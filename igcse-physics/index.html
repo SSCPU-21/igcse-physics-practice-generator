@@ -588,6 +588,275 @@ textarea.lines,.ansline input{background:#EEF5F8;color:#10283E}
   margin-top:2px;
 }
 
+
+/* PREPENROLL CLEAN EXAM WORKSPACE V3 */
+:root{
+  --bg:#EEF3F6;
+  --sheet:#FFFFFF;
+  --ink:#13283A;
+  --muted:#53697B;
+  --rule:#D5E0E7;
+  --line:#C7D5DE;
+  --grid:#E4EBF0;
+  --grid2:#F0F4F6;
+  --field:#F6F9FA;
+  --blue:#173B5A;
+  --blue-ink:#FFFFFF;
+  --blue-soft:#E9F0F5;
+  --brand-green:#3E7F4F;
+  --red:#B8463D;
+  --red-soft:#FCE9E6;
+  --green:#3E7F4F;
+  --green-soft:#E7F2E9;
+  --shadow:0 10px 28px rgba(18,40,58,.08);
+}
+body{
+  background:#EEF3F6;
+  color:var(--ink);
+}
+.brand{
+  background:#FFFFFF;
+  border-bottom:1px solid #D9E2E8;
+  box-shadow:0 2px 10px rgba(18,40,58,.04);
+}
+.brand a{color:var(--blue)}
+.brand a:hover{background:#F2F6F8}
+.brand a.cta{
+  background:var(--green);
+  color:#fff;
+  box-shadow:none;
+}
+.top{
+  padding-top:32px;
+  padding-bottom:20px;
+}
+.eyebrow{
+  background:#E8F1EA;
+  color:#2F7042;
+}
+h1{
+  color:#173B5A;
+  font-size:clamp(36px,4.6vw,48px);
+}
+.top p{
+  color:#41596B;
+  font-size:15px;
+}
+.wrap{
+  grid-template-columns:290px minmax(0,1fr);
+  gap:22px;
+}
+.panel{
+  background:#F8FAFB;
+  border:1px solid #CBD9E1;
+  border-radius:14px;
+  box-shadow:none;
+}
+.fs legend{
+  color:#244A68;
+  font-weight:800;
+}
+.hint,.hist .d,.lenout{
+  color:#607587;
+}
+.seg{
+  background:#EDF3F6;
+  border-color:#C6D5DE;
+  border-radius:10px;
+}
+.seg label{
+  color:#2A4153;
+  background:transparent;
+}
+.seg input:checked+label{
+  background:#173B5A;
+  color:#fff;
+}
+.chk b{
+  color:#253B4D;
+}
+.chk small{
+  color:#64798A;
+}
+.chip{
+  background:#FFFFFF;
+  border-color:#C8D6DF;
+  color:#2C4253;
+  border-radius:10px;
+}
+.chip[aria-pressed="true"]{
+  background:#E7F0F5;
+  border-color:#7FA0B5;
+}
+.chip[aria-pressed="true"] .n{
+  color:#173B5A;
+}
+.btn{
+  border-radius:10px;
+  box-shadow:none;
+}
+.btn.primary{
+  background:#173B5A;
+  border-color:#173B5A;
+  box-shadow:none;
+}
+.btn.primary:hover{
+  background:#0F304A;
+  box-shadow:none;
+}
+.btn.red{
+  background:#B8463D;
+  border-color:#B8463D;
+}
+.sheet{
+  background:#FFFFFF;
+  border:1px solid #C6D4DD;
+  border-radius:16px;
+  box-shadow:0 12px 30px rgba(18,40,58,.08);
+}
+.phead{
+  background:#FFFFFF;
+  border-bottom:1px solid #CCD8E0;
+  padding:28px 34px 22px;
+}
+.phead h2{
+  color:#173B5A;
+  font-size:28px;
+  font-weight:800;
+}
+.meta{
+  color:#5A7182;
+}
+.code{
+  background:#F7F9FA;
+  border-color:#C5D2DB;
+  color:#334C5E;
+}
+.timer{
+  background:#173B5A;
+  color:#FFFFFF;
+  border-radius:12px;
+  min-width:118px;
+  padding:12px 14px;
+}
+.timer small{
+  color:#DCE7EE;
+}
+.instr{
+  background:#F5F8FA;
+  color:#31495B;
+  padding:14px 34px;
+}
+.note{
+  background:#FAF2EE;
+  color:#60483E;
+  padding:11px 34px;
+}
+.sect{
+  padding:24px 34px 8px;
+}
+.sect h3{
+  color:#2E5D82;
+  font-size:20px;
+  font-weight:800;
+}
+.sect span{
+  color:#667A89;
+}
+.q{
+  margin:8px 16px;
+  padding-left:16px;
+  background:#FFFFFF;
+  border:1px solid #D9E3E9;
+  border-radius:12px;
+  box-shadow:none;
+}
+.q:hover{
+  border-color:#B8C9D3;
+  box-shadow:none;
+}
+.q:nth-of-type(even){
+  background:#FCFDFD;
+}
+.qn{
+  color:#2F6C9A;
+}
+.qb,.stem,.pq{
+  color:#172F42;
+}
+.tag{
+  background:#173B5A;
+  color:#FFFFFF;
+  border-radius:999px;
+  padding:5px 9px;
+}
+.mcol{
+  background:#F3F7F9;
+  color:#52697A;
+  border-left:1px solid #D7E1E7;
+}
+.opt label{
+  background:#FFFFFF;
+  border-color:#BFCED8;
+  color:#213849;
+  border-radius:10px;
+}
+.opt label:hover{
+  background:#F5F8FA;
+  border-color:#8FA6B6;
+}
+.opt input:checked+label{
+  background:#E8F0F5;
+  border-color:#173B5A;
+}
+.opt input:checked+label .L{
+  background:#173B5A;
+}
+textarea.lines{
+  background:#FAFCFD;
+  border-color:#CBD8E0;
+  color:#173044;
+}
+.ansline input{
+  background:#FAFCFD;
+  color:#173044;
+}
+.expl,.ms{
+  border-radius:8px;
+}
+.finish{
+  background:#F6F9FA;
+  border-top:1px solid #D7E1E7;
+}
+.result{
+  background:#F2F7F9;
+  border:1px solid #C9D8E1;
+  border-radius:14px;
+}
+.big{
+  color:#173B5A;
+}
+.result .split,.result .bar,.result .v{
+  color:#40596B;
+}
+.bar .fl{
+  background:#3E7F4F;
+}
+.bar .fl.lo{
+  background:#B8463D;
+}
+.foot{
+  background:#F8FAFB;
+  border:1px solid #D3DEE5;
+  color:#53697B;
+}
+.report-note{
+  color:#53697B;
+}
+@media(max-width:900px){
+  .wrap{grid-template-columns:1fr}
+}
+
 </style>
 
 <div class="brand"><div class="brand-in">
