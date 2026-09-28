@@ -251,7 +251,7 @@ body{background:#EEF3F6;color:#102B43}.brand{background:#fff;border-bottom:1px s
 
 </style>
 
-<div class="pe-gate" id="peGate">
+<div class="pe-gate" id="peGate" hidden>
   <div class="pe-gate-card" role="dialog" aria-modal="true" aria-labelledby="peGateTitle">
     <div class="pe-gate-head">
       <div class="pe-gate-brand">Prep<b>Enroll</b>™ Practice</div>
@@ -2602,10 +2602,17 @@ $('#sheet').addEventListener('change',e=>{const t=e.target;if(t.matches('.ms inp
 
 
 /* ---------- privacy-first access gate ---------- */
+const ACCESS_GATE_ENABLED = false;
 const PE_LEAD_ENDPOINT='https://ziwdwgdncbjclvmuvnfg.supabase.co/functions/v1/practice-lead';
 (function(){
   const gate=document.getElementById('peGate'),form=document.getElementById('peGateForm');
+  if(!ACCESS_GATE_ENABLED){
+    if(gate) gate.hidden=true;
+    document.documentElement.style.overflow='';
+    return;
+  }
   if(!gate||!form)return;
+  gate.hidden=false;
   document.documentElement.style.overflow='hidden';
   const adult=document.getElementById('peAdultFields'),minor=document.getElementById('peMinorFields');
   const err=document.getElementById('peGateError'),btn=document.getElementById('peGateSubmit');
