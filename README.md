@@ -1,4 +1,4 @@
-# PrepEnroll Practice Generators
+# PrepEnroll Practice
 
 Central public practice hub for **PrepEnroll™**.
 
