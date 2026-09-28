@@ -857,6 +857,125 @@ textarea.lines{
   .wrap{grid-template-columns:1fr}
 }
 
+
+/* PREPENROLL STRICT WHITE NAVY V4 */
+:root{
+  --bg:#EEF3F6;
+  --sheet:#FFFFFF;
+  --ink:#102B43;
+  --muted:#173B5A;
+  --rule:#D1DDE5;
+  --line:#C3D2DC;
+  --grid:#E1E9EE;
+  --grid2:#EEF3F6;
+  --field:#F8FAFB;
+  --blue:#173B5A;
+  --blue-ink:#FFFFFF;
+  --blue-soft:#EAF1F5;
+  --brand-green:#3E7F4F;
+  --green:#3E7F4F;
+  --green-soft:#E8F3EA;
+}
+body{background:#EEF3F6;color:#102B43}
+.brand,.sheet,.phead,.q,.opt label{background:#FFFFFF}
+.top p,.hint,.hist .d,.lenout,.meta,.instr,.sect span,.mcol,.result .split,.result .bar,.result .v,.foot,.report-note{
+  color:#173B5A!important;
+}
+.panel{
+  background:#FFFFFF;
+  border:1px solid #C8D6DF;
+  padding:18px;
+  gap:16px;
+}
+.fs legend,.chk b,.chip,.stem,.pq,.qb,.ansline,.part,.code,.phead h2,.sect h3{
+  color:#102B43;
+}
+.chip{
+  min-height:44px;
+  border-radius:9px;
+  background:#FFFFFF;
+  border:1px solid #C9D7E0;
+}
+.chip:hover{
+  background:#F4F8FA;
+  border-color:#7899AE;
+}
+.chip[aria-pressed="true"]{
+  background:#173B5A;
+  border-color:#173B5A;
+  color:#FFFFFF;
+}
+.chip[aria-pressed="true"] .n,
+.chip[aria-pressed="true"] .cnt{
+  color:#FFFFFF!important;
+}
+.chip .n,.chip .cnt{color:#173B5A}
+.seg label{color:#102B43}
+.seg input:checked+label{background:#173B5A;color:#FFFFFF}
+.sheet{
+  border:1px solid #C5D4DE;
+  box-shadow:0 10px 24px rgba(16,43,67,.07);
+}
+.phead{background:#FFFFFF}
+.instr{background:#F8FAFB;color:#102B43!important}
+.q{background:#FFFFFF}
+.q:nth-of-type(even){background:#FFFFFF}
+.mcol{background:#F8FAFB;color:#173B5A!important}
+textarea.lines,.ansline input{background:#FFFFFF;color:#102B43}
+.finish{background:#FFFFFF}
+.result{background:#F8FAFB}
+.foot{background:#FFFFFF;color:#173B5A!important}
+.start-empty{
+  min-height:520px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  padding:56px 32px;
+  background:#FFFFFF;
+  color:#102B43;
+}
+.start-empty h2{
+  margin:14px 0 10px;
+  color:#173B5A;
+  font:800 clamp(28px,4vw,42px)/1.05 var(--display);
+  letter-spacing:-.02em;
+}
+.start-empty p{
+  max-width:620px;
+  margin:0;
+  color:#173B5A;
+  font-size:15px;
+  line-height:1.65;
+}
+.start-badge{
+  display:inline-flex;
+  padding:8px 12px;
+  border-radius:999px;
+  background:#E8F3EA;
+  color:#2F7042;
+  font:700 11px/1 var(--mono);
+  letter-spacing:.06em;
+  text-transform:uppercase;
+}
+.start-steps{
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+  justify-content:center;
+  margin-top:24px;
+}
+.start-steps span{
+  padding:10px 13px;
+  border:1px solid #C8D6DF;
+  border-radius:10px;
+  background:#F8FAFB;
+  color:#173B5A;
+  font-weight:700;
+  font-size:13px;
+}
+
 </style>
 
 <div class="brand"><div class="brand-in">
@@ -2856,7 +2975,7 @@ function buildPaper(s){
 
 /* ---------- state + UI ---------- */
 const $=s=>document.querySelector(s);
-let S={tier:'E',types:7,topics:63,len:1,seed:0};
+let S={tier:'E',types:7,topics:0,len:1,seed:0};
 let paper=null,marked=false,ticks={},startT=0,timerId=null,elapsed=0,attemptId=null;
 
 function readUI(){S.tier=$('#tierC').checked?'C':'E';S.types=($('#secM').checked?1:0)|($('#secT').checked?2:0)|($('#secP').checked?4:0);
@@ -2867,7 +2986,7 @@ function updateLen(){readUI();const L=LENS[S.len],b=[];if(S.types&1)b.push(L.m+'
   $('#tierHint').textContent=S.tier==='E'?'Core and Supplement content.':'Core content only.'}
 
 const TCOUNT={};Object.values(BANKS).forEach(bk=>bk.forEach(it=>TCOUNT[it.t]=(TCOUNT[it.t]||0)+1));
-$('#chips').innerHTML=TOPICS.map((t,i)=>`<button type="button" class="chip" aria-pressed="true"><span class="n">${i+1}</span><span>${t.n}</span><span class="cnt">${TCOUNT[t.k]||0}</span></button>`).join('');
+$('#chips').innerHTML=TOPICS.map((t,i)=>`<button type="button" class="chip" aria-pressed="false"><span class="n">${i+1}</span><span>${t.n}</span><span class="cnt">${TCOUNT[t.k]||0}</span></button>`).join('');
 $('#chips').addEventListener('click',e=>{const c=e.target.closest('.chip');if(!c)return;c.setAttribute('aria-pressed',c.getAttribute('aria-pressed')==='true'?'false':'true');updateLen()});
 document.querySelectorAll('.builder input').forEach(i=>i.addEventListener('change',updateLen));
 $('#gen').addEventListener('click',()=>{readUI();const err=$('#genErr');
@@ -2878,6 +2997,15 @@ $('#codeForm').addEventListener('submit',e=>{e.preventDefault();const d=decode($
   if(!d){err.textContent='That code is not recognised. Codes look like E71R1-4K9QZ.';err.hidden=false;return}
   err.hidden=true;S=d;writeUI();start()});
 
+function showTopicStart(){
+  paper=null;marked=false;clearInterval(timerId);
+  $('#sheet').innerHTML=`<div class="start-empty">
+    <div class="start-badge">PrepEnroll™ · IGCSE Physics 0625</div>
+    <h2>Choose what you want to practise.</h2>
+    <p>Select one or more topics from the sidebar, choose your paper sections and length, then click <b>Generate new paper</b>.</p>
+    <div class="start-steps"><span>1&nbsp; Select topic</span><span>2&nbsp; Choose format</span><span>3&nbsp; Generate & practise</span></div>
+  </div>`;
+}
 function start(){paper=buildPaper(S);marked=false;ticks={};elapsed=0;attemptId=Date.now().toString(36);startT=Date.now();
   try{history.replaceState(null,'','#'+encode(S))}catch(e){}
   render();clearInterval(timerId);timerId=setInterval(tick,1000);tick()}
@@ -2904,7 +3032,7 @@ function render(){
   if(marked)renderResult();
 }
 function finishHTML(){return marked
-  ?`<p>Marked. Tick or untick mark-scheme points in the written answers to adjust your score.</p><button class="btn primary" type="button" id="downloadReport">Download marks report</button><button class="btn" type="button" id="retry">Retry this paper</button><button class="btn" type="button" id="again">New paper, same settings</button><div class="report-note">The report includes question-wise marks earned, marks lost, topic breakdown and time taken. Open it and choose Print → Save as PDF if you want a PDF copy.</div>`
+  ?`<p>Marked. Tick or untick mark-scheme points in the written answers to adjust your score.</p><button class="btn primary" type="button" id="downloadReport">Download Scorecard</button><button class="btn" type="button" id="retry">Retry this paper</button><button class="btn" type="button" id="again">New paper, same settings</button><div class="report-note">Your scorecard includes question-wise marks earned, marks lost, topic breakdown and time taken. Open it and choose Print → Save as PDF if you want a PDF copy.</div>`
   :`<p>When you finish, multiple-choice answers are marked automatically. For written answers you compare your work with the mark scheme and tick the points you made.</p><button class="btn red" type="button" id="markBtn">Finish and mark</button>`}
 
 function renderM(q){const long=q.o.some(o=>o.replace(/<[^>]+>/g,'').length>34);
@@ -2986,7 +3114,7 @@ function downloadReport(){
   const topicRows=TOPICS.filter(t=>s.byT[t.k]).map(t=>{const b=s.byT[t.k];return `<tr><td>${escReport(t.n)}</td><td>${b.g}/${b.m}</td><td>${b.m-b.g}</td></tr>`}).join('');
   const qRows=rows.map(r=>`<tr><td>${escReport(r.q)}</td><td>${escReport(r.section)}</td><td>${escReport(r.topic)}</td><td>${r.earned}/${r.max}</td><td>${r.lost}</td><td>${escReport(r.status)}</td></tr>`).join('');
   const html=`<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>PrepEnroll IGCSE Physics Marks Report</title>
+<title>PrepEnroll IGCSE Physics Scorecard</title>
 <style>
 body{font-family:Arial,sans-serif;color:#10283E;background:#EEF4F7;margin:0;padding:28px}
 .wrap{max-width:920px;margin:auto;background:white;border:1px solid #C7D8E2;border-radius:18px;overflow:hidden}
@@ -3001,7 +3129,7 @@ table{width:100%;border-collapse:collapse;font-size:13px}th,td{border-bottom:1px
 .actions{padding:0 32px 24px}.actions button{background:#153B5C;color:white;border:0;border-radius:999px;padding:10px 16px;font-weight:700;cursor:pointer}
 @media print{body{background:white;padding:0}.wrap{border:0;border-radius:0}.actions{display:none}}
 </style></head><body><div class="wrap">
-<div class="head"><div class="brand">Prep<span>Enroll</span>™</div><h1>IGCSE Physics Marks Report</h1><div class="meta">Paper code: ${escReport(code)} · Tier: ${S.tier==='E'?'Extended':'Core'} · Generated: ${escReport(new Date().toLocaleString())}</div></div>
+<div class="head"><div class="brand">Prep<span>Enroll</span>™</div><h1>IGCSE Physics Scorecard</h1><div class="meta">Paper code: ${escReport(code)} · Tier: ${S.tier==='E'?'Extended':'Core'} · Generated: ${escReport(new Date().toLocaleString())}</div></div>
 <div class="score"><div class="kpi"><b>${s.got}/${s.max}</b><span>Total score</span></div><div class="kpi"><b>${pct}%</b><span>Percentage</span></div><div class="kpi"><b>${s.max-s.got}</b><span>Marks lost</span></div><div class="kpi"><b>${escReport(mmss(elapsed))}</b><span>Time taken</span></div></div>
 <div class="section"><h2>Question-by-question breakdown</h2><table><thead><tr><th>Question</th><th>Section</th><th>Topic</th><th>Marks</th><th>Lost</th><th>Status</th></tr></thead><tbody>${qRows}</tbody></table></div>
 <div class="section"><h2>Topic summary</h2><table><thead><tr><th>Topic</th><th>Score</th><th>Marks lost</th></tr></thead><tbody>${topicRows}</tbody></table></div>
@@ -3010,7 +3138,7 @@ table{width:100%;border-collapse:collapse;font-size:13px}th,td{border-bottom:1px
 </div></body></html>`;
   const blob=new Blob([html],{type:'text/html;charset=utf-8'});
   const a=document.createElement('a');a.href=URL.createObjectURL(blob);
-  a.download=`PrepEnroll_IGCSE_Physics_Report_${code.replace(/[^A-Z0-9-]/gi,'_')}.html`;
+  a.download=`PrepEnroll_IGCSE_Physics_Scorecard_${code.replace(/[^A-Z0-9-]/gi,'_')}.html`;
   document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),1500);
 }
 function updateAwards(){paper.sections.forEach(sec=>sec.items.forEach(q=>{if(q.kind==='M')return;const aw=document.querySelector(`.q[data-q="${q.n}"] .aw`);
@@ -3043,6 +3171,7 @@ $('#sheet').addEventListener('change',e=>{const t=e.target;if(t.matches('.ms inp
 
 /* boot */
 (function(){let d=null;try{d=decode(location.hash)}catch(e){}
-  if(d){S=d}else{S.seed=Math.floor(Math.random()*2176782335)}
-  writeUI();showH();start()})();
+  if(d){S=d;writeUI();showH();start()}
+  else{S.seed=Math.floor(Math.random()*2176782335);S.topics=0;writeUI();showH();showTopicStart()}
+})();
 </script>
