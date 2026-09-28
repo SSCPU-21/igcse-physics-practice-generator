@@ -7,55 +7,125 @@
 <meta name="description" content="PrepEnroll practice paper generators for IGCSE, GCSE, IB, AP, A Level and CBSE students.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=DM+Sans:wght@500;600;700&display=swap" rel="stylesheet">
 <style>
-:root{--navy:#173654;--green:#4b8a5a;--ink:#17202b;--muted:#66717f;--bg:#f5f7f8;--card:#fff;--line:#dde4e8}
+:root{
+  --navy:#173654;--navy2:#224d73;--green:#4b8a5a;--green2:#6cad78;
+  --ink:#17202b;--muted:#66717f;--bg:#f7fafb;--card:#fff;--line:#dfe8ec;
+  --yellow:#ffd86b;--sky:#dff2ff;--mint:#e9f7ec;--lav:#eee9ff;--peach:#fff0e8;
+}
 *{box-sizing:border-box}
-body{margin:0;font-family:Manrope,system-ui,sans-serif;background:var(--bg);color:var(--ink)}
-header{background:#fff;border-bottom:1px solid var(--line);padding:18px 24px;position:sticky;top:0;z-index:10}
-.nav{max-width:1180px;margin:auto;display:flex;align-items:center;justify-content:space-between;gap:20px}
-.brand{font-weight:800;font-size:23px;color:var(--navy);letter-spacing:-.04em}.brand span{color:var(--green)}
-.nav a{color:var(--navy);text-decoration:none;font-weight:700;font-size:14px}
-.hero{max-width:1180px;margin:auto;padding:82px 24px 54px;text-align:center}
-.eyebrow{font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--green);font-weight:800}
-h1{font-size:clamp(38px,7vw,72px);line-height:1.02;letter-spacing:-.055em;margin:14px auto 20px;max-width:900px;color:var(--navy)}
-.hero p{max-width:700px;margin:auto;color:var(--muted);font-size:17px;line-height:1.7}
-.grid{max-width:1180px;margin:0 auto;padding:0 24px 80px;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}
-.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:26px;min-height:185px;display:flex;flex-direction:column;justify-content:space-between;text-decoration:none;color:inherit;box-shadow:0 10px 30px rgba(25,42,56,.04)}
-.card:hover{transform:translateY(-2px);box-shadow:0 16px 38px rgba(25,42,56,.08)}
+html{scroll-behavior:smooth}
+body{margin:0;font-family:Manrope,system-ui,sans-serif;background:
+radial-gradient(circle at 12% 10%,rgba(108,173,120,.16),transparent 24%),
+radial-gradient(circle at 88% 12%,rgba(86,148,207,.14),transparent 24%),
+linear-gradient(180deg,#fbfdfd 0%,#f5f8fa 100%);color:var(--ink)}
+a{text-decoration:none;color:inherit}
+header{padding:18px 24px;position:sticky;top:0;z-index:20;background:rgba(255,255,255,.86);backdrop-filter:blur(14px);border-bottom:1px solid rgba(223,232,236,.8)}
+.nav{max-width:1180px;margin:auto;display:flex;align-items:center;justify-content:space-between;gap:18px}
+.brand{display:flex;align-items:center;gap:10px;font-weight:800;font-size:23px;color:var(--navy);letter-spacing:-.04em}
+.brand-dot{width:14px;height:14px;border-radius:50%;background:var(--green);box-shadow:20px 0 0 var(--yellow)}
+.brand span{color:var(--green)}
+.navlinks{display:flex;gap:18px;align-items:center;font-size:14px;font-weight:700;color:var(--navy)}
+.navlinks .site{padding:10px 14px;border-radius:999px;background:#fff;border:1px solid var(--line)}
+.hero{max-width:1180px;margin:auto;padding:78px 24px 46px;position:relative;overflow:hidden}
+.hero-inner{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(320px,.85fr);gap:46px;align-items:center}
+.eyebrow{display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border-radius:999px;background:var(--mint);color:var(--green);font-size:12px;font-weight:800;letter-spacing:.08em;text-transform:uppercase}
+.eyebrow:before{content:"";width:8px;height:8px;border-radius:50%;background:var(--green)}
+h1{font-size:clamp(44px,7vw,76px);line-height:.98;letter-spacing:-.06em;margin:18px 0 20px;color:var(--navy);max-width:840px}
+.hero p{max-width:700px;color:var(--muted);font-size:17px;line-height:1.75;margin:0}
+.hero-actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:28px}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:13px 18px;border-radius:999px;font-weight:800;font-size:14px}
+.btn.primary{background:var(--navy);color:white;box-shadow:0 12px 30px rgba(23,54,84,.18)}
+.btn.secondary{background:white;border:1px solid var(--line);color:var(--navy)}
+.hero-card{background:white;border:1px solid var(--line);border-radius:28px;padding:24px;box-shadow:0 24px 70px rgba(31,63,88,.12);transform:rotate(2deg);position:relative}
+.hero-card:before,.hero-card:after{content:"";position:absolute;border-radius:50%;z-index:-1}
+.hero-card:before{width:86px;height:86px;background:var(--yellow);right:-26px;top:-30px}
+.hero-card:after{width:60px;height:60px;background:var(--lav);left:-26px;bottom:-26px}
+.paper-mini{border:1px solid var(--line);border-radius:18px;padding:20px;background:#fcfefe}
+.paper-mini .mini-top{display:flex;justify-content:space-between;gap:12px;font-size:12px;color:var(--muted);font-weight:700}
+.paper-mini h3{font-size:24px;line-height:1.1;color:var(--navy);margin:14px 0}
+.lines{display:grid;gap:9px;margin-top:16px}.line{height:10px;border-radius:999px;background:#eaf0f3}.line:nth-child(2){width:82%}.line:nth-child(3){width:68%}
+.mini-chip{display:inline-block;margin-top:18px;padding:8px 10px;border-radius:999px;background:var(--mint);color:var(--green);font-size:11px;font-weight:800}
+.section{max-width:1180px;margin:auto;padding:18px 24px 88px}
+.section-head{display:flex;align-items:end;justify-content:space-between;gap:18px;margin-bottom:22px}
+.section-head h2{margin:0;color:var(--navy);font-size:32px;letter-spacing:-.04em}
+.section-head p{margin:0;color:var(--muted);font-size:14px}
+.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}
+.card{position:relative;background:var(--card);border:1px solid var(--line);border-radius:22px;padding:24px;min-height:210px;display:flex;flex-direction:column;justify-content:space-between;overflow:hidden;transition:.22s ease;box-shadow:0 10px 26px rgba(26,52,72,.04)}
+.card:hover{transform:translateY(-5px);box-shadow:0 18px 40px rgba(26,52,72,.10)}
+.card:after{content:"";position:absolute;width:120px;height:120px;border-radius:50%;right:-44px;bottom:-48px;background:var(--accent,#eef3f5)}
 .card .tag{font-size:12px;text-transform:uppercase;letter-spacing:.1em;color:var(--green);font-weight:800}
-.card h2{margin:8px 0 4px;font-size:25px;color:var(--navy);letter-spacing:-.03em}
-.card p{margin:0;color:var(--muted);font-size:14px;line-height:1.55}
-.card.live{border-color:#bed5c4}
+.card h3{margin:8px 0 8px;font-size:27px;color:var(--navy);letter-spacing:-.035em}
+.card p{margin:0;color:var(--muted);font-size:14px;line-height:1.6;max-width:28ch}
+.card .status{position:relative;z-index:2;margin-top:24px;font-size:13px;font-weight:800;color:#98a1aa}
+.card.live{border-color:#b9d9c0;background:linear-gradient(180deg,#fff 0%,#fbfffc 100%)}
 .card.live .status{color:var(--green)}
-.status{margin-top:22px;font-size:13px;font-weight:800;color:#98a1aa}
-footer{border-top:1px solid var(--line);background:#fff;padding:28px 24px;color:var(--muted);font-size:12px;line-height:1.7}
+.card.live:before{content:"LIVE";position:absolute;top:18px;right:18px;padding:6px 9px;border-radius:999px;background:var(--green);color:#fff;font-size:10px;font-weight:800;letter-spacing:.08em}
+.card:nth-child(1){--accent:#dff2ff}.card:nth-child(2){--accent:#fff0e8}.card:nth-child(3){--accent:#eee9ff}.card:nth-child(4){--accent:#e9f7ec}.card:nth-child(5){--accent:#fff7d9}.card:nth-child(6){--accent:#e9f0ff}
+.note{margin-top:24px;padding:16px 18px;border-radius:16px;background:white;border:1px dashed #cfdde3;color:var(--muted);font-size:13px}
+footer{border-top:1px solid var(--line);background:#fff;padding:30px 24px;color:var(--muted);font-size:12px;line-height:1.7}
 .foot{max-width:1180px;margin:auto;text-align:center}
 .foot strong{color:var(--navy)} .foot a{color:var(--navy);font-weight:700}
-@media(max-width:850px){.grid{grid-template-columns:1fr 1fr}.hero{padding-top:58px}}
-@media(max-width:560px){.grid{grid-template-columns:1fr}.nav{align-items:flex-start}.hero{text-align:left}h1{font-size:42px}}
+@media(max-width:900px){.hero-inner{grid-template-columns:1fr}.hero-card{max-width:520px}.grid{grid-template-columns:1fr 1fr}}
+@media(max-width:600px){.grid{grid-template-columns:1fr}.navlinks a:not(.site){display:none}.hero{padding-top:52px}.hero-card{transform:none}h1{font-size:48px}.section-head{align-items:start;flex-direction:column}}
 </style>
 </head>
 <body>
-<header><div class="nav"><div class="brand">Prep<span>Enroll</span>™ Practice</div><a href="https://www.prepenroll.com" target="_blank" rel="noopener">prepenroll.com ↗</a></div></header>
+<header>
+  <div class="nav">
+    <div class="brand"><span class="brand-dot"></span>Prep<span>Enroll</span>™ Practice</div>
+    <div class="navlinks"><a href="#curricula">Curricula</a><a class="site" href="https://www.prepenroll.com" target="_blank" rel="noopener">prepenroll.com ↗</a></div>
+  </div>
+</header>
+
 <main>
 <section class="hero">
-<div class="eyebrow">Prep. Learn. Go.</div>
-<h1>Practice smarter across every curriculum.</h1>
-<p>Original, curriculum-aligned practice paper generators by PrepEnroll™. Choose your course below and generate a fresh practice experience.</p>
+  <div class="hero-inner">
+    <div>
+      <div class="eyebrow">Prep. Learn. Go.</div>
+      <h1>Practice that feels less boring.</h1>
+      <p>Original, curriculum-aligned practice paper generators by PrepEnroll™. Pick a curriculum, generate a fresh paper, and start solving.</p>
+      <div class="hero-actions">
+        <a class="btn primary" href="/igcse-physics-practice-generator/igcse-physics/">Start IGCSE Physics →</a>
+        <a class="btn secondary" href="#curricula">Explore all curricula</a>
+      </div>
+    </div>
+    <div class="hero-card">
+      <div class="paper-mini">
+        <div class="mini-top"><span>PREPENROLL™</span><span>PRACTICE MODE</span></div>
+        <h3>Your next paper is one click away.</h3>
+        <div class="lines"><div class="line"></div><div class="line"></div><div class="line"></div></div>
+        <span class="mini-chip">Fresh questions • Instant practice</span>
+      </div>
+    </div>
+  </div>
 </section>
-<section class="grid">
-<a class="card live" href="./igcse-physics/"><div><div class="tag">IGCSE</div><h2>Physics</h2><p>Cambridge IGCSE Physics 0625 practice paper generator.</p></div><div class="status">Open generator →</div></a>
-<div class="card"><div><div class="tag">GCSE</div><h2>Physics</h2><p>Practice generator planned for GCSE Physics.</p></div><div class="status">Coming soon</div></div>
-<div class="card"><div><div class="tag">IB</div><h2>Physics</h2><p>Practice generator planned for IB Physics HL & SL.</p></div><div class="status">Coming soon</div></div>
-<div class="card"><div><div class="tag">AP</div><h2>Physics</h2><p>Practice generator planned for AP Physics.</p></div><div class="status">Coming soon</div></div>
-<div class="card"><div><div class="tag">A Level</div><h2>Physics</h2><p>Practice generator planned for A/AS Level Physics.</p></div><div class="status">Coming soon</div></div>
-<div class="card"><div><div class="tag">CBSE</div><h2>Physics</h2><p>Practice generator planned for CBSE Physics.</p></div><div class="status">Coming soon</div></div>
+
+<section class="section" id="curricula">
+  <div class="section-head">
+    <div><div class="eyebrow">Choose your route</div><h2>Practice by curriculum</h2></div>
+    <p>More generators will be added here as they go live.</p>
+  </div>
+
+  <div class="grid">
+    <a class="card live" href="/igcse-physics-practice-generator/igcse-physics/">
+      <div><div class="tag">IGCSE</div><h3>Physics</h3><p>Cambridge IGCSE Physics 0625 practice paper generator.</p></div>
+      <div class="status">Open generator →</div>
+    </a>
+    <div class="card"><div><div class="tag">GCSE</div><h3>Physics</h3><p>Practice generator planned for GCSE Physics.</p></div><div class="status">Coming soon</div></div>
+    <div class="card"><div><div class="tag">IB</div><h3>Physics</h3><p>Practice generator planned for IB Physics HL & SL.</p></div><div class="status">Coming soon</div></div>
+    <div class="card"><div><div class="tag">AP</div><h3>Physics</h3><p>Practice generator planned for AP Physics.</p></div><div class="status">Coming soon</div></div>
+    <div class="card"><div><div class="tag">A Level</div><h3>Physics</h3><p>Practice generator planned for A/AS Level Physics.</p></div><div class="status">Coming soon</div></div>
+    <div class="card"><div><div class="tag">CBSE</div><h3>Physics</h3><p>Practice generator planned for CBSE Physics.</p></div><div class="status">Coming soon</div></div>
+  </div>
+
+  <div class="note">Every generator is an independent PrepEnroll™ practice tool. More subjects and curricula can be added without changing this hub link.</div>
 </section>
 </main>
+
 <footer><div class="foot"><strong>© 2026 PrepEnroll™. All Rights Reserved.</strong><br>
 Practice generators, question banks, interfaces, designs and educational content on this site are owned by PrepEnroll™. Unauthorized copying, reproduction, redistribution, modification or commercial use is prohibited.<br>
 <a href="https://www.prepenroll.com" target="_blank" rel="noopener">www.prepenroll.com</a></div></footer>
-<!-- pages-refresh-2026-09-28 -->
 </body>
 </html>
