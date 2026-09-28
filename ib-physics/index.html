@@ -214,6 +214,10 @@ textarea.lines:focus{outline:2px solid var(--blue);outline-offset:1px}
 /* PREPENROLL MATCHED WHITE-NAVY THEME */
 :root{--bg:#EEF3F6;--sheet:#FFFFFF;--ink:#102B43;--muted:#173B5A;--rule:#D1DDE5;--line:#C3D2DC;--grid:#E1E9EE;--grid2:#EEF3F6;--field:#F8FAFB;--blue:#173B5A;--blue-ink:#FFFFFF;--blue-soft:#EAF1F5;--brand-green:#3E7F4F;--green:#3E7F4F;--green-soft:#E8F3EA;--red:#B8463D;--red-soft:#FCE9E6;--shadow:0 10px 24px rgba(16,43,67,.07)}
 body{background:#EEF3F6;color:#102B43}.brand{background:#fff;border-bottom:1px solid #D9E2E8;box-shadow:0 2px 10px rgba(18,40,58,.04)}.brand a{color:#173B5A}.brand a.cta{background:#3E7F4F;color:#fff;border-radius:10px}.top p,.hint,.hist .d,.lenout,.meta,.instr,.sect span,.mcol,.result .split,.result .bar,.result .v,.foot,.report-note{color:#173B5A!important}.panel{background:#fff;border:1px solid #C8D6DF;border-radius:14px;padding:18px;gap:16px;box-shadow:none}.fs legend,.chk b,.chip,.stem,.pq,.qb,.ansline,.part,.code,.phead h2,.sect h3{color:#102B43}.seg{background:#EEF3F6;border-radius:10px}.seg label{color:#102B43}.seg input:checked+label{background:#173B5A;color:#fff}.chip{min-height:44px;border-radius:9px;background:#fff;border:1px solid #C9D7E0;color:#102B43}.chip:hover{background:#F4F8FA;border-color:#7899AE}.chip[aria-pressed="true"]{background:#173B5A;border-color:#173B5A;color:#fff}.chip[aria-pressed="true"] .n,.chip[aria-pressed="true"] .cnt{color:#fff!important}.chip .n,.chip .cnt{color:#173B5A}.btn{border-radius:10px}.btn.primary{background:#173B5A;color:#fff;border-color:#173B5A}.btn.red{background:#B8463D;border-color:#B8463D}.sheet{background:#fff;border:1px solid #C5D4DE;border-radius:16px;box-shadow:0 10px 24px rgba(16,43,67,.07)}.phead{background:#fff;border-bottom:1px solid #CCD8E0}.phead h2{color:#173B5A}.timer{background:#173B5A;color:#fff;border-radius:12px;padding:12px 14px;min-width:118px}.timer small{color:#fff!important}.instr{background:#F8FAFB;color:#102B43!important}.note{background:#FAF2EE;color:#60483E}.sect h3{color:#2E5D82}.q{background:#fff}.qn{color:#2F6C9A}.mcol{background:#F8FAFB;color:#173B5A!important}.tag{color:#173B5A;font-weight:600}.opt label{background:#fff;border-color:#BFCED8;color:#213849;border-radius:10px}.opt input:checked+label{background:#EAF1F5;border-color:#173B5A}.opt input:checked+label .L{background:#173B5A;color:#fff}textarea.lines,.ansline input{background:#fff;color:#102B43}.finish{background:#fff}.result{background:#F8FAFB}.big{color:#173B5A}.bar .fl{background:#3E7F4F}.bar .fl.lo{background:#B8463D}.foot{background:#fff;border:1px solid #D3DEE5;border-radius:14px;padding:18px 20px;color:#173B5A!important}.report-note{font-size:12.5px;color:#173B5A!important;width:100%}.start-empty{min-height:520px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:56px 32px;background:#fff;color:#102B43}.start-empty h2{margin:14px 0 10px;color:#173B5A;font:800 clamp(28px,4vw,42px)/1.05 var(--display)}.start-empty p{max-width:620px;margin:0;color:#173B5A;font-size:15px;line-height:1.65}.start-badge{display:inline-flex;padding:8px 12px;border-radius:999px;background:#E8F3EA;color:#2F7042;font:700 11px/1 var(--mono);letter-spacing:.06em;text-transform:uppercase}.start-steps{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:24px}.start-steps span{padding:10px 13px;border:1px solid #C8D6DF;border-radius:10px;background:#F8FAFB;color:#173B5A;font-weight:700;font-size:13px}
+
+/* IB GENERATION FLOW FIX */
+#genErr{font-weight:700;color:#B8463D;background:#FCE9E6;border-radius:8px;padding:8px 10px}
+#genErr[hidden]{display:none}
 </style>
 
 <div class="brand"><div class="brand-in">
@@ -2340,12 +2344,35 @@ function updateLen(){readUI();const L=getL(S),b=[];if(S.types&1)b.push(L.m+' × 
 
 const TCOUNT={};Object.values(BANKS).forEach(bk=>bk.forEach(it=>TCOUNT[it.t]=(TCOUNT[it.t]||0)+1));
 $('#chips').innerHTML=TOPICS.map((t,i)=>`<button type="button" class="chip" aria-pressed="false"><span class="n">${t.k}</span><span>${t.n}</span><span class="cnt">${TCOUNT[t.k]||0}</span></button>`).join('');
-$('#chips').addEventListener('click',e=>{const c=e.target.closest('.chip');if(!c)return;c.setAttribute('aria-pressed',c.getAttribute('aria-pressed')==='true'?'false':'true');updateLen()});
-document.querySelectorAll('.builder input').forEach(i=>i.addEventListener('change',updateLen));
-$('#gen').addEventListener('click',()=>{readUI();const err=$('#genErr');
-  if(!S.types){err.textContent='Choose at least one paper.';err.hidden=false;return}
-  if(!S.topics){err.textContent='Choose at least one theme.';err.hidden=false;return}
-  err.hidden=true;S.seed=Math.floor(Math.random()*2176782335);start();$('#sheet').scrollIntoView({behavior:'smooth',block:'start'})});
+$('#chips').addEventListener('click',e=>{
+  const chip=e.target.closest('.chip');if(!chip)return;
+  chip.setAttribute('aria-pressed',chip.getAttribute('aria-pressed')==='true'?'false':'true');
+  readUI();updateLen();
+});
+document.querySelectorAll('.builder input').forEach(i=>i.addEventListener('change',()=>{readUI();updateLen()}));
+$('#gen').addEventListener('click',()=>{
+  const err=$('#genErr');
+  try{
+    readUI();
+    const selected=[...document.querySelectorAll('.chip')].filter(x=>x.getAttribute('aria-pressed')==='true');
+    if(!S.types){err.textContent='Choose at least one paper.';err.hidden=false;return}
+    if(!selected.length||!S.topics){err.textContent='Choose at least one theme first.';err.hidden=false;return}
+    err.hidden=true;
+    S.seed=Math.floor(Math.random()*2176782335);
+    const testPaper=buildPaper(S);
+    if(!testPaper.sections.length||!testPaper.marks){
+      err.textContent='No questions are available for this exact combination. Try another theme or paper.';
+      err.hidden=false;return;
+    }
+    start();
+    $('#sheet').scrollIntoView({behavior:'smooth',block:'start'});
+  }catch(ex){
+    console.error(ex);
+    err.textContent='The paper could not be generated. Please change one selection and try again.';
+    err.hidden=false;
+    $('#sheet').innerHTML='<div class="start-empty"><div class="start-badge">PrepEnroll™ · IB Physics</div><h2>We could not build that paper.</h2><p>Please choose at least one theme and one paper, then try Generate new paper again.</p></div>';
+  }
+});
 $('#codeForm').addEventListener('submit',e=>{e.preventDefault();const d=decode($('#codeIn').value),err=$('#codeErr');
   if(!d){err.textContent='That code is not recognised. Codes look like H70V1-4K9QZ.';err.hidden=false;return}
   err.hidden=true;S=d;writeUI();start()});
@@ -2354,9 +2381,13 @@ function showThemeStart(){
   paper=null;marked=false;clearInterval(timerId);
   $('#sheet').innerHTML=`<div class="start-empty"><div class="start-badge">PrepEnroll™ · IB Physics</div><h2>Choose what you want to practise.</h2><p>Select one or more IB themes, choose SL or HL, select the papers and length, then click <b>Generate new paper</b>.</p><div class="start-steps"><span>1&nbsp; Select theme</span><span>2&nbsp; Choose papers</span><span>3&nbsp; Generate & practise</span></div></div>`;
 }
-function start(){paper=buildPaper(S);marked=false;ticks={};elapsed=0;attemptId=Date.now().toString(36);startT=Date.now();
+function start(){
+  paper=buildPaper(S);
+  if(!paper||!paper.sections||!paper.sections.length)throw new Error('No paper sections generated');
+  marked=false;ticks={};elapsed=0;attemptId=Date.now().toString(36);startT=Date.now();
   try{history.replaceState(null,'','#'+encode(S))}catch(e){}
-  render();clearInterval(timerId);timerId=setInterval(tick,1000);tick()}
+  render();clearInterval(timerId);timerId=setInterval(tick,1000);tick()
+}
 function tick(){if(marked)return;elapsed=Math.floor((Date.now()-startT)/1000);const el=$('#timer');if(el)el.firstChild.nodeValue=mmss(elapsed)}
 const mmss=s=>`${String(Math.floor(s/60)).padStart(2,'0')}:${String(s%60).padStart(2,'0')}`;
 const esc=s=>String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;');
