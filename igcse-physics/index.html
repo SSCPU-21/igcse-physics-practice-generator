@@ -976,6 +976,38 @@ textarea.lines,.ansline input{background:#FFFFFF;color:#102B43}
   font-size:13px;
 }
 
+
+/* PREPENROLL PRIVACY-FIRST ACCESS GATE */
+.pe-gate{position:fixed;inset:0;z-index:9999;background:rgba(16,43,67,.72);backdrop-filter:blur(8px);display:grid;place-items:center;padding:18px;overflow:auto}
+.pe-gate[hidden]{display:none}
+.pe-gate-card{width:min(720px,100%);background:#fff;border:1px solid #C8D6DF;border-radius:20px;box-shadow:0 24px 70px rgba(16,43,67,.24);overflow:hidden}
+.pe-gate-head{padding:24px 26px 18px;border-bottom:1px solid #D8E3E9;background:#fff}
+.pe-gate-brand{font:800 13px/1 var(--sans);letter-spacing:.04em;color:#173B5A}
+.pe-gate-brand b{color:#3E7F4F}
+.pe-gate h2{margin:8px 0 6px;font:800 clamp(26px,5vw,38px)/1.05 var(--display);color:#173B5A}
+.pe-gate-head p{margin:0;color:#173B5A;font-size:14px;line-height:1.55}
+.pe-gate-form{padding:22px 26px 24px;display:grid;gap:16px}
+.pe-grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.pe-field{display:grid;gap:6px}
+.pe-field label,.pe-age legend{font:700 12px/1.2 var(--sans);color:#102B43}
+.pe-field input,.pe-field select{width:100%;border:1px solid #BFCFD9;background:#fff;color:#102B43;border-radius:10px;padding:11px 12px;outline:none}
+.pe-field input:focus,.pe-field select:focus{border-color:#173B5A;box-shadow:0 0 0 3px rgba(23,59,90,.10)}
+.pe-age{border:0;padding:0;margin:0;display:grid;gap:8px}
+.pe-age-row{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.pe-age-choice{border:1px solid #C7D6DF;border-radius:10px;padding:10px 12px;display:flex;align-items:center;gap:8px;color:#102B43;font-weight:700;cursor:pointer}
+.pe-age-choice input{accent-color:#173B5A}
+.pe-minor-note{background:#F5F9FB;border:1px solid #D4E0E7;border-radius:10px;padding:10px 12px;color:#173B5A;font-size:12.5px;line-height:1.45}
+.pe-consent{display:grid;grid-template-columns:18px 1fr;gap:9px;align-items:start;color:#102B43;font-size:12.5px;line-height:1.45}
+.pe-consent input{margin-top:3px;accent-color:#173B5A}
+.pe-consent a{color:#173B5A;font-weight:800}
+.pe-optional{padding-top:2px}
+.pe-submit{border:0;border-radius:11px;padding:12px 16px;background:#173B5A;color:#fff;font:800 14px var(--sans);cursor:pointer}
+.pe-submit:hover{background:#102F49}.pe-submit:disabled{opacity:.65;cursor:wait}
+.pe-gate-error{margin:0;background:#FCE9E6;color:#8A2E28;border-radius:9px;padding:9px 11px;font-size:12.5px;font-weight:700}
+.pe-gate-foot{margin:0;color:#173B5A;font-size:11.5px;line-height:1.5}
+.pe-honeypot{position:absolute!important;left:-9999px!important;width:1px!important;height:1px!important;overflow:hidden!important}
+@media(max-width:620px){.pe-grid2{grid-template-columns:1fr}.pe-age-row{grid-template-columns:1fr}.pe-gate-head,.pe-gate-form{padding-inline:18px}}
+
 </style>
 
 <div class="brand"><div class="brand-in">
@@ -3128,7 +3160,60 @@ table{width:100%;border-collapse:collapse;font-size:13px}th,td{border-bottom:1px
 .lost{font-weight:700;color:#B7433A}.foot{padding:20px 32px;background:#EAF2F6;color:#40586B;font-size:12px;line-height:1.55}
 .actions{padding:0 32px 24px}.actions button{background:#153B5C;color:white;border:0;border-radius:999px;padding:10px 16px;font-weight:700;cursor:pointer}
 @media print{body{background:white;padding:0}.wrap{border:0;border-radius:0}.actions{display:none}}
-</style></head><body><div class="wrap">
+</style></head><body>
+
+<div class="pe-gate" id="peGate" hidden>
+  <div class="pe-gate-card" role="dialog" aria-modal="true" aria-labelledby="peGateTitle">
+    <div class="pe-gate-head">
+      <div class="pe-gate-brand">Prep<b>Enroll</b>™ Practice</div>
+      <h2 id="peGateTitle">Before you start</h2>
+      <p>Enter your details to access the Practice Studio. We only ask for the minimum contact information needed for access and follow-up.</p>
+    </div>
+    <form class="pe-gate-form" id="peGateForm">
+      <div class="pe-grid2">
+        <div class="pe-field"><label for="peName">Student name *</label><input id="peName" name="full_name" maxlength="120" autocomplete="name" required></div>
+        <div class="pe-field"><label for="peCurriculum">Curriculum *</label><select id="peCurriculum" name="curriculum" required>
+          <option value="IGCSE" selected>IGCSE</option><option value="IB">IB</option><option value="GCSE">GCSE</option><option value="AP">AP</option><option value="A Level">A Level</option><option value="CBSE">CBSE</option><option value="Other">Other</option>
+        </select></div>
+      </div>
+
+      <fieldset class="pe-age">
+        <legend>Age group *</legend>
+        <div class="pe-age-row">
+          <label class="pe-age-choice"><input type="radio" name="age_group" value="adult" required> I am 18 or older</label>
+          <label class="pe-age-choice"><input type="radio" name="age_group" value="minor" required> I am under 18</label>
+        </div>
+      </fieldset>
+
+      <div id="peAdultFields" hidden>
+        <div class="pe-grid2">
+          <div class="pe-field"><label for="peEmail">Email</label><input id="peEmail" type="email" autocomplete="email" placeholder="name@example.com"></div>
+          <div class="pe-field"><label for="peWhatsapp">WhatsApp / contact number</label><input id="peWhatsapp" inputmode="tel" autocomplete="tel" placeholder="+91 98XXXXXXXX"></div>
+        </div>
+        <p class="pe-gate-foot">At least one of email or WhatsApp/contact number is required.</p>
+      </div>
+
+      <div id="peMinorFields" hidden>
+        <div class="pe-minor-note"><strong>For students under 18:</strong> please ask a parent or legal guardian to complete this contact section.</div>
+        <div class="pe-field"><label for="peGuardianName">Parent / guardian name *</label><input id="peGuardianName" maxlength="120" autocomplete="name"></div>
+        <div class="pe-grid2">
+          <div class="pe-field"><label for="peGuardianEmail">Parent / guardian email</label><input id="peGuardianEmail" type="email" autocomplete="email" placeholder="parent@example.com"></div>
+          <div class="pe-field"><label for="peGuardianWhatsapp">Parent / guardian WhatsApp / contact number</label><input id="peGuardianWhatsapp" inputmode="tel" autocomplete="tel" placeholder="+91 98XXXXXXXX"></div>
+        </div>
+        <p class="pe-gate-foot">At least one parent/guardian contact method is required.</p>
+      </div>
+
+      <label class="pe-consent"><input id="pePrivacyAck" type="checkbox" required><span>I have read the <a href="/prepenroll-practice/privacy/" target="_blank" rel="noopener">Privacy Notice</a> and understand that PrepEnroll™ will use these details to provide access to this practice tool, keep a record of this submission, and respond to questions about the tool. *</span></label>
+
+      <label class="pe-consent pe-optional"><input id="peMarketing" type="checkbox"><span>I would like PrepEnroll™ to contact me (or my parent/guardian) about tutoring, academic support and related updates. <strong>Optional.</strong></span></label>
+
+      <div class="pe-honeypot" aria-hidden="true"><label>Company<input id="peCompany" tabindex="-1" autocomplete="off"></label></div>
+      <p class="pe-gate-error" id="peGateError" hidden></p>
+      <button class="pe-submit" id="peGateSubmit" type="submit">Continue to Practice →</button>
+      <p class="pe-gate-foot">Privacy questions or deletion requests: <strong>info@prepenroll.com</strong></p>
+    </form>
+  </div>
+</div><div class="wrap">
 <div class="head"><div class="brand">Prep<span>Enroll</span>™</div><h1>IGCSE Physics Scorecard</h1><div class="meta">Paper code: ${escReport(code)} · Tier: ${S.tier==='E'?'Extended':'Core'} · Generated: ${escReport(new Date().toLocaleString())}</div></div>
 <div class="score"><div class="kpi"><b>${s.got}/${s.max}</b><span>Total score</span></div><div class="kpi"><b>${pct}%</b><span>Percentage</span></div><div class="kpi"><b>${s.max-s.got}</b><span>Marks lost</span></div><div class="kpi"><b>${escReport(mmss(elapsed))}</b><span>Time taken</span></div></div>
 <div class="section"><h2>Question-by-question breakdown</h2><table><thead><tr><th>Question</th><th>Section</th><th>Topic</th><th>Marks</th><th>Lost</th><th>Status</th></tr></thead><tbody>${qRows}</tbody></table></div>
@@ -3168,6 +3253,76 @@ $('#sheet').addEventListener('click',e=>{
 });
 function selectCode(){const el=document.querySelector('.code');const r=document.createRange();r.selectNodeContents(el);const s=getSelection();s.removeAllRanges();s.addRange(r)}
 $('#sheet').addEventListener('change',e=>{const t=e.target;if(t.matches('.ms input[type=checkbox]')){const id=t.dataset.t,i=+t.dataset.i;const set=ticks[id];t.checked?set.add(i):set.delete(i);updateAwards();save()}});
+
+
+/* ---------- privacy-first access gate ---------- */
+const PE_GATE_KEY='prepenrollPracticeGate:igcse-physics';
+const PE_LEAD_ENDPOINT='https://ziwdwgdncbjclvmuvnfg.supabase.co/functions/v1/practice-lead';
+function peGateInit(){
+  const gate=document.getElementById('peGate'),form=document.getElementById('peGateForm');
+  if(!gate||!form)return;
+  const adult=document.getElementById('peAdultFields'),minor=document.getElementById('peMinorFields');
+  const err=document.getElementById('peGateError'),btn=document.getElementById('peGateSubmit');
+  let granted=false;try{granted=sessionStorage.getItem(PE_GATE_KEY)==='1'}catch(e){}
+  gate.hidden=granted;
+  if(!granted)document.body.style.overflow='hidden';
+
+  form.addEventListener('change',e=>{
+    if(e.target.name!=='age_group')return;
+    const isAdult=e.target.value==='adult';
+    adult.hidden=!isAdult;minor.hidden=isAdult;
+  });
+
+  form.addEventListener('submit',async e=>{
+    e.preventDefault();err.hidden=true;
+    const age=form.querySelector('input[name="age_group"]:checked');
+    if(!age){err.textContent='Please select the age group.';err.hidden=false;return}
+    const isAdult=age.value==='adult';
+    const email=document.getElementById('peEmail').value.trim();
+    const whatsapp=document.getElementById('peWhatsapp').value.trim();
+    const guardianName=document.getElementById('peGuardianName').value.trim();
+    const guardianEmail=document.getElementById('peGuardianEmail').value.trim();
+    const guardianWhatsapp=document.getElementById('peGuardianWhatsapp').value.trim();
+
+    if(isAdult && !email && !whatsapp){err.textContent='Please enter an email or WhatsApp/contact number.';err.hidden=false;return}
+    if(!isAdult && (!guardianName || (!guardianEmail && !guardianWhatsapp))){
+      err.textContent='For students under 18, please enter parent/guardian name and at least one parent/guardian contact method.';err.hidden=false;return
+    }
+
+    btn.disabled=true;btn.textContent='Saving…';
+    try{
+      const res=await fetch(PE_LEAD_ENDPOINT,{
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({
+          full_name:document.getElementById('peName').value.trim(),
+          curriculum:document.getElementById('peCurriculum').value || 'IGCSE',
+          email,whatsapp,is_adult:isAdult,
+          guardian_name:guardianName,
+          guardian_email:guardianEmail,
+          guardian_whatsapp:guardianWhatsapp,
+          source:'igcse-physics',
+          privacy_acknowledged:document.getElementById('pePrivacyAck').checked,
+          marketing_opt_in:document.getElementById('peMarketing').checked,
+          company:document.getElementById('peCompany').value
+        })
+      });
+      const data=await res.json().catch(()=>({}));
+      if(!res.ok)throw new Error(data.error||'Could not save your details.');
+      try{
+        sessionStorage.setItem(PE_GATE_KEY,'1');
+        sessionStorage.setItem('prepenrollPracticeName',document.getElementById('peName').value.trim());
+      }catch(e){}
+      gate.hidden=true;document.body.style.overflow='';
+    }catch(ex){
+      err.textContent=ex.message||'Could not save your details. Please try again.';
+      err.hidden=false;
+    }finally{
+      btn.disabled=false;btn.textContent='Continue to Practice →';
+    }
+  });
+}
+document.addEventListener('DOMContentLoaded',peGateInit);
 
 /* boot */
 (function(){let d=null;try{d=decode(location.hash)}catch(e){}
