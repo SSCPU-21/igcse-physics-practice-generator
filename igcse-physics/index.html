@@ -3162,7 +3162,7 @@ table{width:100%;border-collapse:collapse;font-size:13px}th,td{border-bottom:1px
 @media print{body{background:white;padding:0}.wrap{border:0;border-radius:0}.actions{display:none}}
 </style></head><body>
 
-<div class="pe-gate" id="peGate">
+<div class="pe-gate" id="peGate" style="display:grid!important">
   <div class="pe-gate-card" role="dialog" aria-modal="true" aria-labelledby="peGateTitle">
     <div class="pe-gate-head">
       <div class="pe-gate-brand">Prep<b>Enroll</b>™ Practice</div>
@@ -3213,7 +3213,8 @@ table{width:100%;border-collapse:collapse;font-size:13px}th,td{border-bottom:1px
       <p class="pe-gate-foot">Privacy questions or deletion requests: <strong>info@prepenroll.com</strong></p>
     </form>
   </div>
-</div><div class="wrap">
+</div>
+<script>/* PE_GATE_FORCE_VISIBLE */document.addEventListener('DOMContentLoaded',function(){var g=document.getElementById('peGate');if(g){g.hidden=false;g.style.setProperty('display','grid','important');document.body.style.overflow='hidden';}});</script><div class="wrap">
 <div class="head"><div class="brand">Prep<span>Enroll</span>™</div><h1>IGCSE Physics Scorecard</h1><div class="meta">Paper code: ${escReport(code)} · Tier: ${S.tier==='E'?'Extended':'Core'} · Generated: ${escReport(new Date().toLocaleString())}</div></div>
 <div class="score"><div class="kpi"><b>${s.got}/${s.max}</b><span>Total score</span></div><div class="kpi"><b>${pct}%</b><span>Percentage</span></div><div class="kpi"><b>${s.max-s.got}</b><span>Marks lost</span></div><div class="kpi"><b>${escReport(mmss(elapsed))}</b><span>Time taken</span></div></div>
 <div class="section"><h2>Question-by-question breakdown</h2><table><thead><tr><th>Question</th><th>Section</th><th>Topic</th><th>Marks</th><th>Lost</th><th>Status</th></tr></thead><tbody>${qRows}</tbody></table></div>
@@ -3263,9 +3264,9 @@ function peGateInit(){
   if(!gate||!form)return;
   const adult=document.getElementById('peAdultFields'),minor=document.getElementById('peMinorFields');
   const err=document.getElementById('peGateError'),btn=document.getElementById('peGateSubmit');
-  let granted=false;try{granted=sessionStorage.getItem(PE_GATE_KEY)==='1'}catch(e){}
-  gate.hidden=granted;
-  if(!granted){gate.hidden=false;document.body.style.overflow='hidden'}
+  gate.hidden=false;
+  gate.style.display='grid';
+  document.body.style.overflow='hidden'
 
   form.addEventListener('change',e=>{
     if(e.target.name!=='age_group')return;
@@ -3309,11 +3310,7 @@ function peGateInit(){
       });
       const data=await res.json().catch(()=>({}));
       if(!res.ok)throw new Error(data.error||'Could not save your details.');
-      try{
-        sessionStorage.setItem(PE_GATE_KEY,'1');
-        sessionStorage.setItem('prepenrollPracticeName',document.getElementById('peName').value.trim());
-      }catch(e){}
-      gate.hidden=true;document.body.style.overflow='';
+      gate.hidden=true;gate.style.display='none';document.body.style.overflow='';
     }catch(ex){
       err.textContent=ex.message||'Could not save your details. Please try again.';
       err.hidden=false;
@@ -3323,8 +3320,6 @@ function peGateInit(){
   });
 }
 document.addEventListener('DOMContentLoaded',peGateInit);
-window.addEventListener('pageshow',()=>{const g=document.getElementById('peGate');if(g){let ok=false;try{ok=sessionStorage.getItem(PE_GATE_KEY)==='1'}catch(e){}g.hidden=ok;if(!ok)document.body.style.overflow='hidden'}});
-
 /* boot */
 (function(){let d=null;try{d=decode(location.hash)}catch(e){}
   if(d){S=d;writeUI();showH();start()}
