@@ -2517,7 +2517,7 @@ function downloadReport(){
   const report=`<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>PrepEnroll IB Physics Scorecard</title>
 <style>body{font-family:Arial,sans-serif;color:#102B43;background:#EEF3F6;margin:0;padding:28px}.wrap{max-width:940px;margin:auto;background:#fff;border:1px solid #C8D6DF;border-radius:18px;overflow:hidden}.head{padding:28px 32px;background:#EAF1F5}.brand{font-weight:800;color:#173B5A}.brand span{color:#3E7F4F}h1{margin:8px 0 6px;font-size:30px}.meta{color:#173B5A;font-size:13px;line-height:1.6}.score{display:flex;gap:18px;flex-wrap:wrap;padding:22px 32px;background:#F8FAFB;border-bottom:1px solid #D5E2E9}.kpi{min-width:140px}.kpi b{display:block;font-size:26px;color:#173B5A}.kpi span{font-size:12px;color:#173B5A}.section{padding:24px 32px}h2{font-size:18px;margin:0 0 12px}table{width:100%;border-collapse:collapse;font-size:13px}th,td{border-bottom:1px solid #DDE7EC;padding:9px 8px;text-align:left;vertical-align:top}th{background:#EAF1F5;color:#173B5A}.actions{padding:0 32px 24px}.actions button{background:#173B5A;color:#fff;border:0;border-radius:999px;padding:10px 16px;font-weight:700;cursor:pointer}.foot{padding:20px 32px;background:#F8FAFB;color:#173B5A;font-size:12px;line-height:1.55}@media print{body{background:#fff;padding:0}.wrap{border:0;border-radius:0}.actions{display:none}}</style></head><body>
 
-<div class="pe-gate" id="peGate" hidden>
+<div class="pe-gate" id="peGate">
   <div class="pe-gate-card" role="dialog" aria-modal="true" aria-labelledby="peGateTitle">
     <div class="pe-gate-head">
       <div class="pe-gate-brand">Prep<b>Enroll</b>™ Practice</div>
@@ -2619,7 +2619,7 @@ function peGateInit(){
   const err=document.getElementById('peGateError'),btn=document.getElementById('peGateSubmit');
   let granted=false;try{granted=sessionStorage.getItem(PE_GATE_KEY)==='1'}catch(e){}
   gate.hidden=granted;
-  if(!granted)document.body.style.overflow='hidden';
+  if(!granted){gate.hidden=false;document.body.style.overflow='hidden'}
 
   form.addEventListener('change',e=>{
     if(e.target.name!=='age_group')return;
@@ -2677,6 +2677,7 @@ function peGateInit(){
   });
 }
 document.addEventListener('DOMContentLoaded',peGateInit);
+window.addEventListener('pageshow',()=>{const g=document.getElementById('peGate');if(g){let ok=false;try{ok=sessionStorage.getItem(PE_GATE_KEY)==='1'}catch(e){}g.hidden=ok;if(!ok)document.body.style.overflow='hidden'}});
 
 /* boot */
 (function(){let d=null;try{d=decode(location.hash)}catch(e){}
