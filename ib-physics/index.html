@@ -2413,6 +2413,48 @@ function render(){
 function finishHTML(){return marked
   ?`<p>Marked. Tick or untick mark-scheme points in the written answers to adjust your score.</p><button class="btn primary" type="button" id="downloadReport">Download Scorecard</button><button class="btn" type="button" id="retry">Retry this paper</button><button class="btn" type="button" id="again">New paper, same settings</button><div class="report-note">Your scorecard includes question-wise marks earned, marks lost, theme breakdown and time taken. Open it and choose Print → Save as PDF for a PDF copy.</div>`
   :`<p>When you finish, multiple-choice answers are marked automatically. For written answers you compare your work with the mark scheme and tick the points you made.</p><button class="btn red" type="button" id="markBtn">Finish and mark</button>`}
+function renderM(q){const long=q.o.some(o=>o.replace(/<[^>]+>/g,'').length>34);
+  return `<div class="q" data-q="${q.n}"><div class="qn">${q.n}</div><div class="qb"><span class="tag">${tagOf(q)}</span><p class="stem">${q.q}</p>${q.fig||''}
+  <div class="opts${long?' long':''}" role="radiogroup" aria-label="Question ${q.n} options">${q.o.map((o,i)=>`<div class="opt" data-i="${i}"><input type="radio" name="m${q.n}" id="m${q.n}_${i}" value="${i}"><label for="m${q.n}_${i}"><span class="L">${LET[i]}</span><span>${o}</span></label></div>`).join('')}</div>
+  <div class="fb" hidden></div></div><div class="mcol"><span class="lbl">mark</span><span>[1]</span></div></div>`}
+function renderS(q){
+  return `<div class="q" data-q="${q.n}"><div class="qn">${q.n}</div><div class="qb"><span class="tag">${tagOf(q)}</span><p class="stem">${q.intro}</p>${q.fig||''}
+  ${q.parts.map((p,pi)=>{const id=`${q.n}_${pi}`;return `<div class="part" data-p="${id}"><p class="pq"><span class="pl2">(${PL[pi]})</span>${p.q} <span class="tag">[${p.m}]</span></p>
+    <label class="vh" for="w${id}">${p.ans?'Working':'Answer'} for ${q.n}(${PL[pi]})</label>
+    <textarea class="lines" id="w${id}" rows="${p.ans?2:Math.max(2,p.m+1)}" placeholder="${p.ans?'Working':''}"></textarea>
+    ${p.ans?`<div class="ansline"><label for="n${id}">Answer =</label><input id="n${id}" inputmode="decimal" autocomplete="off"><span class="u">${p.ans.u||''}</span></div>`:''}
+    <div class="msw" hidden></div></div>`}).join('')}
+  </div><div class="mcol"><span class="lbl">marks</span><span>[${q.max}]</span><span class="aw"></span></div></div>`}
+
+function parseNum(s){s=String(s).trim().replace(/,/g,'').replace(/[×x]\s*10\^?\s*/i,'e');const m=/-?\d*\.?\d+(e-?\d+)?/i.exec(s);return m?parseFloat(m[0]):NaN}
+function numOK(x,v){return isFinite(x)&&Math.abs(x-v)<=Math.max(Math.abs(v)*0.02,0.006)}
+
+function doMark(){
+  marked=true;clearInterval(timerId);elapsed=Math.floor((Date.now()-startT)/1000);
+  paper.sections.forEach(sec=>sec.items.forEach(q=>{
+    if(q.kind!=='M')q.parts.forEach((p,pi)=>{const id=`${q.n}_${pi}`;
+      if(p.ans){const x=parseNum($('#n'+id).value);p.got=x;p.ok=numOK(x,p.ans.v);ticks[id]=new Set(p.ok?p.ms.map((_,i)=>i).slice(0,p.m):[])}
+      else ticks[id]=new Set()})}));
+  // capture answers, then re-render in marked mode keeping inputs
+  const vals={};document.querySelectorAll('#sheet textarea,#sheet .ansline input').forEach(el=>vals[el.id]=el.value);
+  const chosen={};document.querySelectorAll('#sheet input[type=radio]:checked').forEach(el=>chosen[el.name]=+el.value);
+  render();
+  Object.entries(vals).forEach(([id,v])=>{const el=document.getElementById(id);if(el){el.value=v;el.readOnly=true}});
+  paper.sections.forEach(sec=>sec.items.forEach(q=>{const box=document.querySelector(`.q[data-q="${q.n}"]`);
+    if(q.kind==='M'){const c=chosen['m'+q.n];q.chosen=c;box.querySelectorAll('input[type=radio]').forEach(i=>{i.disabled=true;if(+i.value===c)i.checked=true});
+      box.querySelectorAll('.opt').forEach(o=>{const i=+o.dataset.i;if(i===q.a)o.classList.add('ok');else if(i===c)o.classList.add('bad')});
+      const fb=box.querySelector('.fb');const ok=c===q.a;fb.hidden=false;fb.innerHTML=`<div class="expl${ok?' good':''}"><b>${ok?'Correct.':c===undefined?'Not answered.':'Incorrect.'}</b> Answer ${LET[q.a]}. ${q.e}</div>`;
+      box.querySelector('.mcol').innerHTML=`<span class="lbl">mark</span><span class="award">${ok?1:0}<small>/1</small></span>`}
+    else q.parts.forEach((p,pi)=>{const id=`${q.n}_${pi}`,w=box.querySelector(`[data-p="${id}"] .msw`);w.hidden=false;
+      const any=p.ms.length>p.m?`any ${p.m} of`:'';
+      w.innerHTML=`<div class="ms"><span class="h">Mark scheme ${any?'· '+any:''} · tick the points you made</span>
+        ${p.ans?`<span class="auto${p.ok?' ok':''}">${isFinite(p.got)?`Your answer ${p.got} ${p.ans.u||''}: ${p.ok?'matches the expected value, points ticked for you.':'does not match. Tick any method marks you earned.'}`:'No final answer given.'} Expected ${fmt(p.ans.v)} ${p.ans.u||''}</span>`:''}
+        ${p.ms.map((m,i)=>`<label><input type="checkbox" data-t="${id}" data-i="${i}" ${ticks[id].has(i)?'checked':''}><span>${m}</span></label>`).join('')}
+        ${p.tip?`<span class="tip"><b>Examiner tip:</b> ${p.tip}</span>`:''}</div>`});
+  }));
+  updateAwards();save();
+  $('#result').scrollIntoView({behavior:'smooth',block:'start'});
+}
 function score(){let got=0,max=0,mG=0,mM=0,wG=0,wM=0,mW=0,mB=0;const wrong=[],blank=[];const byT={};
   paper.sections.forEach(sec=>sec.items.forEach(q=>{const t=byT[q.t]=byT[q.t]||{g:0,m:0};
     if(q.kind==='M'){const s=q.chosen===q.a?1:0;mG+=s;mM++;t.g+=s;t.m++;if(q.chosen===undefined){mB++;blank.push(q.n)}else if(!s){mW++;wrong.push(q.n)}}
