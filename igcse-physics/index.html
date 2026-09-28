@@ -1,4 +1,4 @@
-<title>IGCSE Physics Practice Paper Generator | PrepEnroll™</title>
+<title>IGCSE Physics Practice Studio | PrepEnroll™</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,500..800&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap">
@@ -517,6 +517,77 @@ textarea.lines{
   .sect{padding-inline:16px}
 }
 
+
+/* PREPENROLL PRACTICE STUDIO THEME V2 */
+:root{
+  --bg:#EAF2F6;
+  --sheet:#FDFEFE;
+  --ink:#10283E;
+  --muted:#40586B;
+  --rule:#C8D8E2;
+  --line:#BCD0DC;
+  --grid:#D9E6ED;
+  --grid2:#EAF1F5;
+  --field:#EDF4F7;
+  --blue:#153B5C;
+  --blue-soft:#DCEAF3;
+  --brand-green:#3E8050;
+  --green:#3E8050;
+  --green-soft:#DCEEE1;
+  --red:#B7433A;
+  --red-soft:#FBE4E1;
+}
+body{
+  background:
+    radial-gradient(circle at 8% 6%,rgba(62,128,80,.16),transparent 24%),
+    radial-gradient(circle at 92% 10%,rgba(21,59,92,.14),transparent 26%),
+    linear-gradient(180deg,#EAF2F6 0%,#F4F8FA 48%,#EAF2F6 100%);
+  color:var(--ink);
+}
+.top p,.hint,.hist .d,.split,.bar .v,.foot{color:var(--muted)}
+.panel{
+  background:#F8FBFC;
+  border-color:#C6D8E2;
+}
+.sheet{
+  background:#FDFEFE;
+  border-color:#BFD2DE;
+}
+.phead{
+  background:
+    radial-gradient(circle at 92% 16%,rgba(62,128,80,.10),transparent 30%),
+    linear-gradient(135deg,#E7F0F6,#F4F9F7);
+}
+.instr{background:#EEF5F8;color:#334C60}
+.note{background:#F6EDE7;color:#5C4039}
+.q{
+  background:#F7FAFC;
+  border-color:#CCDCE5;
+}
+.q:nth-of-type(even){background:#F1F7F9}
+.qb,.stem,.pq{color:#17324A}
+.mcol{background:#EAF2F6;color:#3F596C}
+.opt label{background:#F8FBFC}
+.opt label:hover{background:#EAF2F6}
+textarea.lines,.ansline input{background:#EEF5F8;color:#10283E}
+.finish{background:#EAF2F6}
+.result{
+  background:linear-gradient(135deg,#DDEBF4 0%,#E7F3EA 100%);
+  border-color:#B9CFDB;
+}
+.result .split,.result .bar,.result .v{color:#29485E}
+.foot{
+  background:#E6F0F4;
+  border-color:#BED1DC;
+  color:#2D4A5F;
+}
+.report-note{
+  font-size:12.5px;
+  color:var(--muted);
+  width:100%;
+  margin-top:2px;
+}
+
 </style>
 
 <div class="brand"><div class="brand-in">
@@ -527,9 +598,9 @@ textarea.lines{
 <header class="top">
   <div>
     <div class="eyebrow">PrepEnroll · IGCSE Physics 0625</div>
-    <h1>Practice paper <em>generator</em></h1>
+    <h1>IGCSE Physics <em>Practice Studio</em></h1>
   </div>
-  <p>Over 1,250 original exam-style questions. Every paper is new: choose the tier, sections and topics, then answer, mark and review against the mark scheme.</p>
+  <p>Build a fresh IGCSE Physics practice set, solve it at your pace, mark it, and finish with a clear question-by-question performance report.</p>
 </header>
 
 <div class="wrap">
@@ -587,7 +658,7 @@ textarea.lines{
 
   <main class="sheet" id="sheet" aria-live="polite"></main>
 </div>
-<p class="foot"><strong>© 2026 PrepEnroll™. All Rights Reserved.</strong> · <a href="https://www.prepenroll.com" target="_blank" rel="noopener">www.prepenroll.com</a> · Prep. Learn. Go.<br>This IGCSE Physics Practice Paper Generator, its question bank, interface, design and educational content are owned by PrepEnroll™. Unauthorized copying, reproduction, redistribution, modification or commercial use is prohibited.<br>All questions are original and written in the style of the Cambridge IGCSE Physics 0625 syllabus. This is an independent practice tool, not affiliated with or endorsed by Cambridge International. Take g = 9.8 N/kg.</p>
+<p class="foot"><strong>© 2026 PrepEnroll™. All Rights Reserved.</strong> · <a href="https://www.prepenroll.com" target="_blank" rel="noopener">www.prepenroll.com</a> · Prep. Learn. Go.<br>This IGCSE Physics Practice Studio, its question bank, interface, design and educational content are owned by PrepEnroll™. Unauthorized copying, reproduction, redistribution, modification or commercial use is prohibited.<br>All questions are original and written in the style of the Cambridge IGCSE Physics 0625 syllabus. This is an independent practice tool, not affiliated with or endorsed by Cambridge International. Take g = 9.8 N/kg.</p>
 
 <script>
 /* ---------- utilities ---------- */
@@ -2564,7 +2635,7 @@ function render(){
   if(marked)renderResult();
 }
 function finishHTML(){return marked
-  ?`<p>Marked. Tick or untick mark-scheme points in the written answers to adjust your score.</p><button class="btn" type="button" id="retry">Retry this paper</button><button class="btn primary" type="button" id="again">New paper, same settings</button>`
+  ?`<p>Marked. Tick or untick mark-scheme points in the written answers to adjust your score.</p><button class="btn primary" type="button" id="downloadReport">Download marks report</button><button class="btn" type="button" id="retry">Retry this paper</button><button class="btn" type="button" id="again">New paper, same settings</button><div class="report-note">The report includes question-wise marks earned, marks lost, topic breakdown and time taken. Open it and choose Print → Save as PDF if you want a PDF copy.</div>`
   :`<p>When you finish, multiple-choice answers are marked automatically. For written answers you compare your work with the mark scheme and tick the points you made.</p><button class="btn red" type="button" id="markBtn">Finish and mark</button>`}
 
 function renderM(q){const long=q.o.some(o=>o.replace(/<[^>]+>/g,'').length>34);
@@ -2614,6 +2685,65 @@ function score(){let got=0,max=0,mG=0,mM=0,wG=0,wM=0;const byT={};
     if(q.kind==='M'){const s=q.chosen===q.a?1:0;mG+=s;mM++;t.g+=s;t.m++}
     else{q.aw=q.parts.reduce((a,p,pi)=>a+Math.min(p.m,(ticks[`${q.n}_${pi}`]||new Set()).size),0);wG+=q.aw;wM+=q.max;t.g+=q.aw;t.m+=q.max}}));
   got=mG+wG;max=mM+wM;return{got,max,mG,mM,wG,wM,byT}}
+
+function reportRows(){
+  const rows=[];
+  paper.sections.forEach(sec=>sec.items.forEach(q=>{
+    const topic=TNAME[q.t]||q.t;
+    if(q.kind==='M'){
+      const earned=q.chosen===q.a?1:0;
+      const status=q.chosen===undefined?'Not answered':earned?'Correct':'Incorrect';
+      rows.push({q:String(q.n),section:sec.title,topic,earned,max:1,lost:1-earned,status});
+    }else{
+      q.parts.forEach((p,pi)=>{
+        const earned=Math.min(p.m,(ticks[`${q.n}_${pi}`]||new Set()).size);
+        rows.push({
+          q:`${q.n}(${String.fromCharCode(97+pi)})`,
+          section:sec.title,
+          topic,
+          earned,
+          max:p.m,
+          lost:p.m-earned,
+          status:earned===p.m?'Full marks':earned===0?'No marks':'Partial'
+        });
+      });
+    }
+  }));
+  return rows;
+}
+function escReport(s){return String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))}
+function downloadReport(){
+  const s=score(),pct=s.max?Math.round(s.got/s.max*100):0,code=encode(S),rows=reportRows();
+  const topicRows=TOPICS.filter(t=>s.byT[t.k]).map(t=>{const b=s.byT[t.k];return `<tr><td>${escReport(t.n)}</td><td>${b.g}/${b.m}</td><td>${b.m-b.g}</td></tr>`}).join('');
+  const qRows=rows.map(r=>`<tr><td>${escReport(r.q)}</td><td>${escReport(r.section)}</td><td>${escReport(r.topic)}</td><td>${r.earned}/${r.max}</td><td>${r.lost}</td><td>${escReport(r.status)}</td></tr>`).join('');
+  const html=`<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>PrepEnroll IGCSE Physics Marks Report</title>
+<style>
+body{font-family:Arial,sans-serif;color:#10283E;background:#EEF4F7;margin:0;padding:28px}
+.wrap{max-width:920px;margin:auto;background:white;border:1px solid #C7D8E2;border-radius:18px;overflow:hidden}
+.head{padding:28px 32px;background:linear-gradient(135deg,#DCEAF3,#E3F1E7)}
+.brand{font-weight:800;color:#153B5C}.brand span{color:#3E8050}
+h1{margin:8px 0 6px;font-size:30px}.meta{color:#40586B;font-size:13px;line-height:1.6}
+.score{display:flex;gap:18px;flex-wrap:wrap;padding:22px 32px;background:#F5F9FB;border-bottom:1px solid #D5E2E9}
+.kpi{min-width:140px}.kpi b{display:block;font-size:26px;color:#153B5C}.kpi span{font-size:12px;color:#52697A}
+.section{padding:24px 32px}h2{font-size:18px;margin:0 0 12px}
+table{width:100%;border-collapse:collapse;font-size:13px}th,td{border-bottom:1px solid #DDE7EC;padding:9px 8px;text-align:left;vertical-align:top}th{background:#EAF2F6;color:#153B5C}
+.lost{font-weight:700;color:#B7433A}.foot{padding:20px 32px;background:#EAF2F6;color:#40586B;font-size:12px;line-height:1.55}
+.actions{padding:0 32px 24px}.actions button{background:#153B5C;color:white;border:0;border-radius:999px;padding:10px 16px;font-weight:700;cursor:pointer}
+@media print{body{background:white;padding:0}.wrap{border:0;border-radius:0}.actions{display:none}}
+</style></head><body><div class="wrap">
+<div class="head"><div class="brand">Prep<span>Enroll</span>™</div><h1>IGCSE Physics Marks Report</h1><div class="meta">Paper code: ${escReport(code)} · Tier: ${S.tier==='E'?'Extended':'Core'} · Generated: ${escReport(new Date().toLocaleString())}</div></div>
+<div class="score"><div class="kpi"><b>${s.got}/${s.max}</b><span>Total score</span></div><div class="kpi"><b>${pct}%</b><span>Percentage</span></div><div class="kpi"><b>${s.max-s.got}</b><span>Marks lost</span></div><div class="kpi"><b>${escReport(mmss(elapsed))}</b><span>Time taken</span></div></div>
+<div class="section"><h2>Question-by-question breakdown</h2><table><thead><tr><th>Question</th><th>Section</th><th>Topic</th><th>Marks</th><th>Lost</th><th>Status</th></tr></thead><tbody>${qRows}</tbody></table></div>
+<div class="section"><h2>Topic summary</h2><table><thead><tr><th>Topic</th><th>Score</th><th>Marks lost</th></tr></thead><tbody>${topicRows}</tbody></table></div>
+<div class="actions"><button onclick="window.print()">Print / Save as PDF</button></div>
+<div class="foot"><strong>© 2026 PrepEnroll™. All Rights Reserved.</strong><br>This report was generated from the student's marked attempt in PrepEnroll™ IGCSE Physics Practice Studio. Written-response marks are based on the student's self-marking against the displayed mark scheme.</div>
+</div></body></html>`;
+  const blob=new Blob([html],{type:'text/html;charset=utf-8'});
+  const a=document.createElement('a');a.href=URL.createObjectURL(blob);
+  a.download=`PrepEnroll_IGCSE_Physics_Report_${code.replace(/[^A-Z0-9-]/gi,'_')}.html`;
+  document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),1500);
+}
 function updateAwards(){paper.sections.forEach(sec=>sec.items.forEach(q=>{if(q.kind==='M')return;const aw=document.querySelector(`.q[data-q="${q.n}"] .aw`);
   const s=q.parts.reduce((a,p,pi)=>a+Math.min(p.m,(ticks[`${q.n}_${pi}`]||new Set()).size),0);aw.innerHTML=`<span class="award">${s}<small>/${q.max}</small></span>`}));renderResult()}
 function renderResult(){const s=score(),pct=s.max?Math.round(s.got/s.max*100):0;
@@ -2633,6 +2763,7 @@ $('#hist').addEventListener('click',e=>{const b=e.target.closest('button[data-co
 
 $('#sheet').addEventListener('click',e=>{
   if(e.target.id==='markBtn')doMark();
+  else if(e.target.id==='downloadReport')downloadReport();
   else if(e.target.id==='retry'){paper=buildPaper(S);marked=false;ticks={};attemptId=Date.now().toString(36);startT=Date.now();render();clearInterval(timerId);timerId=setInterval(tick,1000);$('#sheet').scrollIntoView({behavior:'smooth'})}
   else if(e.target.id==='again'){S.seed=Math.floor(Math.random()*2176782335);start();$('#sheet').scrollIntoView({behavior:'smooth'})}
   else if(e.target.id==='copyCode'){const c=encode(S),b=e.target;const done=()=>{b.textContent='Copied';setTimeout(()=>b.textContent='Copy',1500)};
