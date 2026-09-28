@@ -3162,7 +3162,7 @@ table{width:100%;border-collapse:collapse;font-size:13px}th,td{border-bottom:1px
 @media print{body{background:white;padding:0}.wrap{border:0;border-radius:0}.actions{display:none}}
 </style></head><body>
 
-<div class="pe-gate" id="peGate" hidden>
+<div class="pe-gate" id="peGate">
   <div class="pe-gate-card" role="dialog" aria-modal="true" aria-labelledby="peGateTitle">
     <div class="pe-gate-head">
       <div class="pe-gate-brand">Prep<b>Enroll</b>™ Practice</div>
@@ -3265,7 +3265,7 @@ function peGateInit(){
   const err=document.getElementById('peGateError'),btn=document.getElementById('peGateSubmit');
   let granted=false;try{granted=sessionStorage.getItem(PE_GATE_KEY)==='1'}catch(e){}
   gate.hidden=granted;
-  if(!granted)document.body.style.overflow='hidden';
+  if(!granted){gate.hidden=false;document.body.style.overflow='hidden'}
 
   form.addEventListener('change',e=>{
     if(e.target.name!=='age_group')return;
@@ -3323,6 +3323,7 @@ function peGateInit(){
   });
 }
 document.addEventListener('DOMContentLoaded',peGateInit);
+window.addEventListener('pageshow',()=>{const g=document.getElementById('peGate');if(g){let ok=false;try{ok=sessionStorage.getItem(PE_GATE_KEY)==='1'}catch(e){}g.hidden=ok;if(!ok)document.body.style.overflow='hidden'}});
 
 /* boot */
 (function(){let d=null;try{d=decode(location.hash)}catch(e){}
