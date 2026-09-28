@@ -202,6 +202,321 @@ textarea.lines:focus{outline:2px solid var(--blue);outline-offset:1px}
 .foot{max-width:1200px;margin:20px auto 0;font-size:12.5px;color:var(--muted)}
 .vh{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 @media (prefers-reduced-motion:no-preference){.fl{transition:width .6s ease}}
+
+/* PREPENROLL PREMIUM THEME OVERRIDES */
+:root{
+  --bg:#F6F9FB;
+  --sheet:#FFFFFF;
+  --ink:#17202B;
+  --muted:#6A7684;
+  --rule:#DFE7EC;
+  --line:#D5E0E6;
+  --grid:#E8EEF2;
+  --grid2:#F2F6F8;
+  --field:#F7FAFB;
+  --blue:#183A5A;
+  --blue-ink:#FFFFFF;
+  --blue-soft:#EAF2F8;
+  --brand-green:#4B8A5A;
+  --red:#C44D42;
+  --red-soft:#FFF0ED;
+  --green:#4B8A5A;
+  --green-soft:#EAF7ED;
+  --shadow:0 16px 45px rgba(24,58,90,.10);
+}
+body{
+  background:
+    radial-gradient(circle at 12% 8%,rgba(75,138,90,.10),transparent 28%),
+    radial-gradient(circle at 88% 12%,rgba(48,108,160,.10),transparent 26%),
+    var(--bg);
+  padding-inline:18px;
+  padding-bottom:64px;
+}
+.brand{
+  position:sticky;
+  top:0;
+  z-index:50;
+  margin-inline:-18px;
+  padding:12px 18px;
+  background:rgba(255,255,255,.92);
+  backdrop-filter:blur(14px);
+  border-bottom:1px solid rgba(213,224,230,.9);
+  box-shadow:0 8px 24px rgba(24,58,90,.04);
+}
+.brand-in{max-width:1240px}
+.brand img{height:46px}
+.brand nav{gap:10px}
+.brand a{
+  padding:8px 10px;
+  border-radius:999px;
+  transition:.2s ease;
+}
+.brand a:hover{
+  text-decoration:none;
+  background:var(--blue-soft);
+}
+.brand a.cta{
+  padding:10px 16px;
+  border-radius:999px;
+  box-shadow:0 8px 20px rgba(75,138,90,.18);
+}
+.top{
+  max-width:1240px;
+  padding:42px 0 26px;
+  align-items:center;
+}
+.eyebrow{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  padding:7px 10px;
+  border-radius:999px;
+  background:var(--green-soft);
+  color:var(--green);
+  letter-spacing:.08em;
+}
+.eyebrow:before{
+  content:"";
+  width:7px;
+  height:7px;
+  border-radius:50%;
+  background:var(--green);
+}
+h1{
+  font-size:clamp(34px,5vw,52px);
+  line-height:1;
+  letter-spacing:-.03em;
+  color:var(--blue);
+}
+.top p{
+  font-size:15px;
+  line-height:1.6;
+  max-width:52ch;
+}
+.wrap{
+  max-width:1240px;
+  grid-template-columns:310px minmax(0,1fr);
+  gap:28px;
+}
+.builder{gap:14px}
+.panel{
+  border-radius:18px;
+  border:1px solid var(--rule);
+  padding:20px;
+  gap:20px;
+  box-shadow:0 12px 32px rgba(24,58,90,.06);
+}
+.fs legend{
+  color:var(--blue);
+  font-weight:700;
+}
+.seg{
+  border-radius:12px;
+  overflow:hidden;
+  background:var(--field);
+}
+.seg label{
+  padding:10px 8px;
+  font-weight:600;
+}
+.seg input:checked+label{
+  background:var(--blue);
+  color:#fff;
+}
+.chips{gap:8px}
+.chip{
+  border-radius:12px;
+  padding:10px 12px;
+  background:#fff;
+  transition:.18s ease;
+}
+.chip:hover{
+  transform:translateY(-1px);
+  border-color:#AFC1CD;
+  box-shadow:0 6px 16px rgba(24,58,90,.05);
+}
+.chip[aria-pressed="true"]{
+  border-color:rgba(24,58,90,.35);
+  background:linear-gradient(180deg,#F2F7FB 0%,#EAF2F8 100%);
+}
+.btn{
+  border-radius:999px;
+  padding:11px 16px;
+  transition:.18s ease;
+  box-shadow:none;
+}
+.btn:hover{
+  transform:translateY(-1px);
+  box-shadow:0 7px 18px rgba(24,58,90,.08);
+}
+.btn.primary{
+  background:linear-gradient(135deg,#183A5A,#245A84);
+  border-color:transparent;
+  color:#fff;
+  box-shadow:0 10px 24px rgba(24,58,90,.18);
+}
+.btn.primary:hover{filter:none;box-shadow:0 14px 28px rgba(24,58,90,.22)}
+.btn.red{
+  background:linear-gradient(135deg,#B84036,#CE5A4F);
+  border-color:transparent;
+}
+.codein{
+  border-radius:12px;
+  padding:10px 12px;
+  background:#fff;
+}
+.sheet{
+  border-radius:22px;
+  overflow:hidden;
+  border:1px solid var(--rule);
+  box-shadow:var(--shadow);
+}
+.phead{
+  padding:32px 38px 24px;
+  background:
+    linear-gradient(135deg,rgba(24,58,90,.04),rgba(75,138,90,.03)),
+    #fff;
+  border-bottom:1px solid var(--rule);
+}
+.phead h2{
+  font-size:30px;
+  color:var(--blue);
+  letter-spacing:-.025em;
+}
+.code{
+  border-radius:999px;
+  border:1px solid var(--line);
+  background:#fff;
+  padding:9px 13px;
+}
+.timer{
+  color:var(--blue);
+  padding:10px 12px;
+  border-radius:14px;
+  background:var(--blue-soft);
+  min-width:108px;
+}
+.instr{
+  padding:16px 38px;
+  background:#FCFDFD;
+}
+.note{
+  padding:12px 38px;
+  background:#FFF8F4;
+  color:#6C4A42;
+}
+.sect{
+  padding:28px 38px 10px;
+  border-top:0;
+}
+.sect h3{
+  font-size:21px;
+  color:var(--blue);
+}
+.q{
+  margin:12px 18px;
+  padding-left:18px;
+  border:1px solid var(--grid);
+  border-radius:16px;
+  background:#fff;
+  grid-template-columns:2.5rem minmax(0,1fr) 4.2rem;
+  transition:.18s ease;
+}
+.q:hover{
+  border-color:#C9D7DE;
+  box-shadow:0 8px 24px rgba(24,58,90,.05);
+}
+.qn{
+  color:var(--blue);
+  font-weight:700;
+}
+.qb{padding:18px 20px 20px 6px}
+.mcol{
+  border-left:1px dashed #CBD8DF;
+  background:#FAFCFD;
+}
+.tag{
+  display:inline-flex;
+  width:max-content;
+  padding:5px 8px;
+  border-radius:999px;
+  background:var(--blue-soft);
+  color:var(--blue);
+  font-weight:700;
+  letter-spacing:.04em;
+}
+.opts{gap:10px}
+.opt label{
+  border-radius:12px;
+  min-height:48px;
+  background:#fff;
+  transition:.16s ease;
+}
+.opt label:hover{
+  border-color:#AFC1CD;
+  background:#FBFDFE;
+}
+.opt .L{
+  border-color:#BBC8D1;
+}
+.opt input:checked+label{
+  background:var(--blue-soft);
+  border-color:rgba(24,58,90,.45);
+}
+textarea.lines{
+  border:1px solid var(--line);
+  border-radius:12px;
+  background-color:#FBFDFE;
+  padding:8px 12px;
+}
+.ansline input{
+  border-bottom:1.5px solid #9FB1BD;
+  background:#FBFDFE;
+  border-radius:6px 6px 0 0;
+}
+.expl,.ms{
+  border-radius:10px;
+}
+.expl.good,.opt.ok label{
+  background:var(--green-soft);
+}
+.finish{
+  padding:28px 38px 34px;
+  background:#FCFDFD;
+  border-top:1px solid var(--rule);
+}
+.result{
+  margin:18px;
+  border:1px solid var(--rule);
+  border-radius:18px;
+  background:linear-gradient(135deg,#F8FBFD,#FBFDFC);
+}
+.big{color:var(--blue)}
+.bar .tr{height:10px}
+.bar .fl{background:linear-gradient(90deg,#183A5A,#4B8A5A)}
+.foot{
+  max-width:1240px;
+  margin-top:28px;
+  padding:18px 20px;
+  border:1px solid var(--rule);
+  border-radius:16px;
+  background:rgba(255,255,255,.82);
+  text-align:center;
+  line-height:1.65;
+}
+@media (max-width:900px){
+  .wrap{grid-template-columns:1fr}
+  .builder{position:static}
+}
+@media (max-width:640px){
+  body{padding-inline:10px}
+  .brand{margin-inline:-10px;padding-inline:10px}
+  .top{padding-top:28px}
+  .phead,.instr,.note,.finish{padding-inline:16px}
+  .q{margin:10px 6px;padding-left:10px}
+  .sect{padding-inline:16px}
+}
+
 </style>
 
 <div class="brand"><div class="brand-in">
@@ -272,7 +587,7 @@ textarea.lines:focus{outline:2px solid var(--blue);outline-offset:1px}
 
   <main class="sheet" id="sheet" aria-live="polite"></main>
 </div>
-<p class="foot"><strong>© 2026 PrepEnroll™. All Rights Reserved.</strong> · <a href="https://www.prepenroll.com" target="_blank" rel="noopener">www.prepenroll.com</a> · Prep. Learn. Go.<br>This IGCSE Physics Practice Paper Generator, its question bank, interface, design and educational content are owned by PrepEnroll™. Unauthorized copying, reproduction, redistribution, modification or commercial use is prohibited.<br>All questions are original, written in the style of the Cambridge IGCSE Physics 0625 syllabus. This is an independent practice tool, not affiliated with or endorsed by Cambridge International. Take g = 9.8 N/kg.</p>
+<p class="foot"><strong>© 2026 PrepEnroll™. All Rights Reserved.</strong> · <a href="https://www.prepenroll.com" target="_blank" rel="noopener">www.prepenroll.com</a> · Prep. Learn. Go.<br>This IGCSE Physics Practice Paper Generator, its question bank, interface, design and educational content are owned by PrepEnroll™. Unauthorized copying, reproduction, redistribution, modification or commercial use is prohibited.<br>All questions are original and written in the style of the Cambridge IGCSE Physics 0625 syllabus. This is an independent practice tool, not affiliated with or endorsed by Cambridge International. Take g = 9.8 N/kg.</p>
 
 <script>
 /* ---------- utilities ---------- */
