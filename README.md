@@ -1,15 +1,25 @@
-# IGCSE Physics Practice Paper Generator
+# PrepEnroll Practice Generators
 
-A public IGCSE Physics 0625 practice paper generator by **PrepEnroll™**.
+Central public practice hub for **PrepEnroll™**.
 
-**Website:** https://www.prepenroll.com
+**Planned custom domain:** https://practice.prepenroll.com
+
+## Live generators
+- IGCSE Physics 0625 — `/igcse-physics/`
+
+## Planned
+- GCSE Physics
+- IB Physics HL / SL
+- AP Physics
+- A / AS Level Physics
+- CBSE Physics
+- Additional Maths, Chemistry, Biology and other curriculum tools can be added as separate folders.
 
 ## Ownership and copyright
 
 © 2026 PrepEnroll™. All Rights Reserved.
 
-This practice generator, its question bank, interface, design and educational content are owned by PrepEnroll™. Unauthorized copying, reproduction, redistribution, modification or commercial use is prohibited.
+The practice generators, question banks, interfaces, designs and educational content in this repository are owned by PrepEnroll™. Unauthorized copying, reproduction, redistribution, modification or commercial use is prohibited.
 
-All questions are original and written in the style of the Cambridge IGCSE Physics 0625 syllabus. This is an independent practice tool and is not affiliated with or endorsed by Cambridge International.
-
+**Website:** https://www.prepenroll.com  
 **Prep. Learn. Go.**
