@@ -307,6 +307,40 @@ body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--bg); co
 .pe-calc-grid .op{background:#eefaff}.pe-calc-grid .eq{background:linear-gradient(135deg,var(--green),#4cbf78);color:#fff;border:0}
 @media(max-width:700px){.pe-calc{left:10px;right:auto;bottom:62px;width:220px}.pe-calc-toggle{left:10px;right:auto;bottom:12px}}
 
+
+/* CBSE math notation renderer */
+.math-vec,.math-hat{
+  position:relative;
+  display:inline-block;
+  font-family:"Times New Roman","Cambria Math",serif;
+  font-style:italic;
+  line-height:1;
+  padding-top:.22em;
+  margin:0 .03em;
+}
+.math-vec::after{
+  content:"→";
+  position:absolute;
+  left:50%;
+  top:-.62em;
+  transform:translateX(-50%);
+  font-size:.72em;
+  font-style:normal;
+  font-weight:700;
+  line-height:1;
+}
+.math-hat::after{
+  content:"^";
+  position:absolute;
+  left:50%;
+  top:-.52em;
+  transform:translateX(-50%);
+  font-size:.72em;
+  font-style:normal;
+  font-weight:700;
+  line-height:1;
+}
+.q-text,.option-btn,.answer-box{font-variant-ligatures:none}
 </style>
 </head>
 <body>
@@ -657,36 +691,45 @@ function cbseNextQuestion() {
   if (currentQuestionIndex < testQuestions.length - 1) { currentQuestionIndex++; renderCurrentQuestion(); window.scrollTo({top:0,behavior:'smooth'}); }
 }
 
+
+function formatMathText(value='') {
+  return String(value)
+    .replace(/([A-Za-z])⃗/g, '<span class="math-vec">$1</span>')
+    .replace(/î/g, '<span class="math-hat">i</span>')
+    .replace(/ĵ/g, '<span class="math-hat">j</span>')
+    .replace(/([ijk])̂/g, '<span class="math-hat">$1</span>');
+}
+
 function renderQuestion(q, num) {
   const ti = TYPE_INFO[q._type];
   const marks = q._type === 'num' ? (q.marks || 3) : (q._type === 'la' ? 5 : ti.marks);
 
-  let bodyHtml = `<div class="q-text">${q.q}</div>`;
+  let bodyHtml = `<div class="q-text">${formatMathText(q.q)}</div>`;
 
   if (q._type === 'mcq') {
     const keys = ['A','B','C','D'];
     bodyHtml += `<div class="options" id="opts-${q._id}">` +
       q.opts.map((o, i) => `<div class="option-btn" data-idx="${i}" onclick="selectOption('${q._id}', ${i}, ${q.ans})">`+
-        `<span class="opt-key">${keys[i]}.</span> ${o}</div>`).join('') +
+        `<span class="opt-key">${keys[i]}.</span> ${formatMathText(o)}</div>`).join('') +
       `</div>`;
     bodyHtml += `<div id="exp-${q._id}" style="display:none;" class="answer-box visible" style="margin-top:10px;">
-      <div class="ans-label">✓ Correct: ${keys[q.ans]}. ${q.opts[q.ans]}</div>
-      ${q.exp || ''}
+      <div class="ans-label">✓ Correct: ${keys[q.ans]}. ${formatMathText(q.opts[q.ans])}</div>
+      ${formatMathText(q.exp || '')}
     </div>`;
   } else if (q._type === 'la') {
     // Long answer with 3+2 sub-parts
     bodyHtml += (q.parts || []).map((p, pi) => `
       <div class="sub-part">
         <div class="sub-part-header">(${pi===0?'a':'b'}) [${p.marks} marks]</div>
-        <div style="font-size:0.92rem;">${p.q}</div>
+        <div style="font-size:0.92rem;">${formatMathText(p.q)}</div>
         <button class="ans-toggle" onclick="toggleAnswer(this)">▼ Show Answer</button>
-        <div class="answer-box"><div class="ans-label">Model Answer</div>${p.ans}</div>
+        <div class="answer-box"><div class="ans-label">Model Answer</div>${formatMathText(p.ans)}</div>
       </div>`).join('');
     bodyHtml += selfMarkHtml(q._id, marks);
   } else {
     // VSA, SA1, SA2, Numerical
     bodyHtml += `<button class="ans-toggle" onclick="toggleAnswer(this)">▼ Show Answer</button>`;
-    bodyHtml += `<div class="answer-box"><div class="ans-label">Model Answer</div>${q.ans}</div>`;
+    bodyHtml += `<div class="answer-box"><div class="ans-label">Model Answer</div>${formatMathText(q.ans)}</div>`;
     if (q._type !== 'mcq') bodyHtml += selfMarkHtml(q._id, marks);
   }
 
