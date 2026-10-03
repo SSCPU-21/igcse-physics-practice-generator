@@ -1,4 +1,4 @@
-<title>IGCSE Physics Practice Studio | PrepEnroll™</title>
+<title>IGCSE Physics 0625 Practice Studio | PrepEnroll™</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,500..800&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap">
@@ -72,12 +72,17 @@ h1 em{font-style:normal;color:var(--brand-green)}
 .chk input{margin:3px 0 0;accent-color:var(--blue);width:16px;height:16px}
 .chk b{font-weight:500}
 .chk small{grid-column:2;color:var(--muted);font-size:12.5px}
-.chips{display:flex;flex-direction:column;gap:6px}
-.chip{display:grid;grid-template-columns:22px 1fr auto;align-items:center;gap:8px;border:1px solid var(--line);border-radius:5px;padding:7px 10px;cursor:pointer;font-size:14px;background:transparent;text-align:left}
-.chip .n{font:600 12px/1 var(--mono);color:var(--muted)}
-.chip .cnt{font:500 11px/1 var(--mono);color:var(--muted);font-variant-numeric:tabular-nums}
-.chip[aria-pressed="true"]{border-color:var(--blue);background:var(--blue-soft)}
-.chip[aria-pressed="true"] .n{color:var(--blue)}
+.unit-actions{display:flex;gap:8px;margin:0 0 8px}
+.mini-link{border:0;background:transparent;padding:0;color:var(--blue);font:700 11px/1 var(--sans);cursor:pointer}
+.mini-link:hover{text-decoration:underline}
+.chips{display:flex;flex-direction:column;gap:8px}
+.chip{display:grid;grid-template-columns:58px 1fr auto;align-items:center;gap:9px;border:1px solid var(--line);border-radius:10px;padding:10px 11px;cursor:pointer;font-size:13px;background:var(--sheet);text-align:left;transition:.18s ease;box-shadow:0 1px 0 rgba(16,43,67,.02)}
+.chip:hover{transform:translateY(-1px);border-color:#B7C8D4;box-shadow:0 5px 14px rgba(16,43,67,.06)}
+.chip .n{font:700 10.5px/1 var(--mono);letter-spacing:.03em;text-transform:uppercase;color:var(--muted)}
+.chip .unit-name{font-weight:700;color:var(--ink);line-height:1.25}
+.chip .cnt{font:600 10.5px/1 var(--mono);color:var(--muted);font-variant-numeric:tabular-nums;white-space:nowrap}
+.chip[aria-pressed="true"]{border-color:var(--brand-green);background:linear-gradient(135deg,var(--green-soft),var(--sheet))}
+.chip[aria-pressed="true"] .n,.chip[aria-pressed="true"] .cnt{color:var(--brand-green)}
 .lenout{font:12.5px/1.4 var(--mono);color:var(--muted)}
 .btn{border:1px solid var(--line);background:var(--sheet);border-radius:5px;padding:9px 14px;cursor:pointer;font-weight:600;font-size:14px}
 .btn:hover{border-color:var(--ink)}
@@ -1086,7 +1091,8 @@ textarea.lines,.ansline input{background:#FFFFFF;color:#102B43}
         <label class="chk"><input type="checkbox" id="secP" checked><b>Practical skills</b><small>Paper 5/6 style · mark scheme</small></label>
       </fieldset>
       <fieldset class="fs">
-        <legend>Topics</legend>
+        <legend>Units</legend>
+        <div class="unit-actions"><button type="button" class="mini-link" id="allUnits">Select all</button><button type="button" class="mini-link" id="clearUnits">Clear</button></div>
         <div class="chips" id="chips"></div>
       </fieldset>
       <fieldset class="fs">
@@ -1123,7 +1129,7 @@ textarea.lines,.ansline input{background:#FFFFFF;color:#102B43}
 
   <main class="sheet" id="sheet" aria-live="polite"></main>
 </div>
-<p class="foot"><strong>© 2026 PrepEnroll™. All Rights Reserved.</strong> · <a href="https://www.prepenroll.com" target="_blank" rel="noopener">www.prepenroll.com</a> · Prep. Learn. Go.<br>This IGCSE Physics Practice Studio, its question bank, interface, design and educational content are owned by PrepEnroll™. Unauthorized copying, reproduction, redistribution, modification or commercial use is prohibited.<br>All questions are original and written in the style of the Cambridge IGCSE Physics 0625 syllabus. This is an independent practice tool, not affiliated with or endorsed by Cambridge International. Take g = 9.8 N/kg.</p>
+<p class="foot"><strong>© 2026 PrepEnroll™. All Rights Reserved.</strong> · <a href="https://www.prepenroll.com" target="_blank" rel="noopener">www.prepenroll.com</a> · Prep. Learn. Go.<br>This IGCSE Physics 0625 Practice Studio, its question bank, interface, design and educational content are owned by PrepEnroll™. Unauthorized copying, reproduction, redistribution, modification or commercial use is prohibited.<br>All questions are original and written in the style of the Cambridge IGCSE Physics 0625 syllabus. This is an independent practice tool, not affiliated with or endorsed by Cambridge International. Take g = 9.8 N/kg.</p>
 
 <script>
 /* ---------- utilities ---------- */
@@ -1174,7 +1180,7 @@ const TOPICS=[
   {k:'N',n:'Nuclear physics',wm:1.5,wt:1.2},
   {k:'S',n:'Space physics',wm:0.7,wt:1},
 ];
-const TNAME=Object.fromEntries(TOPICS.map(t=>[t.k,t.n]));
+const TNAME=Object.fromEntries(TOPICS.map((t,i)=>[t.k,`Unit ${i+1} · ${t.n}`]));
 
 /* ---------- multiple choice bank ---------- */
 const NUCS=[{s:'U',A:235,Z:92},{s:'C',A:14,Z:6},{s:'Co',A:60,Z:27},{s:'Sr',A:90,Z:38},{s:'I',A:131,Z:53},{s:'Cs',A:137,Z:55},{s:'K',A:40,Z:19},{s:'Ra',A:226,Z:88}];
@@ -3063,12 +3069,14 @@ function updateLen(){readUI();const L=LENS[S.len],b=[];if(S.types&1)b.push(L.m+'
   $('#tierHint').textContent=S.tier==='E'?'Core and Supplement content.':'Core content only.'}
 
 const TCOUNT={};Object.values(BANKS).forEach(bk=>bk.forEach(it=>TCOUNT[it.t]=(TCOUNT[it.t]||0)+1));
-$('#chips').innerHTML=TOPICS.map((t,i)=>`<button type="button" class="chip" aria-pressed="false"><span class="n">${i+1}</span><span>${t.n}</span><span class="cnt">${TCOUNT[t.k]||0}</span></button>`).join('');
+$('#chips').innerHTML=TOPICS.map((t,i)=>`<button type="button" class="chip" aria-pressed="false"><span class="n">Unit ${i+1}</span><span class="unit-name">${t.n}</span><span class="cnt">${TCOUNT[t.k]||0} Q</span></button>`).join('');
 $('#chips').addEventListener('click',e=>{const c=e.target.closest('.chip');if(!c)return;c.setAttribute('aria-pressed',c.getAttribute('aria-pressed')==='true'?'false':'true');updateLen()});
+$('#allUnits').addEventListener('click',()=>{document.querySelectorAll('#chips .chip').forEach(c=>c.setAttribute('aria-pressed','true'));updateLen()});
+$('#clearUnits').addEventListener('click',()=>{document.querySelectorAll('#chips .chip').forEach(c=>c.setAttribute('aria-pressed','false'));updateLen()});
 document.querySelectorAll('.builder input').forEach(i=>i.addEventListener('change',updateLen));
 $('#gen').addEventListener('click',()=>{readUI();const err=$('#genErr');
   if(!S.types){err.textContent='Choose at least one section.';err.hidden=false;return}
-  if(!S.topics){err.textContent='Choose at least one topic.';err.hidden=false;return}
+  if(!S.topics){err.textContent='Choose at least one unit.';err.hidden=false;return}
   err.hidden=true;S.seed=Math.floor(Math.random()*2176782335);start();$('#sheet').scrollIntoView({behavior:'smooth',block:'start'})});
 $('#codeForm').addEventListener('submit',e=>{e.preventDefault();const d=decode($('#codeIn').value),err=$('#codeErr');
   if(!d){err.textContent='That code is not recognised. Codes look like E71R1-4K9QZ.';err.hidden=false;return}
@@ -3079,8 +3087,8 @@ function showTopicStart(){
   $('#sheet').innerHTML=`<div class="start-empty">
     <div class="start-badge">PrepEnroll™ · IGCSE Physics 0625</div>
     <h2>Choose what you want to practise.</h2>
-    <p>Select one or more topics from the sidebar, choose your paper sections and length, then click <b>Generate new paper</b>.</p>
-    <div class="start-steps"><span>1&nbsp; Select topic</span><span>2&nbsp; Choose format</span><span>3&nbsp; Generate & practise</span></div>
+    <p>Select one or more syllabus units, choose your paper sections and length, then click <b>Generate new paper</b>.</p>
+    <div class="start-steps"><span>1&nbsp; Select unit</span><span>2&nbsp; Choose format</span><span>3&nbsp; Generate & practise</span></div>
   </div>`;
 }
 function start(){paper=buildPaper(S);marked=false;ticks={};elapsed=0;attemptId=Date.now().toString(36);startT=Date.now();
@@ -3095,7 +3103,7 @@ function render(){
   const code=encode(S),tierName=S.tier==='E'?'Extended':'Core';
   let h=`<div class="phead"><div><div class="eyebrow">PrepEnroll · IGCSE Physics 0625 · ${tierName} · ${LENS[S.len].n}</div><h2>Practice Paper ${code.split('-')[1]}</h2></div>
     <div class="timer" id="timer">${mmss(elapsed)}<small>${marked?'time taken':'elapsed · suggested '+paper.mins+' min'}</small></div>
-    <div class="meta"><span>Total <b>${paper.marks} marks</b></span><span>Topics <b>${TOPICS.filter((t,i)=>S.topics&(1<<i)).map((t,i)=>TOPICS.indexOf(t)+1).join(', ')}</b></span>
+    <div class="meta"><span>Total <b>${paper.marks} marks</b></span><span>Units <b>${TOPICS.filter((t,i)=>S.topics&(1<<i)).map(t=>TOPICS.indexOf(t)+1).join(', ')}</b></span>
     <span class="codebox">Paper code <span class="code">${code}</span><button class="btn" type="button" id="copyCode">Copy</button></span></div></div>`;
   if(paper.notes.length)h+=`<div class="note">${paper.notes.join(' ')}</div>`;
   h+=`<div id="result"></div>`;
@@ -3211,7 +3219,7 @@ table{width:100%;border-collapse:collapse;font-size:13px}th,td{border-bottom:1px
 <div class="section"><h2>Question-by-question breakdown</h2><table><thead><tr><th>Question</th><th>Section</th><th>Topic</th><th>Marks</th><th>Lost</th><th>Status</th></tr></thead><tbody>${qRows}</tbody></table></div>
 <div class="section"><h2>Topic summary</h2><table><thead><tr><th>Topic</th><th>Score</th><th>Marks lost</th></tr></thead><tbody>${topicRows}</tbody></table></div>
 <div class="actions"><button onclick="window.print()">Print / Save as PDF</button></div>
-<div class="foot"><strong>© 2026 PrepEnroll™. All Rights Reserved.</strong><br>This report was generated from the student's marked attempt in PrepEnroll™ IGCSE Physics Practice Studio. Written-response marks are based on the student's self-marking against the displayed mark scheme.</div>
+<div class="foot"><strong>© 2026 PrepEnroll™. All Rights Reserved.</strong><br>This report was generated from the student's marked attempt in PrepEnroll™ IGCSE Physics 0625 Practice Studio. Written-response marks are based on the student's self-marking against the displayed mark scheme.</div>
 </div></body></html>`;
   const blob=new Blob([html],{type:'text/html;charset=utf-8'});
   const a=document.createElement('a');a.href=URL.createObjectURL(blob);
