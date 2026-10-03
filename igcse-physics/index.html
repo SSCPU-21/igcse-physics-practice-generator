@@ -1296,7 +1296,7 @@ const MCQ=[
   return ord(`The distance–time graph shows a bus journey. In which section is the bus stationary?`,['P','Q','R','S'],flat,`The bus is stationary in section ${L[flat]}: the line is horizontal, so the distance does not change with time.`,graph({pts,labels,xmax:4*w,ymax:Math.max(d,1),xl:'time / s',yl:'distance / m'}))}},
 {t:'M',x:1,f:r=>txt(r,`A skydiver is falling at terminal velocity. Which statement is correct?`,`The air resistance is equal to the skydiver's weight.`,[`The air resistance is greater than the skydiver's weight.`,`There is no air resistance acting.`,`The skydiver's acceleration is 9.8 m/s².`],`At terminal velocity the resultant force is zero: air resistance (drag) equals weight, so there is no acceleration.`)},
 {t:'M',f:r=>{const n=r.p([10,20,25]),T=r.p([0.8,1.2,1.4,1.6,2]),t=rd(n*T,1);return num(r,`A student times ${n} complete oscillations of a pendulum and gets ${t} s. What is the period of the pendulum?`,T,[t*n,n/t,t/(2*n)],'s',`Period = time for one oscillation = ${t} ÷ ${n} = ${fmt(T)} s.`)}},
-{t:'M',f:r=>txt(r,`Which quantity is a vector?`,`velocity`,[`distance`,`mass`,`energy`,`speed`,`time`],`A vector has magnitude and direction. Velocity is speed in a stated direction.`)},
+{t:'M',x:1,f:r=>txt(r,`Which quantity is a vector?`,`velocity`,[`distance`,`mass`,`energy`,`speed`,`time`],`A vector has magnitude and direction. Velocity is speed in a stated direction.`)},
 
 /* 2 Thermal physics */
 {t:'T',f:r=>txt(r,`In which state of matter are the particles close together and vibrate about fixed positions?`,`solid`,[`liquid`,`gas`,`all three states`],`In a solid the particles are closely packed in a regular arrangement and vibrate about fixed positions.`)},
@@ -1630,6 +1630,9 @@ const PR=[
  ]}}},
 ];
 
+/* QA alignment pass: Cambridge IGCSE Physics 0625, examinations 2026–2028.
+   Core/Supplement tagging checked for scalar/vector content, optical-fibre use,
+   magnifying-glass use and right-angle vector resultants. */
 /* ---------- extended bank (per-topic files inlined at build) ---------- */
 /* row formats: [x, stem, correct, [wrong...], explanation]  |  ['o', x, stem, [options], answerIndex, explanation]  |  template object */
 function X(t,rows){return rows.map(r=>{if(!Array.isArray(r))return{t,...r};
@@ -1641,12 +1644,12 @@ MCQ.push(...X('M',[
 /* 1.1 Physical quantities and measurement */
 [0,`Which instrument is most suitable for measuring the length of a laboratory bench?`,`a metre rule`,[`a 30 cm ruler`,`a measuring cylinder`,`a stopwatch`],`A metre rule can measure lengths up to 1 m in one go with a precision of 1 mm. A 30 cm ruler would need repositioning several times.`],
 [0,`A student wants the thickness of one sheet of paper. What is the best method?`,`measure the thickness of 100 sheets with a ruler and divide by 100`,[`measure one sheet with a metre rule`,`measure one sheet with a measuring cylinder`,`weigh one sheet and divide by its area`],`Measuring many sheets together and dividing reduces the effect of the ruler's limited precision.`],
-[0,`Which list contains only vector quantities?`,`force, velocity, acceleration`,[`force, speed, mass`,`distance, velocity, energy`,`mass, time, temperature`],`Vectors have direction as well as size: force, weight, velocity, acceleration, momentum, electric field strength, gravitational field strength.`],
-[0,`Which list contains only scalar quantities?`,`speed, mass, energy`,[`speed, weight, energy`,`velocity, mass, time`,`distance, force, temperature`],`Scalars have size only. Weight is a force, so it is a vector.`],
+[1,`Which list contains only vector quantities?`,`force, velocity, acceleration`,[`force, speed, mass`,`distance, velocity, energy`,`mass, time, temperature`],`Vectors have direction as well as size: force, weight, velocity, acceleration, momentum, electric field strength, gravitational field strength.`],
+[1,`Which list contains only scalar quantities?`,`speed, mass, energy`,[`speed, weight, energy`,`velocity, mass, time`,`distance, force, temperature`],`Scalars have size only. Weight is a force, so it is a vector.`],
 [0,`What is the reading shown by a measuring cylinder when the eye is level with the bottom of the meniscus?`,`the correct volume of the liquid`,[`a value that is too high because of parallax`,`a value that is too low because of parallax`,`the volume of the container`],`Reading at eye level with the bottom of the meniscus avoids parallax error.`],
 [0,`A student uses a stopwatch to time one swing of a pendulum. Why is this inaccurate?`,`Reaction time is large compared with the time being measured.`,[`The stopwatch is not precise enough to measure seconds.`,`The period changes on each swing.`,`The pendulum speeds up during the timing.`],`Human reaction time (about 0.2 s) is a large fraction of one short swing. Timing many swings reduces this effect.`],
 [1,`Two forces of 3.0 N and 4.0 N act at right angles to each other on an object. What is the size of the resultant force?`,`5.0 N`,[`1.0 N`,`7.0 N`,`12 N`],`At right angles: resultant = √(3.0² + 4.0²) = √25 = 5.0 N.`],
-[1,`Two forces act on a point. Their resultant is smallest when the angle between them is`,`180°`,[`0°`,`45°`,`90°`],`Forces in opposite directions (180°) partly cancel, giving the smallest resultant.`],
+[1,`An object has velocity components of 6.0 m/s east and 8.0 m/s north. What is the magnitude of its resultant velocity?`,`10 m/s`,[`2 m/s`,`14 m/s`,`48 m/s`],`For perpendicular components, resultant = √(6.0² + 8.0²) = 10 m/s.`],
 [0,`Which quantity is measured in newtons?`,`weight`,[`mass`,`density`,`energy`],`Weight is a force, measured in newtons (N). Mass is measured in kilograms.`],
 [0,`Which is the SI unit of mass?`,`kilogram`,[`newton`,`gram`,`tonne`],`The SI base unit of mass is the kilogram (kg).`],
 /* 1.2 Motion */
@@ -2221,7 +2224,7 @@ MCQ.push(...X('W',[
 [0,`What is a harmful effect of exposure to microwaves?`,`internal heating of body cells`,[`skin cancer`,`damage to bones`,`mutation of DNA only`],`Microwaves are absorbed by water and can heat body tissue.`],
 [0,`What is a harmful effect of X-rays and gamma rays?`,`mutation or damage to cells, which can cause cancer`,[`sunburn only`,`internal heating only`,`temporary deafness`],`They are ionising and can damage DNA.`],
 [0,`What is a harmful effect of infrared radiation?`,`skin burns`,[`cancer`,`mutation of cells`,`blindness at all doses`],`Too much infrared heats the skin, causing burns.`],
-[0,`Which EM waves are used in optical fibres for communication?`,`visible light and infrared`,[`gamma rays`,`radio waves`,`X-rays`],`Light and infrared pulses carry data in optical fibres.`],
+[1,`Which EM waves are used in optical fibres for communication?`,`visible light and infrared`,[`gamma rays`,`radio waves`,`X-rays`],`Light and infrared pulses carry data in optical fibres.`],
 [1,`Which EM waves are used for communication with satellites?`,`microwaves`,[`long-wave radio`,`visible light`,`gamma rays`],`Microwaves pass through the atmosphere, so they are used for satellite communication.`],
 [1,`Why are microwaves used for satellite communication?`,`They pass through the Earth's atmosphere easily.`,[`They are reflected by the ionosphere.`,`They travel faster than other EM waves.`,`They diffract around the Earth.`],`Microwaves can pass through the atmosphere to and from satellites.`],
 [1,`Which EM waves are used by Bluetooth?`,`radio waves`,[`infrared`,`X-rays`,`ultraviolet`],`Bluetooth uses short-range radio waves.`],
@@ -2270,7 +2273,7 @@ MCQ.push(...X('W',[
 [0,`Why does a white shirt look white in daylight?`,`It reflects all colours of light.`,[`It absorbs all colours.`,`It emits white light.`,`It reflects only blue light.`],`White surfaces reflect all visible wavelengths.`],
 [0,`What happens to the speed of light when it enters water from air?`,`It decreases.`,[`It increases.`,`It stays the same.`,`It becomes zero.`],`Light slows down in denser optical media.`],
 [1,`Light travels from water (n = 1.33) into glass (n = 1.5). How does it bend?`,`towards the normal`,[`away from the normal`,`it does not bend at any angle`,`it undergoes total internal reflection`],`Glass has a higher refractive index than water, so light slows and bends towards the normal.`],
-[0,`A converging lens is used as a magnifying glass. Where must the object be placed?`,`closer to the lens than the principal focus`,[`at 2F`,`beyond 2F`,`exactly at F`],`Inside F, a converging lens gives a virtual, upright, enlarged image.`],
+[1,`A converging lens is used as a magnifying glass. Where must the object be placed?`,`closer to the lens than the principal focus`,[`at 2F`,`beyond 2F`,`exactly at F`],`Inside F, a converging lens gives a virtual, upright, enlarged image.`],
 [0,`Which device uses a converging lens to form a real, diminished image?`,`a camera`,[`a magnifying glass`,`a periscope`,`a plane mirror`],`A camera lens focuses a small real image on the sensor.`],
 [1,`Which device uses a converging lens to form a real, enlarged image on a screen?`,`a projector`,[`a camera`,`a magnifying glass`,`a plane mirror`],`The object (slide) is between F and 2F.`],
 [0,`What is the principal axis of a lens?`,`the line through the centre of the lens at right angles to it`,[`the edge of the lens`,`the line along the surface of the lens`,`the path of any ray through the lens`],`Ray diagrams are drawn around the principal axis.`],
@@ -2285,7 +2288,7 @@ MCQ.push(...X('W',[
 [0,`Which property of a wave is measured in metres?`,`wavelength`,[`frequency`,`period`,`speed`],`Wavelength and amplitude are distances.`],
 [0,`What is the period of a wave?`,`the time for one complete wave to pass a point`,[`the number of waves per second`,`the distance between crests`,`the height of a crest`],`T = 1 ÷ f.`],
 [0,`What is the name for the highest point of a transverse wave?`,`crest`,[`trough`,`compression`,`rarefaction`],`The lowest point is a trough.`],
-[0,`Which type of wave is used to carry signals along an optical fibre?`,`light or infrared`,[`sound`,`ultrasound`,`gamma rays`],`Pulses of visible light or infrared travel along the fibre by total internal reflection.`],
+[1,`Which type of wave is used to carry signals along an optical fibre?`,`light or infrared`,[`sound`,`ultrasound`,`gamma rays`],`Pulses of visible light or infrared travel along the fibre by total internal reflection.`],
 [0,`Which EM radiation is emitted by all warm objects?`,`infrared`,[`ultraviolet`,`X-rays`,`gamma rays`],`All objects above absolute zero emit infrared.`],
 [0,`What type of wave is a radio wave?`,`transverse electromagnetic`,[`longitudinal mechanical`,`transverse mechanical`,`longitudinal electromagnetic`],`All EM waves are transverse.`],
 [0,`Which EM waves are used in fluorescent lamps and to harden dental fillings?`,`ultraviolet`,[`infrared`,`microwaves`,`radio waves`],`UV makes fluorescent coatings glow and sets some fillings.`],
@@ -2302,7 +2305,7 @@ MCQ.push(...X('W',[
 [0,`Which EM wave is used by a doctor to check for a broken bone?`,`X-rays`,[`ultrasound`,`microwaves`,`infrared`],`X-rays pass through soft tissue but are absorbed by bone.`],
 [0,`A student uses a ray box and a semicircular glass block to find the critical angle. What should she look for?`,`the angle of incidence at which the refracted ray just travels along the flat surface`,[`the angle at which all light is absorbed`,`the angle at which the ray is not refracted at all`,`the angle at which the light changes colour`],`At the critical angle, the refracted ray grazes the surface (angle of refraction 90°).`],
 [0,`Which of these statements about light is correct?`,`Light travels in straight lines in a uniform medium.`,[`Light needs air to travel.`,`Light is a longitudinal wave.`,`Light travels more slowly in a vacuum than in glass.`],`Light travels in straight lines unless it is reflected, refracted or diffracted.`],
-[0,`Which of these is correct about an optical fibre?`,`Light travels along it by repeated total internal reflection.`,[`Light travels along it by refraction out of the sides.`,`It needs electricity to carry light.`,`It works only if it is straight.`],`Light hits the inside surface at more than the critical angle each time.`],
+[1,`Which of these is correct about an optical fibre?`,`Light travels along it by repeated total internal reflection.`,[`Light travels along it by refraction out of the sides.`,`It needs electricity to carry light.`,`It works only if it is straight.`],`Light hits the inside surface at more than the critical angle each time.`],
 [1,`A ray inside glass hits the surface at exactly the critical angle. What happens?`,`It refracts along the boundary at 90° to the normal.`,[`It passes into the air bending towards the normal.`,`It is totally absorbed.`,`It returns along its own path.`],`This defines the critical angle.`],
 [0,`What happens to the frequency of a wave when it reflects from a barrier?`,`It stays the same.`,[`It doubles.`,`It halves.`,`It becomes zero.`],`Reflection changes direction only.`],
 [1,`Why is ultrasound, rather than X-rays, used to scan a fetus?`,`Ultrasound is not ionising, so it is safer.`,[`Ultrasound travels faster.`,`X-rays cannot pass through the body.`,`Ultrasound has a longer wavelength than X-rays so it is more detailed.`],`X-rays are ionising and could harm the developing baby.`],
