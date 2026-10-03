@@ -3421,25 +3421,7 @@ table{width:100%;border-collapse:collapse;font-size:13px}th,td{border-bottom:1px
 <div class="actions"><button onclick="window.print()">Print / Save as PDF</button></div>
 <div class="foot"><strong>© 2026 PrepEnroll™. All Rights Reserved.</strong><br>This report was generated from the student's marked attempt in PrepEnroll™ IGCSE Physics 0625 Practice Studio. Written-response marks are based on the student's self-marking against the displayed mark scheme.</div>
 </div>
-<button class="pe-calc-toggle" type="button" onclick="peCalcToggle()">⌗ Mini Calculator</button>
-<div class="pe-calc" id="pe-calc">
-  <div class="pe-calc-head"><span>Practice Calculator</span><button class="pe-calc-close" type="button" onclick="peCalcToggle()">×</button></div>
-  <input class="pe-calc-screen" id="pe-calc-screen" value="" readonly aria-label="Calculator display">
-  <div class="pe-calc-grid">
-    <button onclick="peCalcClear()">C</button><button onclick="peCalcBack()">⌫</button><button class="op" onclick="peCalcAdd('(')">(</button><button class="op" onclick="peCalcAdd(')')">)</button>
-    <button onclick="peCalcAdd('7')">7</button><button onclick="peCalcAdd('8')">8</button><button onclick="peCalcAdd('9')">9</button><button class="op" onclick="peCalcAdd('/')">÷</button>
-    <button onclick="peCalcAdd('4')">4</button><button onclick="peCalcAdd('5')">5</button><button onclick="peCalcAdd('6')">6</button><button class="op" onclick="peCalcAdd('*')">×</button>
-    <button onclick="peCalcAdd('1')">1</button><button onclick="peCalcAdd('2')">2</button><button onclick="peCalcAdd('3')">3</button><button class="op" onclick="peCalcAdd('-')">−</button>
-    <button onclick="peCalcAdd('0')">0</button><button onclick="peCalcAdd('.')">.</button><button class="eq" onclick="peCalcEqual()">=</button><button class="op" onclick="peCalcAdd('+')">+</button>
-  </div>
-</div>
-<script>
-function peCalcToggle(){document.getElementById('pe-calc').classList.toggle('open')}
-function peCalcAdd(v){document.getElementById('pe-calc-screen').value+=v}
-function peCalcClear(){document.getElementById('pe-calc-screen').value=''}
-function peCalcBack(){const s=document.getElementById('pe-calc-screen');s.value=s.value.slice(0,-1)}
-function peCalcEqual(){const s=document.getElementById('pe-calc-screen');try{const e=s.value;if(!/^[0-9+\-*/().\s]+$/.test(e))throw 0;s.value=String(Function('"use strict";return ('+e+')')())}catch(_){s.value='Error'}}
-</script>
+
 
 </body></html>`;
   const blob=new Blob([html],{type:'text/html;charset=utf-8'});
@@ -3553,3 +3535,24 @@ const PE_LEAD_ENDPOINT='https://ziwdwgdncbjclvmuvnfg.supabase.co/functions/v1/pr
   else{S.seed=Math.floor(Math.random()*2176782335);S.topics=0;writeUI();showH();showTopicStart()}
 })();
 </script>
+
+<button class="pe-calc-toggle" type="button" onclick="peCalcToggle()">⌗ Mini Calculator</button>
+<div class="pe-calc" id="pe-calc">
+  <div class="pe-calc-head"><span>Practice Calculator</span><button class="pe-calc-close" type="button" onclick="peCalcToggle()">×</button></div>
+  <input class="pe-calc-screen" id="pe-calc-screen" value="" readonly aria-label="Calculator display">
+  <div class="pe-calc-grid">
+    <button onclick="peCalcClear()">C</button><button onclick="peCalcBack()">⌫</button><button class="op" onclick="peCalcAdd('(')">(</button><button class="op" onclick="peCalcAdd(')')">)</button>
+    <button onclick="peCalcAdd('7')">7</button><button onclick="peCalcAdd('8')">8</button><button onclick="peCalcAdd('9')">9</button><button class="op" onclick="peCalcAdd('/')">÷</button>
+    <button onclick="peCalcAdd('4')">4</button><button onclick="peCalcAdd('5')">5</button><button onclick="peCalcAdd('6')">6</button><button class="op" onclick="peCalcAdd('*')">×</button>
+    <button onclick="peCalcAdd('1')">1</button><button onclick="peCalcAdd('2')">2</button><button onclick="peCalcAdd('3')">3</button><button class="op" onclick="peCalcAdd('-')">−</button>
+    <button onclick="peCalcAdd('0')">0</button><button onclick="peCalcAdd('.')">.</button><button class="eq" onclick="peCalcEqual()">=</button><button class="op" onclick="peCalcAdd('+')">+</button>
+  </div>
+</div>
+<script>
+function peCalcToggle(){document.getElementById('pe-calc').classList.toggle('open')}
+function peCalcAdd(v){document.getElementById('pe-calc-screen').value+=v}
+function peCalcClear(){document.getElementById('pe-calc-screen').value=''}
+function peCalcBack(){const s=document.getElementById('pe-calc-screen');s.value=s.value.slice(0,-1)}
+function peCalcEqual(){const s=document.getElementById('pe-calc-screen');try{const e=s.value;if(!/^[0-9+\-*/().\s]+$/.test(e))throw 0;s.value=String(Function('"use strict";return ('+e+')')())}catch(_){s.value='Error'}}
+</script>
+
