@@ -10,81 +10,84 @@
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=DM+Sans:wght@500;600;700&display=swap" rel="stylesheet">
 <style>
 :root{
-  --navy:#173654;--navy2:#234b70;--green:#4b8a5a;--green2:#6fad79;
-  --ink:#1c2733;--muted:#697582;--line:#e6edf1;--soft:#f7f9fb;
-  --blue:#edf6ff;--mint:#eef8f0;--lav:#f3f0ff;--peach:#fff4ec;--yellow:#fff8df;
+  --navy:#16344f;--navy2:#204968;--green:#4f8d5f;--ink:#17232e;--muted:#6c7885;
+  --line:#e7edf1;--soft:#f8fafb;--blue:#eef6ff;--mint:#eef8f0;--lav:#f3f1ff;
 }
 *{box-sizing:border-box}
 html{scroll-behavior:smooth}
-body{margin:0;font-family:Manrope,system-ui,sans-serif;background:#fff;color:var(--ink)}
+body{margin:0;font-family:Manrope,system-ui,sans-serif;background:#fff;color:var(--ink);overflow-x:hidden}
 a{text-decoration:none;color:inherit}
-header{position:sticky;top:0;z-index:50;background:rgba(255,255,255,.94);backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
+header{position:sticky;top:0;z-index:60;background:rgba(255,255,255,.93);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
 .nav{max-width:1200px;margin:auto;padding:15px 24px;display:flex;align-items:center;justify-content:space-between;gap:20px}
-.brand{display:flex;align-items:center;gap:11px;font-size:22px;font-weight:800;letter-spacing:-.04em;color:var(--navy)}
-.brand-mark{width:40px;height:40px;border-radius:12px;background:linear-gradient(135deg,var(--navy),var(--green));display:grid;place-items:center;color:#fff;font-size:13px;font-weight:800;box-shadow:0 8px 24px rgba(23,54,84,.18)}
+.brand{font-size:22px;font-weight:800;letter-spacing:-.045em;color:var(--navy)}
 .brand span{color:var(--green)}
-.navlinks{display:flex;align-items:center;gap:16px;font-size:13px;font-weight:700;color:var(--navy)}
-.navlinks .site{padding:10px 14px;border:1px solid var(--line);border-radius:999px;background:#fff}
-.hero{max-width:1200px;margin:auto;padding:72px 24px 56px;position:relative}
-.hero:before{content:"";position:absolute;left:-20px;top:22px;width:110px;height:110px;border-radius:32% 68% 61% 39% / 45% 34% 66% 55%;background:var(--mint);opacity:.75;z-index:-1}
-.hero:after{content:"";position:absolute;right:18px;bottom:10px;width:92px;height:92px;border-radius:50%;background:var(--blue);z-index:-1}
-.hero-grid{display:grid;grid-template-columns:minmax(0,1.03fr) minmax(380px,.97fr);gap:52px;align-items:center}
-.eyebrow{display:inline-flex;gap:8px;align-items:center;padding:8px 12px;border-radius:999px;background:var(--mint);color:var(--green);font-size:12px;font-weight:800;letter-spacing:.08em;text-transform:uppercase}
+.navlinks{display:flex;align-items:center;gap:18px;font-size:13px;font-weight:700;color:var(--navy)}
+.site{padding:10px 14px;border:1px solid var(--line);border-radius:999px;background:#fff}
+.hero{position:relative;max-width:1200px;margin:auto;padding:90px 24px 42px;min-height:560px;display:flex;align-items:center}
+.hero-content{position:relative;z-index:4;max-width:860px}
+.eyebrow{display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border-radius:999px;background:var(--mint);color:var(--green);font-size:12px;font-weight:800;letter-spacing:.08em;text-transform:uppercase}
 .eyebrow:before{content:"";width:8px;height:8px;border-radius:50%;background:var(--green)}
-h1{font-size:clamp(50px,7vw,78px);line-height:.98;letter-spacing:-.06em;color:var(--navy);margin:18px 0 20px}
-.hero-copy{font-size:18px;line-height:1.7;color:var(--muted);max-width:690px}
+h1{font-size:clamp(56px,8vw,92px);line-height:.93;letter-spacing:-.065em;color:var(--navy);margin:20px 0 24px}
+.hero p{font-size:18px;line-height:1.75;color:var(--muted);max-width:760px;margin:0}
 .hero-actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:28px}
-.btn{padding:13px 18px;border-radius:999px;font-size:14px;font-weight:800;display:inline-flex;align-items:center;justify-content:center;transition:.2s ease}
-.btn.primary{background:var(--navy);color:#fff;box-shadow:0 12px 28px rgba(23,54,84,.18)}
-.btn.secondary{border:1px solid var(--line);background:#fff;color:var(--navy)}
+.btn{display:inline-flex;align-items:center;justify-content:center;padding:13px 18px;border-radius:999px;font-size:14px;font-weight:800;transition:.2s ease}
+.btn.primary{background:var(--navy);color:#fff;box-shadow:0 12px 28px rgba(22,52,79,.16)}
+.btn.secondary{background:#fff;border:1px solid var(--line);color:var(--navy)}
 .btn:hover{transform:translateY(-2px)}
-.hero-visual{position:relative;min-height:420px}
-.visual-card{background:#fff;border:1px solid var(--line);border-radius:28px;padding:22px;box-shadow:0 24px 70px rgba(23,54,84,.12);position:relative;overflow:hidden}
-.visual-card:before{content:"";position:absolute;width:180px;height:180px;border-radius:50%;background:var(--blue);right:-75px;top:-75px}
-.visual-card svg{width:100%;height:auto;display:block}
-.float{position:absolute;background:#fff;border:1px solid var(--line);border-radius:16px;padding:11px 14px;box-shadow:0 14px 28px rgba(23,54,84,.10);font-size:12px;font-weight:800;color:var(--navy)}
-.f1{left:-18px;top:34px}.f2{right:-18px;bottom:56px}.f3{left:28px;bottom:-18px}
-.fdot{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--green);margin-right:7px}
-.section{max-width:1200px;margin:auto;padding:18px 24px 62px}
-.section-head{display:flex;justify-content:space-between;align-items:flex-end;gap:24px;margin-bottom:22px}
-.section-head h2{margin:8px 0 0;font-size:36px;letter-spacing:-.045em;color:var(--navy)}
-.section-head p{max-width:510px;margin:0;color:var(--muted);font-size:14px;line-height:1.65}
-.live-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
-.studio-card{background:#fff;border:1px solid var(--line);border-radius:22px;overflow:hidden;box-shadow:0 8px 26px rgba(23,54,84,.06);transition:.22s ease}
-.studio-card:hover{transform:translateY(-4px);box-shadow:0 18px 44px rgba(23,54,84,.11)}
-.card-art{height:132px;padding:18px;position:relative;overflow:hidden}
-.card-art.blue{background:var(--blue)}.card-art.lav{background:var(--lav)}.card-art.mint{background:var(--mint)}
-.card-art svg{width:100%;height:100%;display:block}
-.card-body{padding:20px}
-.topline{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.motion-field{position:absolute;inset:0;overflow:hidden;pointer-events:none}
+.orbit{position:absolute;border:1px solid rgba(22,52,79,.10);border-radius:50%;animation:drift 18s linear infinite}
+.o1{width:560px;height:560px;right:-140px;top:-130px}
+.o2{width:360px;height:360px;right:70px;top:35px;animation-duration:14s;animation-direction:reverse}
+.o3{width:760px;height:210px;left:-140px;bottom:20px;border-radius:50%;transform:rotate(-7deg);animation-duration:22s}
+.wave{position:absolute;height:1px;background:linear-gradient(90deg,transparent,rgba(79,141,95,.22),rgba(22,52,79,.18),transparent);width:70%;animation:sweep 9s ease-in-out infinite}
+.w1{top:24%;left:-22%}.w2{top:46%;right:-18%;animation-delay:-3s}.w3{bottom:14%;left:4%;animation-delay:-6s}
+.dot{position:absolute;width:6px;height:6px;border-radius:50%;background:rgba(79,141,95,.34);animation:floatdot 7s ease-in-out infinite}
+.d1{right:18%;top:18%}.d2{right:8%;top:42%;animation-delay:-2s}.d3{left:14%;bottom:16%;animation-delay:-4s}
+@keyframes drift{0%{transform:rotate(0deg) translateX(0)}50%{transform:rotate(180deg) translateX(12px)}100%{transform:rotate(360deg) translateX(0)}}
+@keyframes sweep{0%,100%{transform:translateX(-4%)}50%{transform:translateX(12%)}}
+@keyframes floatdot{0%,100%{transform:translateY(0);opacity:.35}50%{transform:translateY(-16px);opacity:.8}}
+.ticker-wrap{border-top:1px solid var(--line);border-bottom:1px solid var(--line);background:#fff;overflow:hidden}
+.ticker{display:flex;width:max-content;animation:ticker 26s linear infinite}
+.ticker-item{padding:15px 28px;font-size:13px;font-weight:800;color:var(--navy);white-space:nowrap}
+.ticker-item span{color:var(--green);margin-right:9px}
+@keyframes ticker{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+.section{max-width:1200px;margin:auto;padding:62px 24px}
+.section-head{display:flex;align-items:flex-end;justify-content:space-between;gap:24px;margin-bottom:22px}
+.section-head h2{margin:8px 0 0;font-size:38px;letter-spacing:-.045em;color:var(--navy)}
+.section-head p{max-width:520px;margin:0;color:var(--muted);font-size:14px;line-height:1.65}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.card{position:relative;background:#fff;border:1px solid var(--line);border-radius:20px;padding:24px;min-height:230px;display:flex;flex-direction:column;justify-content:space-between;box-shadow:0 8px 22px rgba(22,52,79,.045);transition:.22s ease;overflow:hidden}
+.card:after{content:"";position:absolute;left:0;right:0;bottom:0;height:2px;background:linear-gradient(90deg,var(--green),var(--navy));transform:scaleX(.18);transform-origin:left;transition:.25s ease}
+.card:hover{transform:translateY(-4px);box-shadow:0 18px 40px rgba(22,52,79,.085);border-color:#d8e1e7}
+.card:hover:after{transform:scaleX(1)}
+.topline{display:flex;align-items:center;justify-content:space-between;gap:12px}
 .tag{font-size:11px;font-weight:800;letter-spacing:.07em;text-transform:uppercase;color:var(--navy)}
-.live-pill,.soon-pill{padding:6px 9px;border-radius:999px;font-size:10px;font-weight:800;letter-spacing:.06em;text-transform:uppercase}
-.live-pill{background:var(--mint);color:var(--green)}.soon-pill{background:#f2f4f6;color:#7b8793}
-.card-body h3{font-size:24px;color:var(--navy);letter-spacing:-.03em;margin:13px 0 8px}
-.card-body p{font-size:13px;line-height:1.65;color:var(--muted);margin:0}
-.open{margin-top:18px;display:flex;justify-content:space-between;align-items:center;color:var(--navy);font-size:12px;font-weight:800}
+.pill{padding:6px 9px;border-radius:999px;font-size:10px;font-weight:800;letter-spacing:.06em;text-transform:uppercase}
+.live{background:var(--mint);color:var(--green)}.soon{background:#f2f4f6;color:#808a94}
+.card h3{font-size:25px;letter-spacing:-.035em;color:var(--navy);margin:16px 0 9px}
+.card p{margin:0;color:var(--muted);font-size:13px;line-height:1.68}
+.card-link{margin-top:24px;display:flex;align-items:center;justify-content:space-between;font-size:12px;font-weight:800;color:var(--navy)}
+.minimal-rail{margin:10px 0 0;border:1px solid var(--line);border-radius:18px;overflow:hidden;background:var(--soft)}
+.rail{display:flex;width:max-content;animation:rail 34s linear infinite}
+.rail span{padding:16px 26px;font-size:12px;font-weight:700;color:var(--muted);white-space:nowrap}
+.rail b{color:var(--navy);font-weight:800}
+@keyframes rail{from{transform:translateX(-50%)}to{transform:translateX(0)}}
 .coming-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
-.coming{background:#fff;border:1px solid var(--line);border-radius:18px;padding:18px}
-.coming-top{display:flex;justify-content:space-between;gap:10px;align-items:center}
-.coming h3{color:var(--navy);font-size:19px;margin:13px 0 6px}.coming p{font-size:12px;line-height:1.6;color:var(--muted);margin:0}
-.feature-strip{margin-top:6px;background:var(--soft);border:1px solid var(--line);border-radius:24px;padding:22px;display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
-.feature{background:#fff;border:1px solid var(--line);border-radius:16px;padding:17px}
-.feature .icon{width:38px;height:38px;border-radius:12px;display:grid;place-items:center;background:var(--blue);font-size:19px;margin-bottom:12px}
-.feature:nth-child(2) .icon{background:var(--mint)}.feature:nth-child(3) .icon{background:var(--lav)}.feature:nth-child(4) .icon{background:var(--peach)}
-.feature strong{display:block;color:var(--navy);font-size:14px;margin-bottom:5px}.feature span{font-size:11px;color:var(--muted);line-height:1.55}
-.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
-.step{border:1px solid var(--line);border-radius:18px;padding:19px;background:#fff}
-.step .n{font-size:11px;font-weight:800;color:var(--green);margin-bottom:7px}.step strong{display:block;color:var(--navy);font-size:16px;margin-bottom:6px}.step span{font-size:12px;color:var(--muted);line-height:1.55}
-footer{border-top:1px solid var(--line);padding:28px 24px 42px;text-align:center;color:var(--muted);font-size:12px;line-height:1.8}
+.coming{border:1px solid var(--line);border-radius:18px;padding:20px;background:#fff;min-height:155px}
+.coming h3{color:var(--navy);font-size:20px;margin:14px 0 7px}.coming p{margin:0;color:var(--muted);font-size:12px;line-height:1.6}
+.how{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.step{border-top:1px solid var(--line);padding-top:18px}
+.step .n{font-size:11px;font-weight:800;color:var(--green);margin-bottom:8px}.step strong{display:block;color:var(--navy);font-size:17px;margin-bottom:6px}.step span{font-size:12px;color:var(--muted);line-height:1.6}
+footer{border-top:1px solid var(--line);padding:30px 24px 44px;text-align:center;color:var(--muted);font-size:12px;line-height:1.8}
 footer strong,footer a{color:var(--navy)}
-@media(max-width:920px){.hero-grid{grid-template-columns:1fr}.hero-visual{min-height:auto}.live-grid,.coming-grid{grid-template-columns:1fr 1fr}.feature-strip{grid-template-columns:1fr 1fr}}
-@media(max-width:640px){.navlinks .hide-sm{display:none}.live-grid,.coming-grid,.steps,.feature-strip{grid-template-columns:1fr}.section-head{align-items:flex-start;flex-direction:column}.hero{padding-top:48px}h1{font-size:46px}.hero-copy{font-size:16px}.float{display:none}}
+@media(max-width:900px){.grid,.coming-grid{grid-template-columns:1fr 1fr}.hero{min-height:500px}}
+@media(max-width:640px){.navlinks .hide-sm{display:none}.grid,.coming-grid,.how{grid-template-columns:1fr}.section-head{align-items:flex-start;flex-direction:column}.hero{padding-top:58px;min-height:520px}h1{font-size:52px}.hero p{font-size:16px}.o1{right:-320px}.o2{right:-160px}}
 </style>
 </head>
 <body>
 <header>
   <div class="nav">
-    <a class="brand" href="/prepenroll-practice/"><div class="brand-mark">PE</div><div>Prep<span>Enroll</span>™ Practice</div></a>
+    <a class="brand" href="/prepenroll-practice/">Prep<span>Enroll</span>™ Practice</a>
     <div class="navlinks">
       <a class="hide-sm" href="#live">Live Studios</a>
       <a class="hide-sm" href="#coming">Coming Soon</a>
@@ -95,125 +98,82 @@ footer strong,footer a{color:var(--navy)}
 
 <main>
 <section class="hero">
-  <div class="hero-grid">
-    <div>
-      <div class="eyebrow">Physics Practice Hub</div>
-      <h1>Practice physics.<br>By curriculum.<br>In one place.</h1>
-      <div class="hero-copy">PrepEnroll™ brings curriculum-specific physics practice studios into one clean hub. Choose your course, generate focused practice and review your performance.</div>
-      <div class="hero-actions">
-        <a class="btn primary" href="#live">Explore Live Studios</a>
-        <a class="btn secondary" href="#coming">See What’s Coming</a>
-      </div>
-    </div>
-    <div class="hero-visual">
-      <div class="visual-card">
-        <svg viewBox="0 0 640 430" xmlns="http://www.w3.org/2000/svg" aria-label="Physics study illustration">
-          <rect x="0" y="0" width="640" height="430" rx="26" fill="#ffffff"/>
-          <circle cx="514" cy="84" r="70" fill="#EEF8F0"/>
-          <circle cx="108" cy="334" r="62" fill="#EDF6FF"/>
-          <rect x="118" y="88" width="405" height="256" rx="22" fill="#F8FAFC" stroke="#DDE7EC" stroke-width="2"/>
-          <rect x="148" y="116" width="345" height="46" rx="13" fill="#173654"/>
-          <circle cx="174" cy="139" r="7" fill="#6FAD79"/>
-          <rect x="193" y="132" width="126" height="14" rx="7" fill="#FFFFFF" opacity=".92"/>
-          <rect x="150" y="188" width="150" height="126" rx="18" fill="#FFFFFF" stroke="#E4EBEF"/>
-          <circle cx="225" cy="240" r="37" fill="#EEF8F0" stroke="#4B8A5A" stroke-width="3"/>
-          <ellipse cx="225" cy="240" rx="68" ry="20" fill="none" stroke="#173654" stroke-width="3"/>
-          <ellipse cx="225" cy="240" rx="20" ry="68" fill="none" stroke="#173654" stroke-width="3" transform="rotate(30 225 240)"/>
-          <circle cx="287" cy="236" r="7" fill="#4B8A5A"/>
-          <circle cx="203" cy="180" r="7" fill="#173654"/>
-          <rect x="326" y="188" width="167" height="22" rx="11" fill="#E8EEF3"/>
-          <rect x="326" y="223" width="132" height="18" rx="9" fill="#EEF8F0"/>
-          <rect x="326" y="254" width="146" height="18" rx="9" fill="#EDF6FF"/>
-          <rect x="326" y="286" width="112" height="18" rx="9" fill="#F3F0FF"/>
-          <path d="M548 290 C590 260 595 202 556 170" fill="none" stroke="#173654" stroke-width="5" stroke-linecap="round"/>
-          <circle cx="555" cy="168" r="9" fill="#4B8A5A"/>
-          <line x1="547" y1="290" x2="596" y2="290" stroke="#173654" stroke-width="5" stroke-linecap="round"/>
-          <circle cx="96" cy="86" r="18" fill="#FFF4EC"/>
-          <path d="M81 86h30M96 71v30" stroke="#173654" stroke-width="3" stroke-linecap="round"/>
-          <path d="M72 375 C130 344 165 354 207 381" fill="none" stroke="#6FAD79" stroke-width="4" stroke-linecap="round"/>
-        </svg>
-      </div>
-      <div class="float f1"><span class="fdot"></span>IGCSE · IB · AP</div>
-      <div class="float f2">MCQ + FRQ practice</div>
-      <div class="float f3">Live scoring & review</div>
+  <div class="motion-field">
+    <div class="orbit o1"></div><div class="orbit o2"></div><div class="orbit o3"></div>
+    <div class="wave w1"></div><div class="wave w2"></div><div class="wave w3"></div>
+    <div class="dot d1"></div><div class="dot d2"></div><div class="dot d3"></div>
+  </div>
+  <div class="hero-content">
+    <div class="eyebrow">Physics Practice Hub</div>
+    <h1>One place for<br>serious physics<br>practice.</h1>
+    <p>Choose your curriculum, open the right studio and generate focused practice. IGCSE, IB and AP Physics are live now, with more curricula coming into the same PrepEnroll™ hub.</p>
+    <div class="hero-actions">
+      <a class="btn primary" href="#live">Explore Live Studios</a>
+      <a class="btn secondary" href="#coming">View Coming Soon</a>
     </div>
   </div>
 </section>
 
+<div class="ticker-wrap">
+  <div class="ticker">
+    <div class="ticker-item"><span>LIVE</span>IGCSE Physics 0625</div>
+    <div class="ticker-item"><span>LIVE</span>IB Physics SL & HL</div>
+    <div class="ticker-item"><span>LIVE</span>AP Physics 1</div>
+    <div class="ticker-item"><span>NEXT</span>GCSE Physics</div>
+    <div class="ticker-item"><span>NEXT</span>A / AS Level Physics</div>
+    <div class="ticker-item"><span>NEXT</span>CBSE Physics</div>
+    <div class="ticker-item"><span>LIVE</span>IGCSE Physics 0625</div>
+    <div class="ticker-item"><span>LIVE</span>IB Physics SL & HL</div>
+    <div class="ticker-item"><span>LIVE</span>AP Physics 1</div>
+    <div class="ticker-item"><span>NEXT</span>GCSE Physics</div>
+    <div class="ticker-item"><span>NEXT</span>A / AS Level Physics</div>
+    <div class="ticker-item"><span>NEXT</span>CBSE Physics</div>
+  </div>
+</div>
+
 <section class="section" id="live">
   <div class="section-head">
     <div><div class="eyebrow">Available now</div><h2>Live Practice Studios</h2></div>
-    <p>Each studio has its own curriculum structure, question bank and practice flow—while staying inside one PrepEnroll™ ecosystem.</p>
+    <p>Each studio keeps its own curriculum structure and practice flow, while staying inside one clean PrepEnroll™ Physics hub.</p>
   </div>
-
-  <div class="live-grid">
-    <a class="studio-card" href="/prepenroll-practice/igcse-physics/">
-      <div class="card-art blue">
-        <svg viewBox="0 0 360 120" xmlns="http://www.w3.org/2000/svg">
-          <rect x="28" y="16" width="118" height="88" rx="16" fill="#fff" stroke="#dbe8f2"/>
-          <path d="M48 81l22-30 20 18 17-24 18 36" fill="none" stroke="#173654" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
-          <circle cx="70" cy="51" r="6" fill="#4B8A5A"/>
-          <rect x="170" y="27" width="130" height="12" rx="6" fill="#173654" opacity=".9"/>
-          <rect x="170" y="52" width="105" height="10" rx="5" fill="#4B8A5A" opacity=".55"/>
-          <rect x="170" y="75" width="118" height="10" rx="5" fill="#173654" opacity=".18"/>
-        </svg>
-      </div>
-      <div class="card-body">
-        <div class="topline"><span class="tag">IGCSE</span><span class="live-pill">Live</span></div>
+  <div class="grid">
+    <a class="card" href="/prepenroll-practice/igcse-physics/">
+      <div>
+        <div class="topline"><span class="tag">IGCSE</span><span class="pill live">Live</span></div>
         <h3>Physics 0625</h3>
-        <p>Topic-based practice with generated papers, answer checking and performance review.</p>
-        <div class="open"><span>Open Studio</span><span>→</span></div>
+        <p>Topic-based practice with generated papers, marking and performance review.</p>
       </div>
+      <div class="card-link"><span>Open Studio</span><span>→</span></div>
     </a>
-
-    <a class="studio-card" href="/prepenroll-practice/ib-physics/">
-      <div class="card-art lav">
-        <svg viewBox="0 0 360 120" xmlns="http://www.w3.org/2000/svg">
-          <circle cx="90" cy="60" r="34" fill="#fff" stroke="#ded8f3"/>
-          <ellipse cx="90" cy="60" rx="60" ry="18" fill="none" stroke="#173654" stroke-width="3"/>
-          <ellipse cx="90" cy="60" rx="18" ry="60" fill="none" stroke="#4B8A5A" stroke-width="3" transform="rotate(28 90 60)"/>
-          <circle cx="145" cy="58" r="6" fill="#173654"/>
-          <rect x="184" y="28" width="112" height="12" rx="6" fill="#173654" opacity=".9"/>
-          <rect x="184" y="53" width="88" height="10" rx="5" fill="#4B8A5A" opacity=".55"/>
-          <rect x="184" y="76" width="124" height="10" rx="5" fill="#173654" opacity=".18"/>
-        </svg>
-      </div>
-      <div class="card-body">
-        <div class="topline"><span class="tag">IB</span><span class="live-pill">Live</span></div>
+    <a class="card" href="/prepenroll-practice/ib-physics/">
+      <div>
+        <div class="topline"><span class="tag">IB</span><span class="pill live">Live</span></div>
         <h3>Physics SL & HL</h3>
         <p>Practice Paper 1A, Paper 1B and Paper 2 with theme filters, scoring and review.</p>
-        <div class="open"><span>Open Studio</span><span>→</span></div>
       </div>
+      <div class="card-link"><span>Open Studio</span><span>→</span></div>
     </a>
-
-    <a class="studio-card" href="/prepenroll-practice/ap-physics-1/">
-      <div class="card-art mint">
-        <svg viewBox="0 0 360 120" xmlns="http://www.w3.org/2000/svg">
-          <line x1="56" y1="25" x2="56" y2="94" stroke="#173654" stroke-width="4" stroke-linecap="round"/>
-          <line x1="56" y1="26" x2="121" y2="26" stroke="#173654" stroke-width="4" stroke-linecap="round"/>
-          <line x1="121" y1="26" x2="121" y2="78" stroke="#173654" stroke-width="3"/>
-          <circle cx="121" cy="88" r="12" fill="#4B8A5A"/>
-          <path d="M164 92 C195 44 229 44 260 92" fill="none" stroke="#173654" stroke-width="4" stroke-linecap="round"/>
-          <circle cx="212" cy="57" r="7" fill="#4B8A5A"/>
-          <rect x="278" y="30" width="48" height="12" rx="6" fill="#173654" opacity=".9"/>
-          <rect x="278" y="55" width="34" height="10" rx="5" fill="#4B8A5A" opacity=".55"/>
-          <rect x="278" y="78" width="42" height="10" rx="5" fill="#173654" opacity=".18"/>
-        </svg>
-      </div>
-      <div class="card-body">
-        <div class="topline"><span class="tag">AP</span><span class="live-pill">Live</span></div>
+    <a class="card" href="/prepenroll-practice/ap-physics-1/">
+      <div>
+        <div class="topline"><span class="tag">AP</span><span class="pill live">Live</span></div>
         <h3>Physics 1</h3>
         <p>MCQ and FRQ practice with unit, subtopic and difficulty filters plus results review.</p>
-        <div class="open"><span>Open Studio</span><span>→</span></div>
       </div>
+      <div class="card-link"><span>Open Studio</span><span>→</span></div>
     </a>
   </div>
 
-  <div class="feature-strip">
-    <div class="feature"><div class="icon">⚙️</div><strong>Custom practice</strong><span>Select topics, units and paper styles where available.</span></div>
-    <div class="feature"><div class="icon">✍️</div><strong>MCQ + FRQ</strong><span>Mix quick-response and written-answer practice.</span></div>
-    <div class="feature"><div class="icon">📊</div><strong>Performance review</strong><span>Check answers, scores and areas that need more work.</span></div>
-    <div class="feature"><div class="icon">⏱️</div><strong>Exam-mode focus</strong><span>Use timed practice when you want more exam pressure.</span></div>
+  <div class="minimal-rail">
+    <div class="rail">
+      <span><b>Topic filters</b> · focus your practice</span>
+      <span><b>MCQ + FRQ</b> · different response formats</span>
+      <span><b>Timed mode</b> · practise under pressure</span>
+      <span><b>Review</b> · check your performance</span>
+      <span><b>Topic filters</b> · focus your practice</span>
+      <span><b>MCQ + FRQ</b> · different response formats</span>
+      <span><b>Timed mode</b> · practise under pressure</span>
+      <span><b>Review</b> · check your performance</span>
+    </div>
   </div>
 </section>
 
@@ -223,26 +183,26 @@ footer strong,footer a{color:var(--navy)}
     <p>More Physics studios will appear here as they are prepared and tested.</p>
   </div>
   <div class="coming-grid">
-    <div class="coming"><div class="coming-top"><span class="tag">GCSE</span><span class="soon-pill">Coming Soon</span></div><h3>Physics</h3><p>Curriculum-based GCSE Physics practice.</p></div>
-    <div class="coming"><div class="coming-top"><span class="tag">A / AS Level</span><span class="soon-pill">Coming Soon</span></div><h3>Physics</h3><p>Topic and paper-based A Level / AS Level practice.</p></div>
-    <div class="coming"><div class="coming-top"><span class="tag">CBSE</span><span class="soon-pill">Coming Soon</span></div><h3>Physics</h3><p>Structured CBSE Physics revision and practice.</p></div>
+    <div class="coming"><div class="topline"><span class="tag">GCSE</span><span class="pill soon">Coming Soon</span></div><h3>Physics</h3><p>Curriculum-based GCSE Physics practice.</p></div>
+    <div class="coming"><div class="topline"><span class="tag">A / AS Level</span><span class="pill soon">Coming Soon</span></div><h3>Physics</h3><p>Topic and paper-based A Level / AS Level practice.</p></div>
+    <div class="coming"><div class="topline"><span class="tag">CBSE</span><span class="pill soon">Coming Soon</span></div><h3>Physics</h3><p>Structured CBSE Physics revision and practice.</p></div>
   </div>
 </section>
 
 <section class="section">
   <div class="section-head"><div><div class="eyebrow">Simple workflow</div><h2>How it works</h2></div></div>
-  <div class="steps">
-    <div class="step"><div class="n">01</div><strong>Choose your curriculum</strong><span>Pick the Physics studio that matches your course.</span></div>
-    <div class="step"><div class="n">02</div><strong>Set your practice</strong><span>Select topics, question type, difficulty or paper style.</span></div>
+  <div class="how">
+    <div class="step"><div class="n">01</div><strong>Choose your curriculum</strong><span>Select the Physics studio that matches your course.</span></div>
+    <div class="step"><div class="n">02</div><strong>Set your practice</strong><span>Pick topics, question type, difficulty or paper style.</span></div>
     <div class="step"><div class="n">03</div><strong>Generate & review</strong><span>Attempt the test, mark it and review your performance.</span></div>
   </div>
 </section>
 </main>
 
 <footer>
-<strong>© 2026 PrepEnroll™. All Rights Reserved.</strong><br>
-Independent curriculum-based practice tools by PrepEnroll™.<br>
-<a href="https://www.prepenroll.com" target="_blank" rel="noopener">www.prepenroll.com</a> · <a href="/prepenroll-practice/privacy/">Privacy</a>
+  <strong>© 2026 PrepEnroll™. All Rights Reserved.</strong><br>
+  Independent curriculum-based practice tools by PrepEnroll™.<br>
+  <a href="https://www.prepenroll.com" target="_blank" rel="noopener">www.prepenroll.com</a> · <a href="/prepenroll-practice/privacy/">Privacy</a>
 </footer>
 </body>
 </html>
