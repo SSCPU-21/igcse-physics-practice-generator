@@ -154,6 +154,51 @@ h1 em{font-style:normal;color:var(--brand-green)}
 .instant-feedback{margin-top:12px;padding:12px 14px;border-radius:12px;font-size:13px;line-height:1.55;border-left:4px solid #B7433A;background:#FFF0EE;color:#6D302B}
 .instant-feedback.correct{border-left-color:#3F7F4C;background:#EEF8F1;color:#285D35}
 .instant-feedback strong{display:block;margin-bottom:3px}
+/* IGCSE student-card palette: light professional neon */
+.card-mode .q.card-active{border-color:#CFDDE5!important;box-shadow:0 16px 38px rgba(20,52,79,.10)!important}
+.card-mode .q.card-active:before{content:"";position:absolute;inset:0 auto 0 0;width:4px;background:linear-gradient(180deg,#63D6E8,#7ED993,#9B8CFF);pointer-events:none}
+.card-mode .q.card-active{position:relative}
+.card-mode .q.card-active .tag{display:inline-flex;width:max-content;padding:6px 9px;border-radius:999px;background:#EEF8FF;color:#255C79;font-weight:800}
+.card-mode .q.card-active.unit-M .tag{background:#EAF8FF;color:#23657A}
+.card-mode .q.card-active.unit-T .tag{background:#FFF4DA;color:#8A651B}
+.card-mode .q.card-active.unit-W .tag{background:#F1EDFF;color:#6253A8}
+.card-mode .q.card-active.unit-E .tag{background:#EAF8EF;color:#39714A}
+.card-mode .q.card-active.unit-N .tag{background:#FFF0F5;color:#9A4B69}
+.card-mode .q.card-active.unit-S .tag{background:#ECF8FA;color:#397181}
+
+.card-mode .opt label{background:#FFFFFF!important;border-color:#D6E1E7!important;color:#173B5A!important;box-shadow:none!important}
+.card-mode .opt label:hover{background:#F7FCFF!important;border-color:#7CCFE0!important}
+.card-mode .opt input:checked+label{
+  background:linear-gradient(135deg,#EAF9FF,#F0FFF5)!important;
+  border-color:#59C7DA!important;
+  box-shadow:0 0 0 3px rgba(89,199,218,.13)!important;
+  color:#173B5A!important
+}
+.card-mode .opt input:checked+label .L{
+  background:#DDF7FC!important;border-color:#59C7DA!important;color:#14556A!important
+}
+.card-mode .opt.ok label{
+  background:#EAF8EF!important;border-color:#77C889!important;color:#245C35!important;
+  box-shadow:0 0 0 3px rgba(119,200,137,.12)!important
+}
+.card-mode .opt.ok .L{
+  background:#BDEBC8!important;border-color:#77C889!important;color:#245C35!important
+}
+.card-mode .opt.bad label{
+  background:#FFF0EE!important;border-color:#F09A8E!important;color:#7A3B34!important;
+  box-shadow:0 0 0 3px rgba(240,154,142,.10)!important
+}
+.card-mode .opt.bad .L{
+  background:#FFD5CF!important;border-color:#F09A8E!important;color:#7A3B34!important
+}
+.card-mode .instant-feedback.correct{background:linear-gradient(135deg,#ECFAF0,#F4FFF8)!important;border-left-color:#63BF78!important;color:#285D35!important}
+.card-mode .instant-feedback:not(.correct){background:linear-gradient(135deg,#FFF1EF,#FFF7F5)!important;border-left-color:#EB7F71!important;color:#74382F!important}
+.cardnav .progress-fill{background:linear-gradient(90deg,#173B5A,#4FAF73,#59C7DA,#8C7BE8)!important}
+.qpill.current{background:linear-gradient(135deg,#173B5A,#3E6687)!important;border-color:#173B5A!important}
+.qpill.answered:not(.current){background:#EEFAF1!important;border-color:#8BD29B!important;color:#356C43!important}
+.check-answer{background:linear-gradient(90deg,#285E7A,#4FAF73,#59C7DA)!important}
+.card-footer-nav button.primary{background:linear-gradient(90deg,#173B5A,#285E7A)!important}
+
 .check-answer{border:0!important;background:linear-gradient(90deg,#173B5A,#3F7F4C)!important;color:#fff!important}
 .check-answer:disabled{background:#D9E1E6!important;color:#7F8B94!important}
 
@@ -3204,7 +3249,7 @@ function applyInstantFeedback(){
       else{
         const sel=selected?+selected.value:undefined,ok=sel===q.a;
         fb.hidden=false;fb.className='instant-feedback'+(ok?' correct':'');
-        fb.innerHTML='<strong>'+(ok?'Correct ✓':'Not quite ✕')+'</strong>'+(ok?'Your answer is correct. ':'Correct answer: '+LET[q.a]+'. ')+q.e;
+        fb.innerHTML='<strong>'+(ok?'Correct ✓':'Not quite ✕')+'</strong>'+(ok?'Yes — your answer is correct. ':'Correct answer: '+LET[q.a]+'. ')+q.e;
       }
     }
   });
