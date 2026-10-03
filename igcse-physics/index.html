@@ -1096,6 +1096,20 @@ textarea.lines,.ansline input{background:#FFFFFF;color:#102B43}
 .pe-honeypot{position:absolute!important;left:-9999px!important;width:1px!important;height:1px!important;overflow:hidden!important}
 @media(max-width:620px){.pe-grid2{grid-template-columns:1fr}.pe-age-row{grid-template-columns:1fr}.pe-gate-head,.pe-gate-form{padding-inline:18px}}
 
+
+/* Shared PrepEnroll mini calculator */
+.pe-calc-toggle{position:fixed;right:18px;bottom:18px;z-index:9998;border:0;border-radius:999px;padding:10px 14px;font:700 12px system-ui;color:#fff;background:linear-gradient(135deg,#173654,#3E7B3A);box-shadow:0 10px 28px rgba(23,54,84,.22);cursor:pointer}
+.pe-calc{position:fixed;right:18px;bottom:66px;z-index:9999;width:236px;padding:12px;border:1px solid rgba(56,217,255,.25);border-radius:16px;background:rgba(255,255,255,.96);box-shadow:0 18px 50px rgba(20,45,87,.22);backdrop-filter:blur(12px);display:none}
+.pe-calc.open{display:block}
+.pe-calc-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;font-size:12px;font-weight:800;color:#173654}
+.pe-calc-close{border:0;background:none;font-size:18px;cursor:pointer;color:#687386}
+.pe-calc-screen{box-sizing:border-box;width:100%;height:42px;border:1px solid rgba(24,35,63,.12);border-radius:10px;padding:8px 10px;text-align:right;font-size:18px;font-weight:800;color:#173654;background:#fafdff;margin-bottom:8px}
+.pe-calc-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+.pe-calc-grid button{border:1px solid rgba(24,35,63,.12);border-radius:9px;padding:9px 0;background:#fff;color:#173654;font-weight:800;cursor:pointer}
+.pe-calc-grid button:hover{border-color:#38d9ff;box-shadow:0 0 12px rgba(56,217,255,.14)}
+.pe-calc-grid .op{background:#eefaff}.pe-calc-grid .eq{background:linear-gradient(135deg,#3E7B3A,#4cbf78);color:#fff;border:0}
+@media(max-width:700px){.pe-calc{right:10px;bottom:62px;width:220px}.pe-calc-toggle{right:10px;bottom:12px}}
+
 </style>
 
 <div class="pe-gate" id="peGate" hidden>
@@ -3406,7 +3420,28 @@ table{width:100%;border-collapse:collapse;font-size:13px}th,td{border-bottom:1px
 <div class="section"><h2>Unit summary</h2><table><thead><tr><th>Unit</th><th>Score</th><th>Marks lost</th></tr></thead><tbody>${topicRows}</tbody></table></div>
 <div class="actions"><button onclick="window.print()">Print / Save as PDF</button></div>
 <div class="foot"><strong>© 2026 PrepEnroll™. All Rights Reserved.</strong><br>This report was generated from the student's marked attempt in PrepEnroll™ IGCSE Physics 0625 Practice Studio. Written-response marks are based on the student's self-marking against the displayed mark scheme.</div>
-</div></body></html>`;
+</div>
+<button class="pe-calc-toggle" type="button" onclick="peCalcToggle()">⌗ Mini Calculator</button>
+<div class="pe-calc" id="pe-calc">
+  <div class="pe-calc-head"><span>Practice Calculator</span><button class="pe-calc-close" type="button" onclick="peCalcToggle()">×</button></div>
+  <input class="pe-calc-screen" id="pe-calc-screen" value="" readonly aria-label="Calculator display">
+  <div class="pe-calc-grid">
+    <button onclick="peCalcClear()">C</button><button onclick="peCalcBack()">⌫</button><button class="op" onclick="peCalcAdd('(')">(</button><button class="op" onclick="peCalcAdd(')')">)</button>
+    <button onclick="peCalcAdd('7')">7</button><button onclick="peCalcAdd('8')">8</button><button onclick="peCalcAdd('9')">9</button><button class="op" onclick="peCalcAdd('/')">÷</button>
+    <button onclick="peCalcAdd('4')">4</button><button onclick="peCalcAdd('5')">5</button><button onclick="peCalcAdd('6')">6</button><button class="op" onclick="peCalcAdd('*')">×</button>
+    <button onclick="peCalcAdd('1')">1</button><button onclick="peCalcAdd('2')">2</button><button onclick="peCalcAdd('3')">3</button><button class="op" onclick="peCalcAdd('-')">−</button>
+    <button onclick="peCalcAdd('0')">0</button><button onclick="peCalcAdd('.')">.</button><button class="eq" onclick="peCalcEqual()">=</button><button class="op" onclick="peCalcAdd('+')">+</button>
+  </div>
+</div>
+<script>
+function peCalcToggle(){document.getElementById('pe-calc').classList.toggle('open')}
+function peCalcAdd(v){document.getElementById('pe-calc-screen').value+=v}
+function peCalcClear(){document.getElementById('pe-calc-screen').value=''}
+function peCalcBack(){const s=document.getElementById('pe-calc-screen');s.value=s.value.slice(0,-1)}
+function peCalcEqual(){const s=document.getElementById('pe-calc-screen');try{const e=s.value;if(!/^[0-9+\-*/().\s]+$/.test(e))throw 0;s.value=String(Function('"use strict";return ('+e+')')())}catch(_){s.value='Error'}}
+</script>
+
+</body></html>`;
   const blob=new Blob([html],{type:'text/html;charset=utf-8'});
   const a=document.createElement('a');a.href=URL.createObjectURL(blob);
   a.download=`PrepEnroll_IGCSE_Physics_Scorecard_${code.replace(/[^A-Z0-9-]/gi,'_')}.html`;
