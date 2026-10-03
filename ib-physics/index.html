@@ -230,6 +230,20 @@ table.t th{font-family:var(--sans);font-weight:600;font-size:13px;background:var
 .expl b{color:var(--red)}
 .expl.good{border-left-color:var(--green);background:var(--green-soft)}
 .expl.good b{color:var(--green)}
+.ib-cardmode .opt input:checked+label{
+  background:linear-gradient(135deg,#EAF9FF,#F0FFF5)!important;
+  border-color:#59C7DA!important;color:#173B5A!important;
+  box-shadow:0 0 0 3px rgba(89,199,218,.12)!important
+}
+.ib-cardmode .opt input:checked+label .L{background:#DDF7FC!important;border-color:#59C7DA!important;color:#14556A!important}
+.ib-cardmode .opt.ok label{background:#ECFAF1!important;border-color:#78CA8A!important;color:#285D35!important}
+.ib-cardmode .opt.ok .L{background:#BDEBC8!important;border-color:#78CA8A!important;color:#285D35!important}
+.ib-cardmode .opt.bad label{background:#FFF0EE!important;border-color:#EE9A8E!important;color:#74382F!important}
+.ib-cardmode .opt.bad .L{background:#FFD8D2!important;border-color:#EE9A8E!important;color:#74382F!important}
+.ib-cardmode .expl{background:#FFF4F2!important;border-left-color:#EB8173!important;color:#74382F!important;border-radius:10px!important;padding:11px 13px!important}
+.ib-cardmode .expl.good{background:#EEF9F1!important;border-left-color:#68BE7B!important;color:#285D35!important}
+.ib-cardmode .expl b{color:inherit!important}
+
 
 .part{display:flex;flex-direction:column;gap:8px}
 .part+.part{padding-top:6px}
@@ -256,6 +270,13 @@ textarea.lines:focus{outline:2px solid var(--blue);outline-offset:1px}
 
 .finish{padding:24px 40px 32px;border-top:2px solid var(--ink);display:flex;gap:12px;align-items:center;flex-wrap:wrap}
 .finish p{margin:0;color:var(--muted);font-size:13.5px;flex:1;min-width:220px}
+.finish{background:linear-gradient(90deg,#FBFDFF 0%,#F6FCF8 52%,#FAF8FF 100%)!important;border-top:1px solid #DCE7EC!important}
+.finish .btn{border-radius:999px!important;border:1px solid #D2E0E7!important;background:#FFFFFF!important;color:#173B5A!important;box-shadow:0 6px 16px rgba(23,54,84,.05)!important}
+.finish .btn.primary{background:linear-gradient(90deg,#173B5A,#4F8D5F,#59C7DA)!important;color:#fff!important;border-color:transparent!important}
+.finish .btn:hover{border-color:#8CC9D6!important;background:#F4FBFD!important}
+.finish .btn.primary:hover{filter:brightness(1.03)!important}
+.report-note{color:#657786!important}
+
 @media (max-width:640px){.finish{padding-inline:16px}}
 
 .result{margin:0;padding:24px 40px;border-bottom:1px solid var(--rule);background:var(--field);display:grid;grid-template-columns:auto 1fr;gap:20px 36px;align-items:start}
@@ -2536,7 +2557,7 @@ function buildPaper(s){
 /* ---------- state + UI ---------- */
 const $=s=>document.querySelector(s);
 let S={tier:'H',types:7,topics:0,subs:0,len:1,seed:0};
-let paper=null,marked=false,ticks={},startT=0,timerId=null,elapsed=0,attemptId=null,currentCard=0;
+let paper=null,marked=false,ticks={},startT=0,timerId=null,elapsed=0,attemptId=null,currentCard=0,instantMCQ=new Set();
 
 function readUI(){S.tier=$('#tierS').checked?'S':'H';S.types=($('#secM').checked?1:0)|($('#secT').checked?2:0)|($('#secP').checked?4:0);
   S.topics=[...document.querySelectorAll('.theme-chip')].reduce((a,c,i)=>a|(c.getAttribute('aria-pressed')==='true'?1<<i:0),0);
@@ -2604,7 +2625,7 @@ function showThemeStart(){
 function start(){
   paper=buildPaper(S);
   if(!paper||!paper.sections||!paper.sections.length)throw new Error('No paper sections generated');
-  marked=false;ticks={};elapsed=0;attemptId=Date.now().toString(36);startT=Date.now();currentCard=0;
+  marked=false;ticks={};elapsed=0;attemptId=Date.now().toString(36);startT=Date.now();currentCard=0;instantMCQ=new Set();
   try{history.replaceState(null,'','#'+encode(S))}catch(e){}
   render();clearInterval(timerId);timerId=setInterval(tick,1000);tick()
 }
@@ -2635,7 +2656,7 @@ function render(){
   if(marked)renderResult();
 }
 function finishHTML(){return marked
-  ?`<p>Marked. Tick or untick mark-scheme points in the written answers to adjust your score.</p><button class="btn primary" type="button" id="downloadReport">Download Scorecard</button><button class="btn" type="button" id="retry">Retry this paper</button><button class="btn" type="button" id="again">New paper, same settings</button><div class="report-note">Your scorecard includes question-wise marks earned, marks lost, theme breakdown and time taken. Open it and choose Print → Save as PDF for a PDF copy.</div>`
+  ?`<p>Marked. MCQs were checked as you answered them. Tick or untick mark-scheme points in written answers to adjust your score.</p><button class="btn primary" type="button" id="downloadReport">Download Scorecard</button><button class="btn" type="button" id="retry">Retry this paper</button><button class="btn" type="button" id="again">New paper, same settings</button><div class="report-note">Your scorecard includes question-wise marks earned, marks lost, theme breakdown and time taken. Open it and choose Print → Save as PDF for a PDF copy.</div>`
   :`<p>When you finish, multiple-choice answers are marked automatically. For written answers you compare your work with the mark scheme and tick the points you made.</p><button class="btn red" type="button" id="markBtn">Finish and mark</button>`}
 function renderM(q){const long=q.o.some(o=>o.replace(/<[^>]+>/g,'').length>34);
   return `<div class="q theme-${q.t}" data-q="${q.n}"><div class="qn">${q.n}</div><div class="qb"><span class="tag">${tagOf(q)}</span><p class="stem">${q.q}</p>${q.fig||''}
@@ -2673,13 +2694,33 @@ function applyIBCardMode(){
   if(nav)nav.innerHTML=items.map((it,i)=>'<button type="button" class="ib-qpill '+(i===currentCard?'current ':'')+(ibAnswered(it)?'answered':'')+'" data-card="'+i+'">'+(i+1)+'</button>').join('');
   const prev=document.getElementById('ibPrev'),next=document.getElementById('ibNext');
   if(prev)prev.disabled=currentCard===0;
-  if(next)next.textContent=currentCard===total-1?'Finish ↓':'Next →';
+  if(next){next.textContent=currentCard===total-1?'Finish ↓':'Next →';const cur=items[currentCard];next.disabled=cur?.q.kind==='M'&&!ibAnswered(cur);}
   const sh=document.getElementById('sheet');if(sh)sh.classList.toggle('ib-last',currentCard===total-1);
 }
 function moveIBCard(delta){
-  const total=ibFlatQuestions().length;if(!total)return;
+  const items=ibFlatQuestions(),total=items.length;if(!total)return;
+  const cur=items[currentCard];
+  if(delta>0&&cur?.q.kind==='M'&&!ibAnswered(cur))return;
   if(delta>0&&currentCard===total-1){const fin=document.getElementById('finish');if(fin)fin.scrollIntoView({behavior:'smooth',block:'center'});return;}
   currentCard=Math.max(0,Math.min(total-1,currentCard+delta));applyIBCardMode();
+}
+function showInstantIBFeedback(q){
+  const items=ibFlatQuestions(),idx=items.findIndex(it=>it.q.n===q.n);if(idx<0)return;
+  const box=document.querySelector('#sheet .q[data-q="'+q.n+'"]');if(!box)return;
+  const checked=box.querySelector('input[type=radio]:checked');if(!checked)return;
+  q.chosen=+checked.value;
+  instantMCQ.add(idx);
+  box.querySelectorAll('input[type=radio]').forEach(i=>i.disabled=true);
+  box.querySelectorAll('.opt').forEach(o=>{
+    const oi=+o.dataset.i;o.classList.remove('ok','bad');
+    if(oi===q.a)o.classList.add('ok');
+    else if(oi===q.chosen)o.classList.add('bad');
+  });
+  const fb=box.querySelector('.fb'),ok=q.chosen===q.a;
+  if(fb){fb.hidden=false;fb.innerHTML='<div class="expl'+(ok?' good':'')+'"><b>'+(ok?'Correct ✓':'Not quite ✕')+'</b> '+(ok?'Your answer is correct. ':'Correct answer: '+LET[q.a]+'. ')+q.e+'</div>';}
+  const mc=box.querySelector('.mcol');
+  if(mc)mc.innerHTML='<span class="lbl">mark</span><span class="award">'+(ok?1:0)+'<small>/1</small></span>';
+  applyIBCardMode();
 }
 function parseNum(s){s=String(s).trim().replace(/,/g,'').replace(/[×x]\s*10\^?\s*/i,'e');const m=/-?\d*\.?\d+(e-?\d+)?/i.exec(s);return m?parseFloat(m[0]):NaN}
 function numOK(x,v){return isFinite(x)&&Math.abs(x-v)<=Math.max(Math.abs(v)*0.02,0.006)}
@@ -2696,7 +2737,7 @@ function doMark(){
   render();
   Object.entries(vals).forEach(([id,v])=>{const el=document.getElementById(id);if(el){el.value=v;el.readOnly=true}});
   paper.sections.forEach(sec=>sec.items.forEach(q=>{const box=document.querySelector(`.q[data-q="${q.n}"]`);
-    if(q.kind==='M'){const c=chosen['m'+q.n];q.chosen=c;box.querySelectorAll('input[type=radio]').forEach(i=>{i.disabled=true;if(+i.value===c)i.checked=true});
+    if(q.kind==='M'){const c=chosen['m'+q.n]!==undefined?chosen['m'+q.n]:q.chosen;q.chosen=c;box.querySelectorAll('input[type=radio]').forEach(i=>{i.disabled=true;if(+i.value===c)i.checked=true});
       box.querySelectorAll('.opt').forEach(o=>{const i=+o.dataset.i;if(i===q.a)o.classList.add('ok');else if(i===c)o.classList.add('bad')});
       const fb=box.querySelector('.fb');const ok=c===q.a;fb.hidden=false;fb.innerHTML=`<div class="expl${ok?' good':''}"><b>${ok?'Correct.':c===undefined?'Not answered.':'Incorrect.'}</b> Answer ${LET[q.a]}. ${q.e}</div>`;
       box.querySelector('.mcol').innerHTML=`<span class="lbl">mark</span><span class="award">${ok?1:0}<small>/1</small></span>`}
@@ -2773,14 +2814,17 @@ $('#sheet').addEventListener('click',e=>{
   else if(e.target.matches('.ib-qpill[data-card]')){currentCard=+e.target.dataset.card;applyIBCardMode();}
   else if(e.target.id==='markBtn')doMark();
   else if(e.target.id==='downloadReport')downloadReport();
-  else if(e.target.id==='retry'){paper=buildPaper(S);marked=false;ticks={};currentCard=0;attemptId=Date.now().toString(36);startT=Date.now();render();clearInterval(timerId);timerId=setInterval(tick,1000);$('#sheet').scrollIntoView({behavior:'smooth'})}
+  else if(e.target.id==='retry'){paper=buildPaper(S);marked=false;ticks={};currentCard=0;instantMCQ=new Set();attemptId=Date.now().toString(36);startT=Date.now();render();clearInterval(timerId);timerId=setInterval(tick,1000);$('#sheet').scrollIntoView({behavior:'smooth'})}
   else if(e.target.id==='again'){S.seed=Math.floor(Math.random()*2176782335);start();$('#sheet').scrollIntoView({behavior:'smooth'})}
   else if(e.target.id==='copyCode'){const c=encode(S),b=e.target;const done=()=>{b.textContent='Copied';setTimeout(()=>b.textContent='Copy',1500)};
     try{navigator.clipboard.writeText(c).then(done,()=>{selectCode()})}catch(err){selectCode()}}
 });
 function selectCode(){const el=document.querySelector('.code');const r=document.createRange();r.selectNodeContents(el);const s=getSelection();s.removeAllRanges();s.addRange(r)}
 $('#sheet').addEventListener('change',e=>{const t=e.target;
-  if(t.matches('.q input[type=radio],.q textarea,.q .ansline input'))applyIBCardMode();
+  if(t.matches('.q input[type=radio]')){
+    const box=t.closest('.q'),items=ibFlatQuestions(),item=items.find(it=>String(it.q.n)===String(box?.dataset.q));
+    if(item&&item.q.kind==='M')showInstantIBFeedback(item.q);
+  }else if(t.matches('.q textarea,.q .ansline input'))applyIBCardMode();
   if(t.matches('.ms input[type=checkbox]')){const id=t.dataset.t,i=+t.dataset.i;const set=ticks[id];t.checked?set.add(i):set.delete(i);updateAwards();save()}});
 
 
