@@ -119,6 +119,36 @@ h1 em{font-style:normal;color:var(--brand-green)}
 .sect span{font:12px var(--mono);color:var(--muted)}
 @media (max-width:640px){.sect{padding-inline:16px}}
 
+.ib-cardnav{position:sticky;top:0;z-index:18;background:rgba(255,255,255,.97);backdrop-filter:blur(10px);border-bottom:1px solid var(--rule);padding:13px 18px 12px}
+.ib-cardnav-top{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:9px}
+.ib-cardnav .count{font:800 12px/1 var(--mono);color:#173B5A;white-space:nowrap}
+.ib-cardnav .answered-count{font:700 11px/1 var(--mono);color:var(--muted)}
+.ib-progress-track{height:6px;background:#E6EDF1;border-radius:999px;overflow:hidden}
+.ib-progress-fill{height:100%;background:linear-gradient(90deg,#173B5A,#4F8D5F,#58B7CC,#7B73C9);border-radius:999px;transition:width .22s ease}
+.ib-card-context{padding:11px 18px 0;color:var(--muted);font:700 10.5px/1.3 var(--mono);letter-spacing:.05em;text-transform:uppercase}
+.ib-qnav{display:flex;gap:6px;flex-wrap:wrap;padding:10px 18px 14px;border-bottom:1px solid var(--rule);background:#FBFCFD}
+.ib-qpill{width:28px;height:28px;border-radius:50%;border:1px solid #D5DFE6;background:#fff;color:#74808D;font:800 10px/1 var(--mono);cursor:pointer}
+.ib-qpill.current{background:#173B5A;color:#fff;border-color:#173B5A}
+.ib-qpill.answered{background:#EEF8F1;border-color:#8BCB9B;color:#356C43}
+.ib-cardmode .sect{display:none}
+.ib-cardmode .q{display:none}
+.ib-cardmode .q.ib-active{display:grid;animation:ibCardIn .20s ease;margin:18px;border:1px solid #DCE5EA;border-radius:18px;padding-left:0;overflow:hidden;box-shadow:0 10px 28px rgba(16,43,67,.07);background:#fff}
+.ib-cardmode .q.ib-active.theme-A{background:linear-gradient(180deg,#fff 0%,#F2F8FF 100%)}
+.ib-cardmode .q.ib-active.theme-B{background:linear-gradient(180deg,#fff 0%,#F2FAF3 100%)}
+.ib-cardmode .q.ib-active.theme-C{background:linear-gradient(180deg,#fff 0%,#F5F2FF 100%)}
+.ib-cardmode .q.ib-active.theme-D{background:linear-gradient(180deg,#fff 0%,#EEF9FB 100%)}
+.ib-cardmode .q.ib-active.theme-E{background:linear-gradient(180deg,#fff 0%,#FFF3F7 100%)}
+.ib-cardmode .q.ib-active .qn{background:#173B5A;color:#fff;padding:20px 12px;text-align:center;min-width:48px}
+.ib-cardmode .q.ib-active .qb{padding:22px 24px}
+.ib-cardmode .q.ib-active .mcol{background:rgba(255,255,255,.72)}
+.ib-cardmode .finish{display:none}
+.ib-cardmode.ib-last .finish{display:block}
+.ib-card-footer{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:14px 18px 18px}
+.ib-card-footer button{border:1px solid var(--line);background:#fff;color:#173B5A;border-radius:999px;padding:9px 14px;font-weight:800;cursor:pointer}
+.ib-card-footer button.primary{background:linear-gradient(90deg,#173B5A,#4F8D5F);color:#fff;border-color:transparent}
+.ib-card-footer button:disabled{opacity:.35;cursor:not-allowed}
+@keyframes ibCardIn{from{opacity:.35;transform:translateY(5px)}to{opacity:1;transform:none}}
+@media(max-width:640px){.ib-cardnav{padding:12px}.ib-card-context,.ib-qnav{padding-inline:12px}.ib-cardmode .q.ib-active{margin:12px}.ib-cardmode .q.ib-active .qb{padding:18px 14px}.ib-card-footer{padding-inline:12px}}
 .q{display:grid;grid-template-columns:2.4rem minmax(0,1fr) 4.2rem;border-bottom:1px solid var(--grid);padding-left:40px}
 .q:last-child{border-bottom:0}
 .qn{padding-top:18px;font:600 15px/1.55 var(--mono)}
@@ -2412,7 +2442,7 @@ function buildPaper(s){
 /* ---------- state + UI ---------- */
 const $=s=>document.querySelector(s);
 let S={tier:'H',types:7,topics:0,len:1,seed:0};
-let paper=null,marked=false,ticks={},startT=0,timerId=null,elapsed=0,attemptId=null;
+let paper=null,marked=false,ticks={},startT=0,timerId=null,elapsed=0,attemptId=null,currentCard=0;
 
 function readUI(){S.tier=$('#tierS').checked?'S':'H';S.types=($('#secM').checked?1:0)|($('#secT').checked?2:0)|($('#secP').checked?4:0);
   S.topics=[...document.querySelectorAll('.chip')].reduce((a,c,i)=>a|(c.getAttribute('aria-pressed')==='true'?1<<i:0),0);S.len=+document.querySelector('input[name=len]:checked').value}
@@ -2463,7 +2493,7 @@ function showThemeStart(){
 function start(){
   paper=buildPaper(S);
   if(!paper||!paper.sections||!paper.sections.length)throw new Error('No paper sections generated');
-  marked=false;ticks={};elapsed=0;attemptId=Date.now().toString(36);startT=Date.now();
+  marked=false;ticks={};elapsed=0;attemptId=Date.now().toString(36);startT=Date.now();currentCard=0;
   try{history.replaceState(null,'','#'+encode(S))}catch(e){}
   render();clearInterval(timerId);timerId=setInterval(tick,1000);tick()
 }
@@ -2481,23 +2511,27 @@ function render(){
   if(paper.notes.length)h+=`<div class="note">${paper.notes.join(' ')}</div>`;
   h+=`<div id="result"></div>`;
   h+=`<div class="instr"><span><b>Instructions.</b> Answer all questions. In Paper 1A choose one answer; calculators are not needed but are allowed here. In Papers 1B and 2 show your working, write the equation before substituting and give units.</span><span>Take g = 9.81 m s⁻². Data needed is given in each question (IB data booklet values). Numerical answers within 2% are accepted automatically.</span></div>`;
+  const totalCards=paper.sections.reduce((a,sec)=>a+sec.items.length,0);
+  h+=`<div class="ib-cardnav" id="ibCardnav"><div class="ib-cardnav-top"><div class="count" id="ibCardCount">Question 1 of ${totalCards}</div><div class="answered-count" id="ibAnswered">0/${totalCards} answered</div></div><div class="ib-progress-track"><div class="ib-progress-fill" id="ibProgress" style="width:${totalCards?100/totalCards:0}%"></div></div></div><div class="ib-card-context" id="ibCardContext"></div><div class="ib-qnav" id="ibQnav"></div>`;
   paper.sections.forEach(sec=>{
     h+=`<div class="sect"><h3>${sec.label} · ${sec.title}</h3><span>${sec.key==='M'?sec.items.length+' marks · auto-marked':sec.items.reduce((a,q)=>a+q.max,0)+' marks · self-marked with mark scheme'}</span></div>`;
     sec.items.forEach((q,qi)=>{h+=sec.key==='M'?renderM(q):renderS(q)});
   });
+  h+=`<div class="ib-card-footer"><button type="button" id="ibPrev">← Previous</button><button type="button" class="primary" id="ibNext">Next →</button></div>`;
   h+=`<div class="finish" id="finish">${finishHTML()}</div>`;
-  const sh=$('#sheet');sh.innerHTML=h;sh.classList.toggle('marked',marked);
+  const sh=$('#sheet');sh.innerHTML=h;sh.classList.toggle('marked',marked);sh.classList.add('ib-cardmode');
+  applyIBCardMode();
   if(marked)renderResult();
 }
 function finishHTML(){return marked
   ?`<p>Marked. Tick or untick mark-scheme points in the written answers to adjust your score.</p><button class="btn primary" type="button" id="downloadReport">Download Scorecard</button><button class="btn" type="button" id="retry">Retry this paper</button><button class="btn" type="button" id="again">New paper, same settings</button><div class="report-note">Your scorecard includes question-wise marks earned, marks lost, theme breakdown and time taken. Open it and choose Print → Save as PDF for a PDF copy.</div>`
   :`<p>When you finish, multiple-choice answers are marked automatically. For written answers you compare your work with the mark scheme and tick the points you made.</p><button class="btn red" type="button" id="markBtn">Finish and mark</button>`}
 function renderM(q){const long=q.o.some(o=>o.replace(/<[^>]+>/g,'').length>34);
-  return `<div class="q" data-q="${q.n}"><div class="qn">${q.n}</div><div class="qb"><span class="tag">${tagOf(q)}</span><p class="stem">${q.q}</p>${q.fig||''}
+  return `<div class="q theme-${q.t}" data-q="${q.n}"><div class="qn">${q.n}</div><div class="qb"><span class="tag">${tagOf(q)}</span><p class="stem">${q.q}</p>${q.fig||''}
   <div class="opts${long?' long':''}" role="radiogroup" aria-label="Question ${q.n} options">${q.o.map((o,i)=>`<div class="opt" data-i="${i}"><input type="radio" name="m${q.n}" id="m${q.n}_${i}" value="${i}"><label for="m${q.n}_${i}"><span class="L">${LET[i]}</span><span>${o}</span></label></div>`).join('')}</div>
   <div class="fb" hidden></div></div><div class="mcol"><span class="lbl">mark</span><span>[1]</span></div></div>`}
 function renderS(q){
-  return `<div class="q" data-q="${q.n}"><div class="qn">${q.n}</div><div class="qb"><span class="tag">${tagOf(q)}</span><p class="stem">${q.intro}</p>${q.fig||''}
+  return `<div class="q theme-${q.t}" data-q="${q.n}"><div class="qn">${q.n}</div><div class="qb"><span class="tag">${tagOf(q)}</span><p class="stem">${q.intro}</p>${q.fig||''}
   ${q.parts.map((p,pi)=>{const id=`${q.n}_${pi}`;return `<div class="part" data-p="${id}"><p class="pq"><span class="pl2">(${PL[pi]})</span>${p.q} <span class="tag">[${p.m}]</span></p>
     <label class="vh" for="w${id}">${p.ans?'Working':'Answer'} for ${q.n}(${PL[pi]})</label>
     <textarea class="lines" id="w${id}" rows="${p.ans?2:Math.max(2,p.m+1)}" placeholder="${p.ans?'Working':''}"></textarea>
@@ -2505,6 +2539,37 @@ function renderS(q){
     <div class="msw" hidden></div></div>`}).join('')}
   </div><div class="mcol"><span class="lbl">marks</span><span>[${q.max}]</span><span class="aw"></span></div></div>`}
 
+function ibFlatQuestions(){
+  const out=[];if(!paper)return out;
+  paper.sections.forEach(sec=>sec.items.forEach(q=>out.push({q,sec})));
+  return out;
+}
+function ibAnswered(item){
+  const q=item.q,box=document.querySelector('#sheet .q[data-q="'+q.n+'"]');if(!box)return false;
+  if(q.kind==='M')return !!box.querySelector('input[type=radio]:checked');
+  return [...box.querySelectorAll('textarea,.ansline input')].some(el=>String(el.value||'').trim());
+}
+function applyIBCardMode(){
+  const items=ibFlatQuestions(),total=items.length;if(!total)return;
+  currentCard=Math.max(0,Math.min(currentCard,total-1));
+  document.querySelectorAll('#sheet .q').forEach(el=>el.classList.remove('ib-active'));
+  const active=document.querySelector('#sheet .q[data-q="'+items[currentCard].q.n+'"]');if(active)active.classList.add('ib-active');
+  const cc=document.getElementById('ibCardCount');if(cc)cc.textContent='Question '+(currentCard+1)+' of '+total;
+  const ans=items.filter(ibAnswered).length,ac=document.getElementById('ibAnswered');if(ac)ac.textContent=ans+'/'+total+' answered';
+  const pg=document.getElementById('ibProgress');if(pg)pg.style.width=(((currentCard+1)/total)*100)+'%';
+  const ctx=document.getElementById('ibCardContext');if(ctx)ctx.textContent=items[currentCard].sec.label+' · '+items[currentCard].sec.title+' · '+tagOf(items[currentCard].q);
+  const nav=document.getElementById('ibQnav');
+  if(nav)nav.innerHTML=items.map((it,i)=>'<button type="button" class="ib-qpill '+(i===currentCard?'current ':'')+(ibAnswered(it)?'answered':'')+'" data-card="'+i+'">'+(i+1)+'</button>').join('');
+  const prev=document.getElementById('ibPrev'),next=document.getElementById('ibNext');
+  if(prev)prev.disabled=currentCard===0;
+  if(next)next.textContent=currentCard===total-1?'Finish ↓':'Next →';
+  const sh=document.getElementById('sheet');if(sh)sh.classList.toggle('ib-last',currentCard===total-1);
+}
+function moveIBCard(delta){
+  const total=ibFlatQuestions().length;if(!total)return;
+  if(delta>0&&currentCard===total-1){const fin=document.getElementById('finish');if(fin)fin.scrollIntoView({behavior:'smooth',block:'center'});return;}
+  currentCard=Math.max(0,Math.min(total-1,currentCard+delta));applyIBCardMode();
+}
 function parseNum(s){s=String(s).trim().replace(/,/g,'').replace(/[×x]\s*10\^?\s*/i,'e');const m=/-?\d*\.?\d+(e-?\d+)?/i.exec(s);return m?parseFloat(m[0]):NaN}
 function numOK(x,v){return isFinite(x)&&Math.abs(x-v)<=Math.max(Math.abs(v)*0.02,0.006)}
 
@@ -2568,7 +2633,7 @@ function downloadReport(){
 <div class="section"><h2>Question-by-question breakdown</h2><table><thead><tr><th>Question</th><th>Paper</th><th>Theme</th><th>Marks</th><th>Lost</th><th>Status</th></tr></thead><tbody>${qRows}</tbody></table></div>
 <div class="section"><h2>Theme summary</h2><table><thead><tr><th>Theme</th><th>Score</th><th>Marks lost</th></tr></thead><tbody>${themeRows}</tbody></table></div>
 <div class="actions"><button onclick="window.print()">Print / Save as PDF</button></div>
-<div class="foot"><strong>© 2026 PrepEnroll™. All Rights Reserved.</strong><br>This scorecard was generated from the student's marked attempt in PrepEnroll™ IB Physics Practice Studio. Written-response marks are based on the student's self-marking against the displayed mark scheme.</div>
+<div class="foot"><strong>© 2026 PrepEnroll™. All Rights Reserved.</strong><br>This scorecard was generated from the student's marked attempt in the proprietary PrepEnroll™ IB Physics Practice Studio. No official IB examination questions are reproduced in the studio; questions are original IB-style practice material. Written-response marks are based on the student's self-marking against the displayed mark scheme.</div>
 </div></body></html>`;
   const blob=new Blob([report],{type:'text/html;charset=utf-8'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=`PrepEnroll_IB_Physics_Scorecard_${code.replace(/[^A-Z0-9-]/gi,'_')}.html`;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),1500);
 }
@@ -2591,16 +2656,21 @@ function showH(){const h=loadH();$('#histPanel').hidden=!h.length;$('#hist').inn
 $('#hist').addEventListener('click',e=>{const b=e.target.closest('button[data-code]');if(!b)return;const d=decode(b.dataset.code);if(d){S=d;writeUI();start();$('#sheet').scrollIntoView({behavior:'smooth'})}});
 
 $('#sheet').addEventListener('click',e=>{
-  const j=e.target.closest('.jump');if(j){const el=document.querySelector(`.q[data-q="${j.dataset.n}"]`);if(el)el.scrollIntoView({behavior:'smooth',block:'center'});return}
-  if(e.target.id==='markBtn')doMark();
+  const j=e.target.closest('.jump');if(j){const items=ibFlatQuestions();const idx=items.findIndex(it=>String(it.q.n)===String(j.dataset.n));if(idx>=0){currentCard=idx;applyIBCardMode();const nav=document.getElementById('ibCardnav');if(nav)nav.scrollIntoView({behavior:'smooth',block:'start'});}return}
+  if(e.target.id==='ibPrev')moveIBCard(-1);
+  else if(e.target.id==='ibNext')moveIBCard(1);
+  else if(e.target.matches('.ib-qpill[data-card]')){currentCard=+e.target.dataset.card;applyIBCardMode();}
+  else if(e.target.id==='markBtn')doMark();
   else if(e.target.id==='downloadReport')downloadReport();
-  else if(e.target.id==='retry'){paper=buildPaper(S);marked=false;ticks={};attemptId=Date.now().toString(36);startT=Date.now();render();clearInterval(timerId);timerId=setInterval(tick,1000);$('#sheet').scrollIntoView({behavior:'smooth'})}
+  else if(e.target.id==='retry'){paper=buildPaper(S);marked=false;ticks={};currentCard=0;attemptId=Date.now().toString(36);startT=Date.now();render();clearInterval(timerId);timerId=setInterval(tick,1000);$('#sheet').scrollIntoView({behavior:'smooth'})}
   else if(e.target.id==='again'){S.seed=Math.floor(Math.random()*2176782335);start();$('#sheet').scrollIntoView({behavior:'smooth'})}
   else if(e.target.id==='copyCode'){const c=encode(S),b=e.target;const done=()=>{b.textContent='Copied';setTimeout(()=>b.textContent='Copy',1500)};
     try{navigator.clipboard.writeText(c).then(done,()=>{selectCode()})}catch(err){selectCode()}}
 });
 function selectCode(){const el=document.querySelector('.code');const r=document.createRange();r.selectNodeContents(el);const s=getSelection();s.removeAllRanges();s.addRange(r)}
-$('#sheet').addEventListener('change',e=>{const t=e.target;if(t.matches('.ms input[type=checkbox]')){const id=t.dataset.t,i=+t.dataset.i;const set=ticks[id];t.checked?set.add(i):set.delete(i);updateAwards();save()}});
+$('#sheet').addEventListener('change',e=>{const t=e.target;
+  if(t.matches('.q input[type=radio],.q textarea,.q .ansline input'))applyIBCardMode();
+  if(t.matches('.ms input[type=checkbox]')){const id=t.dataset.t,i=+t.dataset.i;const set=ticks[id];t.checked?set.add(i):set.delete(i);updateAwards();save()}});
 
 
 /* ---------- privacy-first access gate ---------- */
