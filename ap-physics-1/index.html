@@ -1,0 +1,1288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AP Physics 1 Practice Studio | PrepEnroll™</title>
+<style>
+:root{
+  --blue:#1A4B8C;--blue-dark:#0D2F5E;--blue-mid:#2563EB;
+  --blue-light:#E8F0FE;--blue-xlight:#F0F5FF;
+  --green:#0B7A54;--green-dark:#065C3E;--green-mid:#059669;
+  --green-light:#E6F7F2;--green-xlight:#F0FBF8;
+  --teal:#17B890;--teal-light:#D1FAF0;
+  --white:#fff;--gray-50:#F8FAFC;--gray-100:#F1F5F9;
+  --gray-200:#E2E8F0;--gray-300:#CBD5E1;--gray-400:#94A3B8;
+  --gray-600:#475569;--gray-700:#334155;--gray-800:#1E293B;--gray-900:#0F172A;
+  --red:#DC2626;--red-light:#FEE2E2;--yellow:#D97706;--yellow-light:#FEF3C7;
+  --orange:#EA580C;--orange-light:#FFF0E6;
+  --shadow:0 4px 20px rgba(26,75,140,.1);--shadow-lg:0 8px 32px rgba(26,75,140,.16);
+  --radius:14px;--radius-sm:9px;--radius-xs:6px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;background:var(--gray-50);color:var(--gray-800);min-height:100vh}
+/* ─── HEADER ─── */
+.hdr{background:linear-gradient(135deg,var(--blue-dark) 0%,var(--blue) 55%,var(--green) 100%);padding:0 28px;height:62px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:200;box-shadow:0 2px 16px rgba(0,0,0,.18)}
+.logo{display:flex;align-items:center;gap:12px;text-decoration:none}
+.logo-mark{width:38px;height:38px;background:white;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:17px;font-weight:900;color:var(--blue);letter-spacing:-1px}
+.logo-info .logo-name{color:white;font-size:18px;font-weight:800;letter-spacing:-.4px}
+.logo-info .logo-tag{color:rgba(255,255,255,.65);font-size:10px;letter-spacing:.8px}
+.hdr-right{display:flex;align-items:center;gap:14px}
+.exam-pill{background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.3);color:white;padding:4px 14px;border-radius:20px;font-size:12px;font-weight:700;letter-spacing:.3px}
+.hdr-score-live{display:none;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.25);color:white;padding:5px 14px;border-radius:20px;font-size:12px;font-weight:700;gap:8px;align-items:center}
+.hdr-score-live.vis{display:flex}
+/* ─── LAYOUT ─── */
+.app{display:grid;grid-template-columns:310px 1fr;min-height:calc(100vh - 62px)}
+/* ─── SIDEBAR ─── */
+.sidebar{background:white;border-right:1px solid var(--gray-200);overflow-y:auto;padding:20px 18px 32px;position:sticky;top:62px;height:calc(100vh - 62px)}
+.sb-section{margin-bottom:22px}
+.sb-section:first-child{margin-bottom:18px}
+.sb-label{font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:1.2px;color:var(--gray-400);margin-bottom:10px;display:block}
+/* type toggle */
+.type-toggle{display:grid;grid-template-columns:1fr 1fr 1fr;background:var(--gray-100);border-radius:var(--radius-xs);padding:3px;gap:2px}
+.type-btn{padding:8px 4px;border:none;background:transparent;border-radius:5px;cursor:pointer;font-size:11px;font-weight:700;color:var(--gray-600);transition:all .18s;text-align:center}
+.type-btn.active{background:white;color:var(--blue);box-shadow:0 1px 4px rgba(0,0,0,.12)}
+/* units */
+.unit-list{display:flex;flex-direction:column;gap:5px}
+.unit-item{border:1.5px solid var(--gray-200);border-radius:var(--radius-xs);overflow:hidden;transition:border-color .15s}
+.unit-item.has-selected{border-color:var(--blue)}
+.unit-hd{display:flex;align-items:center;padding:9px 10px;cursor:pointer;background:var(--gray-50);gap:8px;transition:background .15s;user-select:none}
+.unit-hd:hover{background:var(--blue-light)}
+.unit-hd.expanded{background:var(--blue-xlight)}
+.unit-cb{width:16px;height:16px;accent-color:var(--blue);cursor:pointer;flex-shrink:0}
+.unit-nm{flex:1;font-size:11.5px;font-weight:700;color:var(--gray-800);line-height:1.3}
+.unit-wt{font-size:9.5px;color:var(--gray-600);background:var(--gray-200);padding:2px 6px;border-radius:4px;white-space:nowrap}
+.unit-arr{font-size:9px;color:var(--gray-400);transition:transform .2s;flex-shrink:0}
+.unit-arr.open{transform:rotate(180deg)}
+.sub-list{display:none;flex-direction:column;padding:6px 10px 8px 30px;gap:5px;border-top:1px solid var(--gray-100);background:var(--white)}
+.sub-list.open{display:flex}
+.sub-row{display:flex;align-items:center;gap:8px;cursor:pointer}
+.sub-cb{width:14px;height:14px;accent-color:var(--green);cursor:pointer;flex-shrink:0}
+.sub-lbl{font-size:11px;color:var(--gray-700);cursor:pointer;flex:1;line-height:1.3}
+.sub-cnt{font-size:9.5px;font-weight:700;color:var(--green);background:var(--green-light);padding:1px 5px;border-radius:4px;white-space:nowrap}
+/* settings */
+.setting-block{margin-bottom:14px}
+.set-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:7px}
+.set-lbl{font-size:12px;font-weight:600;color:var(--gray-700)}
+.set-val{font-size:13px;font-weight:800;color:var(--blue)}
+input[type=range]{width:100%;accent-color:var(--blue);cursor:pointer;height:4px;border-radius:2px}
+.diff-pills{display:flex;gap:5px}
+.dpill{flex:1;padding:6px 4px;border:1.5px solid var(--gray-200);border-radius:5px;cursor:pointer;font-size:10.5px;font-weight:700;text-align:center;transition:all .18s;background:white;color:var(--gray-600)}
+.dpill.a-easy{border-color:var(--green);background:var(--green-light);color:var(--green)}
+.dpill.a-medium{border-color:var(--yellow);background:var(--yellow-light);color:var(--yellow)}
+.dpill.a-hard{border-color:var(--red);background:var(--red-light);color:var(--red)}
+.timer-toggle{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--gray-700);font-weight:600;cursor:pointer}
+input[type=checkbox]{accent-color:var(--blue);width:14px;height:14px}
+/* generate btn */
+.gen-btn{width:100%;padding:13px;background:linear-gradient(135deg,var(--blue),var(--green));color:white;border:none;border-radius:var(--radius-sm);font-size:14px;font-weight:800;cursor:pointer;transition:all .2s;letter-spacing:.3px;display:flex;align-items:center;justify-content:center;gap:8px;box-shadow:0 4px 14px rgba(26,75,140,.3)}
+.gen-btn:hover{opacity:.92;transform:translateY(-1px);box-shadow:0 6px 20px rgba(26,75,140,.4)}
+.gen-btn:active{transform:translateY(0)}
+.selected-info{background:var(--blue-light);border-radius:var(--radius-xs);padding:8px 12px;font-size:11px;color:var(--blue);font-weight:600;margin-bottom:12px;text-align:center}
+/* ─── MAIN ─── */
+.main{padding:28px 32px;max-width:880px;margin:0 auto;width:100%}
+/* welcome */
+.welcome{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:68vh;text-align:center;gap:20px}
+.welcome-icon{font-size:56px;filter:drop-shadow(0 4px 12px rgba(26,75,140,.2))}
+.welcome h1{font-size:30px;font-weight:900;color:var(--gray-800);line-height:1.2}
+.welcome h1 em{color:var(--blue);font-style:normal}
+.welcome p{font-size:15px;color:var(--gray-600);max-width:480px;line-height:1.7}
+.w-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;width:100%;max-width:560px}
+.w-stat{background:white;border-radius:var(--radius-sm);padding:16px;border:1.5px solid var(--gray-200);box-shadow:var(--shadow)}
+.w-stat .wn{font-size:26px;font-weight:900;color:var(--blue)}
+.w-stat .wl{font-size:10.5px;color:var(--gray-600);margin-top:2px;font-weight:600}
+.w-arrow{font-size:28px;animation:bounce 1.6s ease-in-out infinite}
+@keyframes bounce{0%,100%{transform:translateX(0)}50%{transform:translateX(6px)}}
+/* test header */
+.test-hdr{background:white;border-radius:var(--radius);padding:18px 22px;margin-bottom:20px;box-shadow:var(--shadow);display:flex;align-items:center;justify-content:space-between;border:1px solid var(--gray-200)}
+.th-info h2{font-size:15px;font-weight:800;color:var(--gray-800)}
+.th-info p{font-size:11.5px;color:var(--gray-500);margin-top:2px}
+.th-meta{display:flex;gap:18px;align-items:center}
+.timer-disp{font-size:22px;font-weight:900;color:var(--blue);font-variant-numeric:tabular-nums;display:flex;align-items:center;gap:6px}
+.timer-disp .ti{font-size:16px}
+.timer-disp.warn{color:var(--red);animation:tpulse 1s infinite}
+@keyframes tpulse{0%,100%{opacity:1}50%{opacity:.55}}
+/* progress */
+.prog-box{background:white;border-radius:var(--radius);padding:14px 22px;margin-bottom:20px;box-shadow:var(--shadow);border:1px solid var(--gray-200)}
+.prog-hd{display:flex;justify-content:space-between;margin-bottom:7px;font-size:11.5px;font-weight:700;color:var(--gray-600)}
+.prog-bg{background:var(--gray-200);border-radius:100px;height:7px;overflow:hidden}
+.prog-fill{height:100%;background:linear-gradient(90deg,var(--blue),var(--teal));border-radius:100px;transition:width .4s ease}
+.q-dots{display:flex;flex-wrap:wrap;gap:4px;margin-top:10px}
+.qdot{width:22px;height:22px;border-radius:50%;border:2px solid var(--gray-200);background:white;font-size:8.5px;display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--gray-500);font-weight:700;transition:all .15s}
+.qdot:hover{border-color:var(--blue)}
+.qdot.cur{border-color:var(--blue);background:var(--blue);color:white}
+.qdot.ans{border-color:var(--green);background:var(--green-light);color:var(--green)}
+.qdot.flagged{border-color:var(--yellow);background:var(--yellow-light);color:var(--yellow)}
+.qdot.ok{border-color:var(--green);background:var(--green);color:white}
+.qdot.bad{border-color:var(--red);background:var(--red);color:white}
+/* question card */
+.q-card{background:white;border-radius:var(--radius);padding:28px 30px;margin-bottom:20px;box-shadow:var(--shadow);border:1px solid var(--gray-200);animation:fadeUp .28s ease}
+@keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+.q-meta{display:flex;align-items:center;gap:8px;margin-bottom:18px;flex-wrap:wrap}
+.badge{padding:3px 10px;border-radius:20px;font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.4px}
+.badge.mcq{background:var(--blue-light);color:var(--blue)}
+.badge.frq{background:var(--teal-light);color:var(--green-dark)}
+.badge.sub{background:var(--gray-100);color:var(--gray-600)}
+.badge.easy{background:var(--green-light);color:var(--green)}
+.badge.medium{background:var(--yellow-light);color:var(--yellow)}
+.badge.hard{background:var(--red-light);color:var(--red)}
+.q-num{font-size:12px;font-weight:700;color:var(--gray-500)}
+.q-text{font-size:15.5px;line-height:1.75;color:var(--gray-800);margin-bottom:22px;font-weight:500}
+.q-text b{color:var(--blue)}
+.q-text .eq{font-family:'Courier New',monospace;background:var(--gray-100);padding:1px 7px;border-radius:4px;font-size:14px}
+/* MCQ options */
+.opts{display:flex;flex-direction:column;gap:9px}
+.opt{display:flex;align-items:flex-start;gap:13px;padding:13px 16px;border:2px solid var(--gray-200);border-radius:var(--radius-xs);cursor:pointer;transition:all .16s;background:white}
+.opt:hover:not(.locked){border-color:var(--blue);background:var(--blue-xlight)}
+.opt.sel{border-color:var(--blue);background:var(--blue-light)}
+.opt.cor{border-color:var(--green);background:var(--green-light)}
+.opt.inc{border-color:var(--red);background:var(--red-light)}
+.opt.show-cor{border-color:var(--green);background:var(--green-light)}
+.opt-lt{width:26px;height:26px;border-radius:50%;border:2px solid var(--gray-300);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;color:var(--gray-600);flex-shrink:0;transition:all .16s}
+.opt.sel .opt-lt{border-color:var(--blue);background:var(--blue);color:white}
+.opt.cor .opt-lt{border-color:var(--green);background:var(--green);color:white}
+.opt.inc .opt-lt{border-color:var(--red);background:var(--red);color:white}
+.opt.show-cor .opt-lt{border-color:var(--green);background:var(--green);color:white}
+.opt-txt{font-size:14px;line-height:1.55;color:var(--gray-700);padding-top:3px}
+/* FRQ */
+.frq-wrap{display:flex;flex-direction:column;gap:14px}
+.frq-part{background:var(--gray-50);border-radius:var(--radius-xs);padding:14px 16px;border:1px solid var(--gray-200)}
+.frq-part-lbl{font-size:11px;font-weight:800;color:var(--blue);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px}
+.frq-ta{width:100%;min-height:100px;border:2px solid var(--gray-200);border-radius:var(--radius-xs);padding:12px;font-size:13.5px;color:var(--gray-800);font-family:inherit;resize:vertical;transition:border-color .18s;line-height:1.6;background:white}
+.frq-ta:focus{outline:none;border-color:var(--blue)}
+.model-btn{display:inline-flex;align-items:center;gap:7px;padding:9px 16px;background:var(--blue-light);color:var(--blue);border:1.5px solid var(--blue);border-radius:var(--radius-xs);cursor:pointer;font-size:12.5px;font-weight:700;transition:all .18s;margin-top:4px}
+.model-btn:hover{background:var(--blue);color:white}
+.model-ans{display:none;background:var(--green-light);border:1.5px solid var(--green);border-radius:var(--radius-xs);padding:16px 18px;font-size:13px;line-height:1.8;color:var(--gray-800);margin-top:10px}
+.model-ans.vis{display:block}
+.model-ans h4{color:var(--green-dark);margin-bottom:8px;font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.5px}
+/* explanation */
+.expl{display:none;margin-top:14px;padding:14px 18px;background:linear-gradient(135deg,var(--blue-xlight),var(--green-xlight));border-radius:var(--radius-xs);border-left:3px solid var(--blue)}
+.expl.vis{display:block}
+.expl h4{font-size:10.5px;font-weight:800;color:var(--blue);text-transform:uppercase;letter-spacing:.5px;margin-bottom:7px}
+.expl p{font-size:13px;line-height:1.7;color:var(--gray-700)}
+/* nav bar */
+.nav-bar{display:flex;gap:10px;align-items:center;justify-content:space-between;flex-wrap:wrap}
+.nbtn{display:flex;align-items:center;gap:7px;padding:11px 20px;border-radius:var(--radius-xs);font-size:13.5px;font-weight:700;cursor:pointer;transition:all .18s;border:none}
+.nbtn.sec{background:white;color:var(--gray-700);border:1.5px solid var(--gray-200)}
+.nbtn.sec:hover{border-color:var(--gray-400);background:var(--gray-50)}
+.nbtn.pri{background:linear-gradient(135deg,var(--blue),var(--green));color:white;box-shadow:0 3px 10px rgba(26,75,140,.25)}
+.nbtn.pri:hover{opacity:.9}
+.nbtn.sub{background:linear-gradient(135deg,var(--green-dark),var(--green));color:white;box-shadow:0 3px 10px rgba(11,122,84,.25)}
+.nbtn:disabled{opacity:.4;cursor:not-allowed}
+.flag-btn{padding:9px 14px;border:1.5px solid var(--yellow);background:var(--yellow-light);color:var(--yellow);border-radius:var(--radius-xs);cursor:pointer;font-size:12.5px;font-weight:700;transition:all .18s}
+.flag-btn:hover{background:var(--yellow);color:white}
+.flag-btn.on{background:var(--yellow);color:white}
+/* ─── RESULTS ─── */
+#results{display:none}
+#results.vis{display:block}
+.score-card{background:linear-gradient(135deg,var(--blue-dark) 0%,var(--blue) 50%,var(--green) 100%);color:white;border-radius:var(--radius);padding:36px;text-align:center;margin-bottom:22px;position:relative;overflow:hidden;box-shadow:var(--shadow-lg)}
+.score-card::before{content:'';position:absolute;top:-40%;left:-20%;width:80%;height:160%;background:radial-gradient(circle,rgba(255,255,255,.08) 0%,transparent 65%)}
+.sc-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;opacity:.75}
+.sc-big{font-size:82px;font-weight:900;line-height:1;margin:10px 0;text-shadow:0 4px 16px rgba(0,0,0,.2)}
+.sc-frac{font-size:18px;opacity:.85;margin-bottom:10px}
+.sc-grade-pill{display:inline-block;background:rgba(255,255,255,.2);border:1.5px solid rgba(255,255,255,.35);padding:5px 20px;border-radius:20px;font-size:15px;font-weight:800}
+.s-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:22px}
+.s-card{background:white;border-radius:var(--radius-xs);padding:18px;text-align:center;box-shadow:var(--shadow);border:1px solid var(--gray-200)}
+.s-card .sn{font-size:26px;font-weight:900;color:var(--blue)}
+.s-card .sl{font-size:10.5px;color:var(--gray-600);margin-top:3px;font-weight:600}
+.s-card .sn.green{color:var(--green)}
+.s-card .sn.red{color:var(--red)}
+.s-card .sn.yellow{color:var(--yellow)}
+/* breakdown */
+.bd-card{background:white;border-radius:var(--radius);padding:22px 26px;box-shadow:var(--shadow);border:1px solid var(--gray-200);margin-bottom:20px}
+.bd-card h3{font-size:14px;font-weight:800;color:var(--gray-800);margin-bottom:18px;display:flex;align-items:center;gap:8px}
+.us-row{display:flex;align-items:center;gap:12px;margin-bottom:12px}
+.us-nm{font-size:11.5px;color:var(--gray-700);font-weight:600;width:190px;flex-shrink:0;line-height:1.3}
+.us-bar-bg{flex:1;height:9px;background:var(--gray-200);border-radius:100px;overflow:hidden}
+.us-bar-fill{height:100%;border-radius:100px;transition:width .7s ease}
+.us-pct{font-size:12px;font-weight:800;width:38px;text-align:right}
+/* action row */
+.act-row{display:flex;gap:12px;justify-content:center;margin:24px 0 32px}
+.abtn{padding:12px 26px;border-radius:var(--radius-xs);font-size:13.5px;font-weight:700;cursor:pointer;transition:all .18s;border:none;display:flex;align-items:center;gap:8px}
+.abtn.pri{background:linear-gradient(135deg,var(--blue),var(--green));color:white;box-shadow:0 3px 12px rgba(26,75,140,.3)}
+.abtn.sec{background:white;color:var(--gray-700);border:1.5px solid var(--gray-200)}
+.abtn:hover{opacity:.9;transform:translateY(-1px)}
+/* review */
+.rv-card{background:white;border-radius:var(--radius-xs);padding:18px 20px;margin-bottom:10px;border:1px solid var(--gray-200);box-shadow:0 2px 8px rgba(0,0,0,.05)}
+.rv-card.cor-q{border-left:4px solid var(--green)}
+.rv-card.inc-q{border-left:4px solid var(--red)}
+.rv-hd{display:flex;align-items:center;gap:9px;margin-bottom:9px}
+.rv-icon{font-size:15px}
+.rv-txt{font-size:13px;color:var(--gray-700);margin-bottom:9px;line-height:1.5}
+.rv-ansbars{display:flex;gap:12px;font-size:12px;flex-wrap:wrap}
+.rv-a{padding:3px 10px;border-radius:4px;font-weight:700}
+.rv-a.wrong{background:var(--red-light);color:var(--red)}
+.rv-a.right{background:var(--green-light);color:var(--green)}
+.rv-expl-txt{font-size:12px;color:var(--gray-600);margin-top:8px;line-height:1.6;border-top:1px solid var(--gray-100);padding-top:8px}
+/* formula sheet */
+.fs-fab{position:fixed;right:28px;bottom:28px;z-index:150}
+.fs-btn{width:46px;height:46px;border-radius:50%;background:linear-gradient(135deg,var(--blue),var(--green));color:white;border:none;font-size:20px;cursor:pointer;box-shadow:var(--shadow-lg);display:flex;align-items:center;justify-content:center;transition:transform .2s}
+.fs-btn:hover{transform:scale(1.1)}
+.fs-panel{display:none;position:absolute;bottom:58px;right:0;width:300px;background:white;border-radius:var(--radius);box-shadow:var(--shadow-lg);border:1px solid var(--gray-200);max-height:62vh;overflow-y:auto}
+.fs-panel.open{display:block}
+.fs-ph{padding:14px 18px;background:linear-gradient(135deg,var(--blue),var(--green));color:white;font-weight:800;font-size:13px;border-radius:var(--radius) var(--radius) 0 0;display:flex;justify-content:space-between;align-items:center}
+.fs-sec{padding:12px 18px;border-bottom:1px solid var(--gray-100)}
+.fs-sec h4{font-size:10.5px;font-weight:800;text-transform:uppercase;letter-spacing:.5px;color:var(--blue);margin-bottom:8px}
+.fs-sec p{font-size:12px;font-family:'Courier New',monospace;color:var(--gray-700);line-height:1.85}
+/* hidden */
+.hidden{display:none!important}
+/* scrollbar */
+::-webkit-scrollbar{width:5px}
+::-webkit-scrollbar-track{background:var(--gray-100)}
+::-webkit-scrollbar-thumb{background:var(--gray-300);border-radius:3px}
+::-webkit-scrollbar-thumb:hover{background:var(--blue)}
+@media(max-width:860px){.app{grid-template-columns:1fr}.sidebar{position:static;height:auto}.s-grid{grid-template-columns:repeat(2,1fr)}.w-stats{grid-template-columns:repeat(2,1fr)}}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="hdr">
+  <a class="logo" href="#">
+    <div class="logo-mark">PE</div>
+    <div class="logo-info">
+      <div class="logo-name">PrepEnroll™</div>
+      <div class="logo-tag">PREP · LEARN · GO</div>
+    </div>
+  </a>
+  <div class="hdr-right"><a href="/prepenroll-practice/" style="color:white;font-size:11px;font-weight:800;text-decoration:none;opacity:.9">← Practice Hub</a>
+    <div class="exam-pill">AP PHYSICS 1</div>
+    <div class="hdr-score-live" id="liveScore">
+      <span>⚡</span><span id="liveScoreTxt">0/0</span>
+    </div>
+  </div>
+</header>
+
+<div class="app">
+<!-- ── SIDEBAR ── -->
+<aside class="sidebar">
+  <!-- Question Type -->
+  <div class="sb-section">
+    <span class="sb-label">Question Type</span>
+    <div class="type-toggle">
+      <button class="type-btn active" data-type="both" onclick="setType(this)">MCQ + FRQ</button>
+      <button class="type-btn" data-type="mcq" onclick="setType(this)">MCQ Only</button>
+      <button class="type-btn" data-type="frq" onclick="setType(this)">FRQ Only</button>
+    </div>
+  </div>
+
+  <!-- Unit / Subtopic Selection -->
+  <div class="sb-section">
+    <span class="sb-label">Units &amp; Subtopics</span>
+    <div class="unit-list" id="unitList"></div>
+  </div>
+
+  <!-- Number of Questions -->
+  <div class="sb-section">
+    <span class="sb-label">Settings</span>
+    <div class="setting-block">
+      <div class="set-row">
+        <span class="set-lbl">Questions</span>
+        <span class="set-val" id="qCountVal">20</span>
+      </div>
+      <input type="range" id="qCount" min="5" max="80" value="20" step="5"
+             oninput="document.getElementById('qCountVal').textContent=this.value;updateSelInfo()">
+    </div>
+    <div class="setting-block">
+      <div class="set-row"><span class="set-lbl">Difficulty</span></div>
+      <div class="diff-pills">
+        <div class="dpill a-easy" onclick="toggleDiff(this,'easy')">Easy</div>
+        <div class="dpill a-medium" onclick="toggleDiff(this,'medium')">Medium</div>
+        <div class="dpill a-hard" onclick="toggleDiff(this,'hard')">Hard</div>
+      </div>
+    </div>
+    <div class="setting-block">
+      <label class="timer-toggle">
+        <input type="checkbox" id="timerOn" checked> &nbsp;Enable Timer
+      </label>
+    </div>
+  </div>
+
+  <div class="selected-info" id="selInfo">Select subtopics above</div>
+  <button class="gen-btn" onclick="generateTest()">🚀 Generate Practice Test</button>
+</aside>
+
+<!-- ── MAIN ── -->
+<main class="main" id="mainArea">
+
+  <!-- Welcome -->
+  <div class="welcome" id="welcomeScreen">
+    <div class="welcome-icon">🧲</div>
+    <h1>AP Physics 1<br><em>Practice Studio</em></h1>
+    <p>Select units and subtopics on the left, choose your settings, and generate a personalised practice test designed around the AP Physics 1 curriculum.</p>
+    <div class="w-stats">
+      <div class="w-stat"><div class="wn">8</div><div class="wl">Units</div></div>
+      <div class="w-stat"><div class="wn">362</div><div class="wl">Questions</div></div>
+      <div class="w-stat"><div class="wn">MCQ</div><div class="wl">+ FRQ</div></div>
+      <div class="w-stat"><div class="wn">3</div><div class="wl">Difficulty Levels</div></div>
+    </div>
+    <div class="w-arrow">→</div>
+    <p style="font-size:13px;color:var(--gray-400)">Powered by PrepEnroll™ · www.prepenroll.com</p>
+  </div>
+
+  <!-- Test Area -->
+  <div id="testArea" class="hidden">
+    <div class="test-hdr">
+      <div class="th-info">
+        <h2 id="testTitle">AP Physics 1 Practice Test</h2>
+        <p id="testSubTitle"></p>
+      </div>
+      <div class="th-meta">
+        <div class="timer-disp" id="timerDisp"><span class="ti">⏱</span><span id="timerTxt">00:00</span></div>
+      </div>
+    </div>
+    <div class="prog-box">
+      <div class="prog-hd">
+        <span id="progLabel">Question 1 of 20</span>
+        <span id="progPct">0%</span>
+      </div>
+      <div class="prog-bg"><div class="prog-fill" id="progFill" style="width:0%"></div></div>
+      <div class="q-dots" id="qDots"></div>
+    </div>
+    <div class="q-card" id="qCard"></div>
+    <div class="nav-bar">
+      <div style="display:flex;gap:8px">
+        <button class="nbtn sec" onclick="prevQ()">← Prev</button>
+        <button class="flag-btn" id="flagBtn" onclick="toggleFlag()">🚩 Flag</button>
+      </div>
+      <div style="display:flex;gap:8px">
+        <button class="nbtn pri" onclick="nextQ()" id="nextBtn">Next →</button>
+        <button class="nbtn sub hidden" id="submitBtn" onclick="submitTest()">✓ Submit Test</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Results -->
+  <div id="results">
+    <div class="score-card">
+      <div class="sc-label">Your Score</div>
+      <div class="sc-big" id="scoreBig">—</div>
+      <div class="sc-frac" id="scoreFrac"></div>
+      <div class="sc-grade-pill" id="scoreGrade"></div>
+    </div>
+    <div class="s-grid">
+      <div class="s-card"><div class="sn green" id="rCorrect">—</div><div class="sl">Correct</div></div>
+      <div class="s-card"><div class="sn red" id="rWrong">—</div><div class="sl">Incorrect</div></div>
+      <div class="s-card"><div class="sn yellow" id="rSkipped">—</div><div class="sl">Skipped</div></div>
+      <div class="s-card"><div class="sn" id="rTime">—</div><div class="sl">Time Taken</div></div>
+    </div>
+    <div class="bd-card">
+      <h3>📊 Performance by Unit</h3>
+      <div id="unitBreakdown"></div>
+    </div>
+    <div class="act-row">
+      <button class="abtn pri" onclick="restartTest()">🔄 New Test</button>
+      <button class="abtn sec" onclick="reviewTest()">📋 Review Answers</button>
+    </div>
+    <div id="reviewContainer"></div>
+  </div>
+
+</main>
+</div>
+
+<!-- Formula Sheet FAB -->
+<div class="fs-fab">
+  <div class="fs-panel" id="fsPanel">
+    <div class="fs-ph">📐 AP Physics 1 Formula Sheet <span onclick="toggleFS()" style="cursor:pointer">✕</span></div>
+    <div class="fs-sec"><h4>Kinematics</h4><p>v = v₀ + at<br>x = x₀ + v₀t + ½at²<br>v² = v₀² + 2a(x–x₀)<br>x = x₀ + ½(v+v₀)t</p></div>
+    <div class="fs-sec"><h4>Forces</h4><p>F_net = ma<br>f_k = μ_k·N<br>F_g = mg (g = 9.8 m/s²)<br>F_s = –kx (Hooke's Law)</p></div>
+    <div class="fs-sec"><h4>Work, Energy, Power</h4><p>W = Fd·cosθ<br>KE = ½mv²<br>ΔPE_g = mgΔh<br>PE_s = ½kx²<br>P = W/t = Fv</p></div>
+    <div class="fs-sec"><h4>Momentum</h4><p>p = mv<br>J = FΔt = Δp<br>p_before = p_after<br>e = 1 (elastic); e = 0 (perfectly inelastic)</p></div>
+    <div class="fs-sec"><h4>Rotation</h4><p>τ = rF·sinθ<br>τ_net = Iα<br>L = Iω<br>KE_rot = ½Iω²<br>I_disc = ½MR²; I_rod = ⅓ML²</p></div>
+    <div class="fs-sec"><h4>Oscillations</h4><p>T_spring = 2π√(m/k)<br>T_pendulum = 2π√(L/g)<br>f = 1/T<br>x(t) = A·cos(2πft)</p></div>
+    <div class="fs-sec"><h4>Fluids</h4><p>P = P₀ + ρgh<br>F_b = ρ_fluid·V·g<br>A₁v₁ = A₂v₂ (continuity)<br>P + ½ρv² + ρgh = const (Bernoulli)</p></div>
+  </div>
+  <button class="fs-btn" onclick="toggleFS()">📐</button>
+</div>
+
+<div style="max-width:880px;margin:0 auto 22px;padding:0 32px;color:#475569;font-size:11px;line-height:1.6;text-align:center">© 2026 PrepEnroll™. All Rights Reserved. This is an independent PrepEnroll™ practice tool and is not affiliated with or endorsed by College Board.</div>
+<script>
+// ═══════════════════════════════════════════════════════════════════════════
+//  QUESTION BANK — AP Physics 1 (2025–26 Curriculum)
+//  Format: {type, q, opts, ans (0-indexed), exp, diff, sub, unit}
+//  FRQ:    {type:"frq", q, parts:[{lbl,q}], ans:[{lbl,a}], diff, sub, unit}
+// ═══════════════════════════════════════════════════════════════════════════
+const QB = {
+units:[
+//─────────────────────────────────────────────────────────────────────
+// UNIT 1: KINEMATICS
+//─────────────────────────────────────────────────────────────────────
+{id:1,name:"Unit 1: Kinematics",abbr:"U1",weight:"10–15%",subtopics:[
+{id:"1.1",name:"Position, Displacement & Velocity",questions:[
+{type:"mcq",q:"A car travels 60 m east, then 20 m west. What is its displacement?",opts:["20 m west","40 m east","80 m east","60 m east"],ans:1,exp:"Displacement = 60 – 20 = 40 m east. Distance = 80 m, but displacement is the straight-line vector from start to end.",diff:"easy"},
+{type:"mcq",q:"Which of the following is a vector quantity?",opts:["Speed","Distance","Displacement","Time"],ans:2,exp:"Displacement has both magnitude and direction, making it a vector. Speed, distance, and time are scalars.",diff:"easy"},
+{type:"mcq",q:"A runner completes a 400 m lap of a circular track and returns to the starting point. Her displacement is:",opts:["400 m","200 m","800 m","0 m"],ans:3,exp:"Displacement is the change in position. Since she returns to her starting point, displacement = 0.",diff:"easy"},
+{type:"mcq",q:"A ball moves from x = 3 m to x = –5 m. The displacement is:",opts:["8 m in the positive direction","8 m in the negative direction","–8 m","2 m"],ans:2,exp:"Δx = x_f – x_i = –5 – 3 = –8 m. The negative sign indicates the negative direction.",diff:"easy"},
+{type:"mcq",q:"A car travels 120 km in 2 hours. Its average speed is:",opts:["60 km/h","240 km/h","120 km/h","30 km/h"],ans:0,exp:"Average speed = total distance / total time = 120/2 = 60 km/h.",diff:"easy"},
+{type:"mcq",q:"Which statement correctly distinguishes average speed from average velocity?",opts:["They are always equal","Average speed uses distance; average velocity uses displacement","Average velocity uses distance; average speed uses displacement","They differ only in direction"],ans:1,exp:"Average speed = distance/time (scalar). Average velocity = displacement/time (vector).",diff:"easy"},
+{type:"mcq",q:"An object moves 30 m north and then 40 m east. What is the magnitude of its displacement?",opts:["50 m","70 m","10 m","35 m"],ans:0,exp:"Using Pythagoras: √(30² + 40²) = √(900 + 1600) = √2500 = 50 m.",diff:"medium"},
+{type:"mcq",q:"A car drives at 30 m/s for 10 s, then at 10 m/s for 10 s. Its average speed is:",opts:["20 m/s","25 m/s","15 m/s","40 m/s"],ans:0,exp:"Total distance = 30×10 + 10×10 = 300+100 = 400 m. Total time = 20 s. Avg speed = 400/20 = 20 m/s.",diff:"medium"},
+{type:"mcq",q:"A position-time graph has a horizontal line segment. This represents:",opts:["Constant velocity","Zero velocity (object at rest)","Constant acceleration","Uniform deceleration"],ans:1,exp:"A horizontal line on an x-t graph means position is not changing with time → the object is at rest (velocity = 0).",diff:"easy"},
+{type:"mcq",q:"On a position-time graph, the slope of a line represents:",opts:["Acceleration","Displacement","Speed","Velocity"],ans:3,exp:"Slope of x-t graph = Δx/Δt = velocity (including direction).",diff:"easy"},
+{type:"mcq",q:"A cyclist rides 5 km north and then 12 km east. Her total displacement is:",opts:["7 km","13 km","17 km","8.5 km"],ans:1,exp:"Displacement = √(5² + 12²) = √(25+144) = √169 = 13 km.",diff:"medium"},
+{type:"mcq",q:"An object has a velocity of –6 m/s. Which statement is correct?",opts:["The object is decelerating","The object moves in the negative direction","The object is at rest","Speed equals –6 m/s"],ans:1,exp:"Negative velocity means the object moves in the negative reference direction. Speed (magnitude) = 6 m/s.",diff:"easy"},
+{type:"mcq",q:"A car travels the first half of a journey at 40 m/s and the second half at 60 m/s. Its average speed is:",opts:["50 m/s","48 m/s","52 m/s","55 m/s"],ans:1,exp:"For equal distance halves: avg speed = 2v₁v₂/(v₁+v₂) = 2(40)(60)/(100) = 48 m/s.",diff:"hard"},
+{type:"mcq",q:"If an object's position is given by x = 4t² – 3t + 2 (x in m, t in s), the object's average velocity from t=0 to t=2 s is:",opts:["5 m/s","13 m/s","4 m/s","8 m/s"],ans:0,exp:"x(0)=2; x(2)=4(4)–3(2)+2=16–6+2=12. Avg v=(12–2)/2=10/2=5 m/s.",diff:"hard"},
+{type:"mcq",q:"A particle moves with position x(t) = 3 + 5t (m). Its velocity is:",opts:["3 m/s","5 m/s","8 m/s","Increasing with time"],ans:1,exp:"v = dx/dt = 5 m/s. This is constant, as the equation is linear in t.",diff:"medium"},
+{type:"mcq",q:"Two objects start at the same position. Object A travels at 10 m/s and Object B at 15 m/s, both in the same direction. After 4 seconds, their separation is:",opts:["20 m","10 m","60 m","5 m"],ans:0,exp:"Separation = (15–10) × 4 = 5 × 4 = 20 m.",diff:"medium"},
+{type:"mcq",q:"A train moves 200 m in 10 s, stops for 5 s, then moves 100 m in 5 s in the same direction. Its average speed is:",opts:["20 m/s","15 m/s","17 m/s","12 m/s"],ans:1,exp:"Total distance = 300 m. Total time = 20 s. Avg speed = 300/20 = 15 m/s.",diff:"medium"},
+{type:"mcq",q:"In which scenario is average velocity zero but average speed nonzero?",opts:["Object moves in a straight line","Object returns to its starting position","Object accelerates uniformly","Object moves at constant speed"],ans:1,exp:"If start position = end position, displacement = 0, so avg velocity = 0. But distance > 0 means avg speed > 0.",diff:"medium"},
+{type:"mcq",q:"A position-time graph shows a curve that is concave upward. This indicates:",opts:["Constant velocity","Decreasing speed","Increasing speed","Zero acceleration"],ans:2,exp:"A concave-up curve on x-t means slope (velocity) is increasing → the object is speeding up.",diff:"medium"},
+{type:"mcq",q:"An object moves from x = 10 m to x = –4 m to x = 7 m. The distance traveled is:",opts:["3 m","17 m","21 m","14 m"],ans:2,exp:"Leg 1: |–4–10|=14 m; Leg 2: |7–(–4)|=11 m. Wait: leg 2 = 11, but let me recheck: 10→-4 is 14 m; –4→7 is 11 m. Total = 14+11 = 25 m? Let me recalculate: 10→-4: |–4–10|=14; –4→7: |7–(–4)|=11. Total 25 m. The option with 25 isn't listed so let me correct: leg2 = |7–(–4)| = 11... Hmm, let me make this consistent. The answer is 21 m (10→-4 = 14 m; –4→7... that should be 11 m. Total = 25 m not 21). Let me fix the question to give 21: 10→–1→8: leg1=11, leg2=9, total=20 m.",q:"An object moves from x = 10 m to x = –1 m, then back to x = 8 m. The total distance traveled is:",opts:["2 m","18 m","11 m","20 m"],ans:3,exp:"Leg 1: |–1–10| = 11 m. Leg 2: |8–(–1)| = 9 m. Total distance = 11 + 9 = 20 m. Displacement = 8–10 = –2 m.",diff:"medium"},
+{type:"frq",q:"A student walks 600 m north, then turns and walks 800 m east in a time of 20 minutes.",parts:[{lbl:"(a)",q:"Calculate the total distance traveled."},{lbl:"(b)",q:"Calculate the magnitude and direction of the displacement."},{lbl:"(c)",q:"Calculate the average speed in m/s and average velocity in m/s."}],ans:[{lbl:"(a)",a:"Distance = 600 + 800 = 1400 m"},{lbl:"(b)",a:"Displacement = √(600² + 800²) = √(360000+640000) = √1000000 = 1000 m. Direction: θ = arctan(800/600) = 53.1° east of north (or 36.9° north of east)"},{lbl:"(c)",a:"Average speed = 1400 m / (20×60 s) = 1400/1200 ≈ 1.17 m/s. Average velocity = 1000/1200 ≈ 0.833 m/s at 53.1° east of north"}],diff:"medium"},
+{type:"frq",q:"A car's position as a function of time is given by the data below: t=0s x=0m; t=2s x=8m; t=4s x=18m; t=6s x=30m; t=8s x=44m.",parts:[{lbl:"(a)",q:"Calculate the average velocity from t=0 to t=8 s."},{lbl:"(b)",q:"Calculate the average velocity from t=2 s to t=6 s."},{lbl:"(c)",q:"Is the car accelerating? Justify using the data."}],ans:[{lbl:"(a)",a:"v_avg = (44–0)/(8–0) = 44/8 = 5.5 m/s"},{lbl:"(b)",a:"v_avg = (30–8)/(6–2) = 22/4 = 5.5 m/s"},{lbl:"(c)",a:"Yes. The displacement per 2-second interval increases: 8 m, 10 m, 12 m, 14 m. Since velocity is increasing, there is positive acceleration."}],diff:"hard"},
+{type:"frq",q:"An object's position as a function of time is: x = 2t² + 4t − 1 (x in meters, t in seconds).",parts:[{lbl:"(a)",q:"Find the object's position at t = 0, t = 2 s, and t = 4 s."},{lbl:"(b)",q:"Calculate the average velocity from t = 0 to t = 4 s."},{lbl:"(c)",q:"The velocity at any instant is v = 4t + 4. What is the instantaneous velocity at t = 3 s? What does it mean that this is greater than the average velocity?"}],ans:[{lbl:"(a)",a:"x(0)= –1 m; x(2)= 2(4)+4(2)–1 = 8+8–1 = 15 m; x(4)= 2(16)+4(4)–1 = 32+16–1 = 47 m"},{lbl:"(b)",a:"v_avg = (47–(–1))/(4–0) = 48/4 = 12 m/s"},{lbl:"(c)",a:"v(3) = 4(3)+4 = 16 m/s. Since 16 > 12 m/s, the object is moving faster than the average at t=3 s, meaning it was slower earlier and is speeding up."}],diff:"hard"}
+]},
+{id:"1.2",name:"Acceleration",questions:[
+{type:"mcq",q:"A car changes velocity from 10 m/s to 30 m/s in 4 s. Its average acceleration is:",opts:["5 m/s²","7.5 m/s²","10 m/s²","2.5 m/s²"],ans:0,exp:"a = Δv/Δt = (30–10)/4 = 20/4 = 5 m/s².",diff:"easy"},
+{type:"mcq",q:"A negative acceleration always means an object is:",opts:["Slowing down","Moving in the negative direction","Speeding up in the negative direction","Either slowing down or speeding up in the negative direction"],ans:3,exp:"Negative acceleration means: (i) moving in the negative direction and speeding up, OR (ii) moving in the positive direction and slowing down. Context determines which.",diff:"medium"},
+{type:"mcq",q:"On a velocity-time graph, constant acceleration is shown as:",opts:["A horizontal line","A vertical line","A curved line","A straight diagonal line"],ans:3,exp:"On a v-t graph, slope = acceleration. Constant acceleration → constant slope → straight line.",diff:"easy"},
+{type:"mcq",q:"An object moving at 20 m/s north decelerates at 5 m/s². After 2 s, its velocity is:",opts:["10 m/s north","30 m/s north","15 m/s south","10 m/s south"],ans:0,exp:"v = v₀ + at = 20 + (–5)(2) = 20–10 = 10 m/s north.",diff:"easy"},
+{type:"mcq",q:"A ball is thrown upward at 15 m/s. Taking g = 10 m/s² downward, when does it reach maximum height?",opts:["0.75 s","1.5 s","3.0 s","2.0 s"],ans:1,exp:"At max height, v = 0. t = (0–15)/(–10) = 1.5 s.",diff:"easy"},
+{type:"mcq",q:"The slope of a velocity-time graph represents:",opts:["Displacement","Distance","Velocity","Acceleration"],ans:3,exp:"Slope of v-t graph = Δv/Δt = acceleration.",diff:"easy"},
+{type:"mcq",q:"An object has acceleration a = 4 m/s². Its velocity after 0 to 3 s changes by:",opts:["4 m/s","12 m/s","8 m/s","16 m/s"],ans:1,exp:"Δv = a·Δt = 4×3 = 12 m/s.",diff:"easy"},
+{type:"mcq",q:"A car's v-t graph shows a straight line from (0, 20) to (5, 0). The acceleration is:",opts:["4 m/s² forward","–4 m/s²","20 m/s²","–20 m/s²"],ans:1,exp:"a = Δv/Δt = (0–20)/(5–0) = –20/5 = –4 m/s².",diff:"medium"},
+{type:"mcq",q:"An object starts from rest and reaches 24 m/s in 6 s with uniform acceleration. The acceleration is:",opts:["144 m/s²","4 m/s²","18 m/s²","6 m/s²"],ans:1,exp:"a = Δv/Δt = 24/6 = 4 m/s².",diff:"easy"},
+{type:"mcq",q:"A car traveling at 30 m/s decelerates at 6 m/s². How long does it take to stop?",opts:["5 s","10 s","3 s","6 s"],ans:0,exp:"v = v₀ + at → 0 = 30 + (–6)t → t = 5 s.",diff:"easy"},
+{type:"mcq",q:"Which v-t graph represents an object that first moves with constant velocity, then decelerates to rest?",opts:["Horizontal line then sloping up","Horizontal line then sloping down to zero","Straight line with positive slope throughout","Curve then horizontal"],ans:1,exp:"Constant velocity = horizontal line. Decelerating to rest = line sloping down to v=0.",diff:"medium"},
+{type:"mcq",q:"The area under a velocity-time graph represents:",opts:["Acceleration","Displacement","Speed","Force"],ans:1,exp:"Area under v-t graph = ∫v dt = displacement.",diff:"medium"},
+{type:"mcq",q:"A motorcycle accelerates from 0 to 27 m/s in 9 s. How far does it travel during this time?",opts:["243 m","121.5 m","81 m","27 m"],ans:1,exp:"x = ½(v₀+v)t = ½(0+27)(9) = ½(243) = 121.5 m. OR: area under v-t triangle = ½(9)(27) = 121.5 m.",diff:"medium"},
+{type:"mcq",q:"An object has constant acceleration of 3 m/s². It starts with velocity 6 m/s. At t = 4 s its velocity is:",opts:["18 m/s","24 m/s","12 m/s","9 m/s"],ans:0,exp:"v = v₀ + at = 6 + 3(4) = 6+12 = 18 m/s.",diff:"easy"},
+{type:"mcq",q:"Two cars start from rest at the same point. Car A has acceleration 4 m/s² and Car B has 2 m/s². At t = 3 s, how much faster is Car A than Car B?",opts:["6 m/s","12 m/s","4 m/s","18 m/s"],ans:0,exp:"v_A = 4×3=12; v_B = 2×3=6. Difference = 6 m/s.",diff:"medium"},
+{type:"mcq",q:"If a v-t graph is a horizontal line, the object's acceleration is:",opts:["Constant and positive","Equal to the y-intercept","Zero","Decreasing"],ans:2,exp:"Horizontal v-t line means velocity is constant → no change → acceleration = 0.",diff:"easy"},
+{type:"mcq",q:"A ball decelerates from 25 m/s to 10 m/s over 3 s. Its acceleration is:",opts:["–5 m/s²","5 m/s²","–3 m/s²","8.3 m/s²"],ans:0,exp:"a = (v–v₀)/t = (10–25)/3 = –15/3 = –5 m/s² (deceleration).",diff:"easy"},
+{type:"mcq",q:"An accelerometer shows 2 m/s² at all times during a journey. The v-t graph would look like:",opts:["A horizontal line","A parabola","A straight line with slope 2","A straight line with slope 0"],ans:2,exp:"Constant acceleration of 2 m/s² means constant slope on v-t graph = straight line with slope = 2 m/s².",diff:"medium"},
+{type:"mcq",q:"A particle's velocity changes from +8 m/s to –4 m/s in 2 s. The magnitude of acceleration is:",opts:["2 m/s²","6 m/s²","4 m/s²","12 m/s²"],ans:1,exp:"a = Δv/Δt = (–4–8)/2 = –12/2 = –6 m/s². Magnitude = 6 m/s².",diff:"medium"},
+{type:"mcq",q:"An object accelerates at 2 m/s² for 5 s, then decelerates at 2 m/s² for 5 s. Its final speed compared to its initial speed is:",opts:["Greater","Smaller","Equal","Cannot determine"],ans:2,exp:"The speed gained (2×5=10 m/s) equals the speed lost (2×5=10 m/s), so final speed = initial speed.",diff:"medium"},
+{type:"frq",q:"A car starts from rest and accelerates uniformly to 25 m/s in 10 s, then maintains this speed for 20 s, then brakes to a stop in 5 s.",parts:[{lbl:"(a)",q:"Calculate the acceleration during each phase."},{lbl:"(b)",q:"Sketch a labeled velocity-time graph for the entire journey."},{lbl:"(c)",q:"Calculate the total distance traveled."}],ans:[{lbl:"(a)",a:"Phase 1: a = (25–0)/10 = 2.5 m/s². Phase 2: a = 0 (constant speed). Phase 3: a = (0–25)/5 = –5 m/s²"},{lbl:"(b)",a:"Graph: rises linearly from 0 to 25 m/s over 0–10 s; horizontal at 25 m/s from 10–30 s; drops linearly to 0 at t=35 s"},{lbl:"(c)",a:"d₁ = ½(10)(25) = 125 m; d₂ = 25×20 = 500 m; d₃ = ½(5)(25) = 62.5 m. Total = 687.5 m"}],diff:"medium"},
+{type:"frq",q:"A student drops a ball from rest and it accelerates at 9.8 m/s² downward. After the ball has fallen for 3 seconds:",parts:[{lbl:"(a)",q:"What is the ball's velocity?"},{lbl:"(b)",q:"How far has it fallen?"},{lbl:"(c)",q:"Sketch a velocity-time graph. What does the slope represent?"}],ans:[{lbl:"(a)",a:"v = v₀ + at = 0 + 9.8(3) = 29.4 m/s downward"},{lbl:"(b)",a:"x = ½at² = ½(9.8)(9) = 44.1 m"},{lbl:"(c)",a:"The v-t graph is a straight line starting at origin, rising to 29.4 m/s at t=3 s. The slope represents acceleration (9.8 m/s²)."}],diff:"medium"}
+]},
+{id:"1.3",name:"Kinematic Equations & SUVAT",questions:[
+{type:"mcq",q:"A car starts at rest and accelerates at 3 m/s². How far does it travel in 4 s?",opts:["12 m","24 m","48 m","6 m"],ans:1,exp:"x = v₀t + ½at² = 0 + ½(3)(16) = 24 m.",diff:"easy"},
+{type:"mcq",q:"Using v² = v₀² + 2ax: a ball is thrown at 12 m/s and decelerates at 4 m/s². How far does it travel before stopping?",opts:["18 m","24 m","9 m","36 m"],ans:0,exp:"0 = 144 + 2(–4)x → 8x = 144 → x = 18 m.",diff:"medium"},
+{type:"mcq",q:"A stone is thrown horizontally at 10 m/s from a cliff. After 3 s, the horizontal distance traveled is:",opts:["30 m","15 m","45 m","90 m"],ans:0,exp:"Horizontal: no acceleration. x = v_x·t = 10×3 = 30 m.",diff:"easy"},
+{type:"mcq",q:"An object decelerates uniformly from 40 m/s to rest over 100 m. Its deceleration is:",opts:["8 m/s²","4 m/s²","16 m/s²","0.4 m/s²"],ans:0,exp:"v²=v₀²+2ax → 0 = 1600 + 2a(100) → a = –1600/200 = –8 m/s².",diff:"medium"},
+{type:"mcq",q:"An object starts at 5 m/s and accelerates at 2 m/s² for 3 s. Its final velocity is:",opts:["11 m/s","6 m/s","10 m/s","13 m/s"],ans:0,exp:"v = v₀ + at = 5 + 2(3) = 11 m/s.",diff:"easy"},
+{type:"mcq",q:"A ball is dropped from rest and falls for 2 s. Taking g = 10 m/s², the distance fallen is:",opts:["10 m","20 m","40 m","5 m"],ans:1,exp:"x = ½gt² = ½(10)(4) = 20 m.",diff:"easy"},
+{type:"mcq",q:"A car accelerates from 15 m/s to 35 m/s over 50 m. The acceleration is:",opts:["10 m/s²","8 m/s²","6 m/s²","4 m/s²"],ans:0,exp:"v²=v₀²+2ax → 35²=15²+2a(50) → 1225=225+100a → a=10 m/s².",diff:"medium"},
+{type:"mcq",q:"Which kinematic equation does NOT require knowing time?",opts:["v = v₀ + at","x = v₀t + ½at²","v² = v₀² + 2ax","x = ½(v+v₀)t"],ans:2,exp:"v² = v₀² + 2ax contains only v, v₀, a, and x — no time variable.",diff:"easy"},
+{type:"mcq",q:"An object travels 80 m with an initial velocity of 10 m/s and final velocity of 30 m/s. The time taken is:",opts:["4 s","8 s","2 s","6 s"],ans:0,exp:"x = ½(v₀+v)t → 80 = ½(40)t → 80 = 20t → t = 4 s.",diff:"medium"},
+{type:"mcq",q:"A rocket accelerates from rest at 20 m/s². After 5 s its velocity is:",opts:["4 m/s","100 m/s","25 m/s","40 m/s"],ans:1,exp:"v = v₀ + at = 0 + 20(5) = 100 m/s.",diff:"easy"},
+{type:"mcq",q:"A ball is thrown upward at 20 m/s (g = 10 m/s²). The maximum height reached is:",opts:["10 m","20 m","40 m","2 m"],ans:1,exp:"At max height v=0. v²=v₀²–2gh → 0=400–20h → h=20 m.",diff:"medium"},
+{type:"mcq",q:"An object traveling at 8 m/s decelerates at 2 m/s². How long before it stops?",opts:["2 s","4 s","8 s","16 s"],ans:1,exp:"0 = 8 + (–2)t → t = 4 s.",diff:"easy"},
+{type:"mcq",q:"A car brakes from 30 m/s to rest in 5 s. The distance traveled is:",opts:["75 m","150 m","30 m","60 m"],ans:0,exp:"x = ½(v₀+v)t = ½(30+0)(5) = 75 m.",diff:"medium"},
+{type:"mcq",q:"A particle starts at x = 0, v₀ = –6 m/s, a = +2 m/s². Its position at t = 3 s is:",opts:["–9 m","–18 m","0 m","–3 m"],ans:0,exp:"x = v₀t + ½at² = –6(3) + ½(2)(9) = –18 + 9 = –9 m.",diff:"medium"},
+{type:"mcq",q:"Two trains start from the same point. Train A has v₀=0, a=2 m/s². Train B has v₀=10 m/s, a=0. When does Train A catch Train B?",opts:["5 s","10 s","15 s","20 s"],ans:1,exp:"½(2)t² = 10t → t² = 10t → t = 10 s.",diff:"hard"},
+{type:"mcq",q:"An object drops from rest. The ratio of distances fallen in the 1st, 2nd, and 3rd seconds is:",opts:["1:2:3","1:4:9","1:3:5","1:2:4"],ans:2,exp:"Distances: t=1: ½g(1)=4.9; t=1→2: ½g(4)–½g(1)=14.7; ratio 4.9:9.8:14.7 = 1:2:3? Actually d₁=½g, d₂=½g(4)–½g=1.5g, d₃=½g(9)–½g(4)=2.5g → ratio 1:3:5.",diff:"hard"},
+{type:"mcq",q:"A motorcyclist traveling at v₀ sees a light turn red and brakes. If the deceleration is 8 m/s² and the stopping distance is 18 m, what was v₀?",opts:["12 m/s","16 m/s","9 m/s","24 m/s"],ans:0,exp:"v²=v₀²+2ax → 0 = v₀²+2(–8)(18) → v₀²=288 → v₀≈17 m/s. Closest: 12 m/s if x=9m: v₀²=144. Let me recalc: 2(8)(18)=288, v₀=√288≈17. Choose 17? Let me fix: stopping distance = 9m: v₀=√144=12 m/s.",q:"A motorcyclist brakes with deceleration 8 m/s² and stops in 9 m. What was the initial speed?",opts:["12 m/s","16 m/s","8 m/s","6 m/s"],ans:0,exp:"v²=v₀²+2ax → 0=v₀²+2(–8)(9) → v₀²=144 → v₀=12 m/s.",diff:"medium"},
+{type:"mcq",q:"A ball thrown downward at 5 m/s falls for 2 s (g=10 m/s²). How far does it fall?",opts:["30 m","25 m","10 m","50 m"],ans:0,exp:"x = v₀t + ½gt² = 5(2) + ½(10)(4) = 10 + 20 = 30 m.",diff:"medium"},
+{type:"mcq",q:"A particle moves with x = 4t² – 2t + 1. Its acceleration is:",opts:["4 m/s²","8 m/s²","2 m/s²","–2 m/s²"],ans:1,exp:"v = 8t – 2. a = dv/dt = 8 m/s² (constant). In kinematics: the coefficient of t² is ½a, so ½a=4 → a=8 m/s².",diff:"hard"},
+{type:"mcq",q:"In free fall from rest, a ball's speed after falling height h is:",opts:["gh","√(2gh)","√(gh)","2gh"],ans:1,exp:"v²=2gh → v=√(2gh).",diff:"medium"},
+{type:"frq",q:"A car traveling at 25 m/s begins braking with constant deceleration. It takes 5 s to come to rest.",parts:[{lbl:"(a)",q:"Find the deceleration."},{lbl:"(b)",q:"Find the stopping distance."},{lbl:"(c)",q:"If the driver reacted for 0.8 s before braking, find the total distance from when the driver saw the hazard."}],ans:[{lbl:"(a)",a:"a = (0–25)/5 = –5 m/s²; magnitude = 5 m/s²"},{lbl:"(b)",a:"x = ½(v₀+v)t = ½(25)(5) = 62.5 m"},{lbl:"(c)",a:"Reaction distance = 25×0.8 = 20 m. Total = 20 + 62.5 = 82.5 m"}],diff:"medium"},
+{type:"frq",q:"An object is launched vertically upward with initial velocity 30 m/s. Use g = 10 m/s².",parts:[{lbl:"(a)",q:"Find the time to reach maximum height."},{lbl:"(b)",q:"Find the maximum height."},{lbl:"(c)",q:"Find the time for the object to return to the launch point."},{lbl:"(d)",q:"Find the speed when it returns to the launch point."}],ans:[{lbl:"(a)",a:"At max height, v=0. t = (0–30)/(–10) = 3 s"},{lbl:"(b)",a:"h = v₀t–½gt² = 30(3)–½(10)(9) = 90–45 = 45 m"},{lbl:"(c)",a:"By symmetry, total time = 2×3 = 6 s"},{lbl:"(d)",a:"By symmetry, speed = 30 m/s (downward). OR: v²=2gh = 2(10)(45)=900, v=30 m/s"}],diff:"medium"}
+]},
+{id:"1.4",name:"Free Fall & Gravity",questions:[
+{type:"mcq",q:"Two balls, one heavy and one light, are dropped simultaneously from the same height in a vacuum. They reach the ground:",opts:["At the same time","The heavy one first","The light one first","At times proportional to their masses"],ans:0,exp:"In free fall, all objects experience the same gravitational acceleration regardless of mass (g ≈ 9.8 m/s²).",diff:"easy"},
+{type:"mcq",q:"A ball is dropped from rest. Taking g = 10 m/s², its speed after 4 s is:",opts:["40 m/s","20 m/s","80 m/s","10 m/s"],ans:0,exp:"v = gt = 10×4 = 40 m/s.",diff:"easy"},
+{type:"mcq",q:"A ball is dropped from a height of 125 m (g = 10 m/s²). The time to reach the ground is:",opts:["5 s","10 s","2.5 s","12.5 s"],ans:0,exp:"h = ½gt² → 125 = ½(10)t² → t² = 25 → t = 5 s.",diff:"easy"},
+{type:"mcq",q:"An object in free fall near Earth's surface has acceleration:",opts:["9.8 m/s² upward","9.8 m/s² downward","Depends on mass","Zero"],ans:1,exp:"Free fall acceleration = g = 9.8 m/s² directed downward (toward Earth's center).",diff:"easy"},
+{type:"mcq",q:"A rock is dropped from a cliff and takes 3 s to hit the ground (g = 10 m/s²). The height of the cliff is:",opts:["30 m","45 m","15 m","90 m"],ans:1,exp:"h = ½gt² = ½(10)(9) = 45 m.",diff:"easy"},
+{type:"mcq",q:"A ball is thrown upward at 15 m/s (g = 10 m/s²). At the highest point, its acceleration is:",opts:["0","15 m/s² upward","10 m/s² downward","10 m/s² upward"],ans:2,exp:"At the highest point, velocity = 0, but acceleration is still g = 10 m/s² downward. Gravity doesn't switch off.",diff:"medium"},
+{type:"mcq",q:"An object is thrown upward with v₀ = 20 m/s (g=10 m/s²). How high does it go?",opts:["10 m","20 m","40 m","100 m"],ans:1,exp:"v²=v₀²–2gh → 0=400–20h → h=20 m.",diff:"easy"},
+{type:"mcq",q:"Ball A is dropped from height H. Ball B is dropped simultaneously from height 4H. When A hits the ground, how far has B fallen?",opts:["H","H/4","H/2","2H"],ans:0,exp:"Both fall for the same time t=√(2H/g). B falls ½g(t²)=H. So B has also fallen H, meaning B is still 3H above the ground.",diff:"hard"},
+{type:"mcq",q:"A ball is thrown upward and returns to the thrower after 6 s. The initial speed was (g=10 m/s²):",opts:["30 m/s","60 m/s","15 m/s","10 m/s"],ans:0,exp:"Time up = 3 s. v₀ = gt = 10×3 = 30 m/s.",diff:"medium"},
+{type:"mcq",q:"An object is thrown upward at 25 m/s (g=10 m/s²). It is at a height of 30 m:",opts:["Once","Twice","Never","Three times"],ans:1,exp:"Going up: 30 = 25t–5t², t=2 s. Coming down at t=3 s (by symmetry check: 25(3)–5(9)=75–45=30 m). So twice.",diff:"hard"},
+{type:"mcq",q:"A marble is dropped from a height h. The height fallen after time t/2 compared to total fall time t is:",opts:["h/2","h/4","h/8","h/3"],ans:1,exp:"h = ½gt² and h' = ½g(t/2)² = ½g(t²/4) = h/4.",diff:"medium"},
+{type:"mcq",q:"In a 'coin and feather' tube experiment with air removed, both fall at the same rate because:",opts:["They weigh the same","They have the same density","Gravitational acceleration is the same for all masses in vacuum","Air resistance is the main factor"],ans:2,exp:"Without air resistance, all objects experience the same g regardless of mass. F_g=mg and F_net=ma → a=g for any mass.",diff:"easy"},
+{type:"mcq",q:"From a bridge, a stone is thrown downward at 5 m/s and takes 3 s to hit water (g=10 m/s²). The bridge height is:",opts:["45 m","60 m","30 m","75 m"],ans:1,exp:"h = v₀t + ½gt² = 5(3)+½(10)(9) = 15+45 = 60 m.",diff:"medium"},
+{type:"mcq",q:"A ball is thrown upward at 30 m/s from a 20 m high building (g=10 m/s²). When it hits the ground, its speed is:",opts:["30 m/s","40 m/s","50 m/s","10 m/s"],ans:1,exp:"Taking down as positive, v₀=–30 m/s, g=10 m/s², x=20 m. v²=900+2(10)(20)=1300? Let's use energy: v²=v₀²+2g(total drop). Object goes up 45 m, then falls 45+20=65 m from top. v²=2(10)(65)=1300? Hmm. Actually: using v²=(–30)²+2(10)(20)=900+400=1300, v≈36. Let me fix: take upward as positive: v₀=+30, g=–10, x=–20 at ground. v²=900+2(–10)(–20)=900+400=1300. v≈36 m/s. Let me use simpler: throw down at 10 m/s from 45 m: v²=100+900=1000, v≈31.6. Better: use h=20m, v₀=0 (drop). v=√(2×10×20)=√400=20 m/s. Let me use that.",q:"A ball is dropped from rest from a 45 m height (g=10 m/s²). Its speed just before hitting the ground is:",opts:["30 m/s","45 m/s","20 m/s","15 m/s"],ans:0,exp:"v²=2gh=2(10)(45)=900 → v=30 m/s.",diff:"easy"},
+{type:"mcq",q:"A coin is dropped on the Moon (g_moon = 1.6 m/s²) and on Earth (g=9.8 m/s²) from the same height. The Moon fall time compared to Earth is:",opts:["Greater","Less","Equal","Depends on coin mass"],ans:0,exp:"t = √(2h/g). Smaller g → larger t. The Moon fall takes longer because gravitational acceleration is weaker.",diff:"medium"},
+{type:"mcq",q:"An apple falls from a tree 5 m high (g=10 m/s²). Its velocity when it hits the ground is:",opts:["50 m/s","10 m/s","25 m/s","5 m/s"],ans:1,exp:"v²=2gh=2(10)(5)=100 → v=10 m/s.",diff:"easy"},
+{type:"mcq",q:"A ball is thrown upward. Which statement about its velocity and acceleration at the peak is correct?",opts:["Both are zero","Velocity is zero; acceleration is g downward","Acceleration is zero; velocity is maximum","Both are at maximum"],ans:1,exp:"At the peak, velocity = 0 (momentarily at rest). But gravity still acts, so acceleration = g = 9.8 m/s² downward.",diff:"medium"},
+{type:"mcq",q:"In free fall, which pair of quantities both double if the fall time doubles?",opts:["Height and speed","Speed only","Height only","Neither, height quadruples while speed doubles"],ans:3,exp:"v=gt (doubles when t doubles). h=½gt² (quadruples when t doubles). So speed doubles, height quadruples.",diff:"hard"},
+{type:"frq",q:"A ball is dropped from the top of a 80 m building. Use g = 10 m/s².",parts:[{lbl:"(a)",q:"Calculate the time to hit the ground."},{lbl:"(b)",q:"Calculate the speed just before impact."},{lbl:"(c)",q:"A second ball is thrown downward at 10 m/s from the same point at the same time. Which hits the ground first and by how many seconds?"}],ans:[{lbl:"(a)",a:"80 = ½(10)t² → t² = 16 → t = 4 s"},{lbl:"(b)",a:"v = gt = 10×4 = 40 m/s (or v²=2×10×80=1600, v=40 m/s)"},{lbl:"(c)",a:"Ball 2: 80 = 10t + 5t². 5t²+10t–80=0. t²+2t–16=0. t=(–2+√68)/2≈(–2+8.25)/2≈3.12 s. Ball 1 lands at 4 s, Ball 2 at ≈3.12 s. Ball 2 lands ≈0.88 s earlier."}],diff:"hard"}
+]},
+{id:"1.5",name:"Projectile Motion",questions:[
+{type:"mcq",q:"In projectile motion (ignoring air resistance), the horizontal acceleration is:",opts:["g","–g","0","Varies"],ans:2,exp:"Horizontally, no force acts (ignoring air resistance), so horizontal acceleration = 0. Horizontal velocity is constant.",diff:"easy"},
+{type:"mcq",q:"A ball is launched horizontally at 15 m/s from a 20 m cliff (g=10 m/s²). Time to reach the ground:",opts:["2 s","4 s","1.5 s","3 s"],ans:0,exp:"Vertical: 20 = ½(10)t² → t = √4 = 2 s.",diff:"easy"},
+{type:"mcq",q:"Using the previous question (v_x=15 m/s, t=2 s), the horizontal range is:",opts:["20 m","30 m","15 m","40 m"],ans:1,exp:"x = v_x·t = 15×2 = 30 m.",diff:"easy"},
+{type:"mcq",q:"At what launch angle (above horizontal) is the horizontal range of a projectile maximized (on flat ground)?",opts:["30°","45°","60°","90°"],ans:1,exp:"Range R = v₀²sin(2θ)/g is maximum when sin(2θ)=1, i.e., 2θ=90°, θ=45°.",diff:"medium"},
+{type:"mcq",q:"A projectile is fired at 45° with speed 20 m/s (g=10 m/s²). The initial vertical velocity component is:",opts:["10 m/s","14.1 m/s","17.3 m/s","20 m/s"],ans:1,exp:"v_y = v·sin45° = 20×(√2/2) ≈ 14.1 m/s.",diff:"medium"},
+{type:"mcq",q:"In projectile motion, which quantity remains constant throughout the flight?",opts:["Vertical velocity","Speed","Horizontal velocity","Vertical acceleration"],ans:2,exp:"Horizontal velocity is constant (no horizontal force). Vertical velocity changes due to gravity. Speed changes too.",diff:"easy"},
+{type:"mcq",q:"A bomb dropped from a plane traveling horizontally will land:",opts:["Behind the plane","Directly below the release point","Ahead of the plane","To the side"],ans:2,exp:"The bomb retains the plane's horizontal velocity and moves forward as it falls. It lands directly below the plane's position at impact, which is ahead of the release point.",diff:"medium"},
+{type:"mcq",q:"A ball is launched at 30° above horizontal at 40 m/s. The time to reach maximum height (g=10 m/s²):",opts:["2 s","4 s","1 s","3 s"],ans:0,exp:"v_y = 40sin30° = 20 m/s. t = v_y/g = 20/10 = 2 s.",diff:"medium"},
+{type:"mcq",q:"A projectile launched at 60° has the same range as one launched at:",opts:["45°","30°","120°","15°"],ans:1,exp:"Complementary angles give same range: 60° and 30° are complementary (60+30=90°). R = v₀²sin(2θ)/g is same for θ and 90°–θ.",diff:"hard"},
+{type:"mcq",q:"A ball is thrown horizontally from a table. Its vertical velocity after 2 s (g=10 m/s²) is:",opts:["10 m/s","20 m/s","0 m/s","5 m/s"],ans:1,exp:"v_y = gt = 10×2 = 20 m/s (downward).",diff:"easy"},
+{type:"mcq",q:"At the highest point of a projectile's trajectory, the acceleration is:",opts:["Zero","g downward","g horizontal","g upward"],ans:1,exp:"Gravity is always g downward. At the highest point, vertical velocity = 0 but acceleration = g downward.",diff:"medium"},
+{type:"mcq",q:"Two balls are launched simultaneously from the same height: one horizontally, one dropped vertically. They:",opts:["Hit ground simultaneously","The horizontal one lands first","The dropped one lands first","Depends on horizontal speed"],ans:0,exp:"Both experience the same vertical acceleration g. Both have the same initial vertical velocity (zero). So both hit the ground at the same time.",diff:"medium"},
+{type:"mcq",q:"A projectile is at maximum height. Its velocity is:",opts:["Zero","Equal to initial speed","Only horizontal component of initial velocity","Only vertical component"],ans:2,exp:"At max height, vertical velocity = 0. Horizontal velocity is unchanged = v₀cosθ.",diff:"medium"},
+{type:"mcq",q:"A ball thrown at 50 m/s at 37° above horizontal. Taking sin37°=0.6, cos37°=0.8. Initial horizontal velocity is:",opts:["40 m/s","30 m/s","50 m/s","20 m/s"],ans:0,exp:"v_x = 50cos37° = 50×0.8 = 40 m/s.",diff:"easy"},
+{type:"mcq",q:"Using same ball (v₀=50 m/s, 37°, g=10 m/s²), the time of flight is:",opts:["3 s","6 s","4.5 s","5 s"],ans:1,exp:"v_y = 50sin37° = 30 m/s. Time up = 30/10 = 3 s. Total = 6 s.",diff:"medium"},
+{type:"mcq",q:"Using same data, the range is:",opts:["180 m","240 m","360 m","120 m"],ans:1,exp:"R = v_x × T = 40×6 = 240 m.",diff:"medium"},
+{type:"mcq",q:"A projectile's speed is minimum:",opts:["At launch","At maximum height","At impact","At 45° into flight"],ans:1,exp:"At max height, vertical velocity = 0, so speed = v_x (horizontal component only). This is the minimum speed.",diff:"medium"},
+{type:"mcq",q:"A football is kicked at 10 m/s at 30° (g=10). Maximum height reached:",opts:["1.25 m","2.5 m","5 m","0.625 m"],ans:0,exp:"v_y=10sin30°=5 m/s. h=v_y²/(2g)=25/20=1.25 m.",diff:"medium"},
+{type:"frq",q:"A ball is kicked at 30 m/s at an angle of 53° above horizontal (sin53°=0.8, cos53°=0.6). Use g=10 m/s².",parts:[{lbl:"(a)",q:"Find the horizontal and vertical components of the initial velocity."},{lbl:"(b)",q:"Find the time to reach maximum height and the maximum height."},{lbl:"(c)",q:"Find the total time of flight and the horizontal range."}],ans:[{lbl:"(a)",a:"v_x = 30cos53° = 30×0.6 = 18 m/s; v_y = 30sin53° = 30×0.8 = 24 m/s"},{lbl:"(b)",a:"t_up = v_y/g = 24/10 = 2.4 s; h = v_y²/(2g) = 576/20 = 28.8 m"},{lbl:"(c)",a:"Total time = 2t_up = 4.8 s; Range = v_x × T = 18×4.8 = 86.4 m"}],diff:"medium"},
+{type:"frq",q:"A ball rolls off a horizontal table at 4 m/s and lands 2 m from the base. Use g = 10 m/s².",parts:[{lbl:"(a)",q:"Find the time the ball is in the air."},{lbl:"(b)",q:"Find the height of the table."},{lbl:"(c)",q:"Find the ball's velocity (magnitude and direction) when it hits the ground."}],ans:[{lbl:"(a)",a:"x=v_x·t → 2=4t → t=0.5 s"},{lbl:"(b)",a:"h=½gt²=½(10)(0.25)=1.25 m"},{lbl:"(c)",a:"v_x=4 m/s; v_y=gt=10×0.5=5 m/s downward. Speed=√(16+25)=√41≈6.4 m/s. Angle=arctan(5/4)≈51.3° below horizontal."}],diff:"hard"}
+]},
+{id:"1.6",name:"Motion Graphs",questions:[
+{type:"mcq",q:"On a position-time graph, a steeper slope indicates:",opts:["Greater acceleration","Greater displacement","Greater velocity","Greater distance"],ans:2,exp:"Slope of x-t graph = Δx/Δt = velocity. Steeper slope = greater velocity magnitude.",diff:"easy"},
+{type:"mcq",q:"On a v-t graph, the area under the curve between two times represents:",opts:["Acceleration","Displacement","Speed","Average velocity"],ans:1,exp:"Area under v-t graph = ∫v dt = displacement.",diff:"easy"},
+{type:"mcq",q:"An x-t graph shows a straight line with negative slope. The object is:",opts:["Accelerating","Moving in the negative direction at constant velocity","Decelerating","At rest"],ans:1,exp:"Constant negative slope = constant negative velocity = moving in negative direction at constant speed.",diff:"easy"},
+{type:"mcq",q:"A v-t graph shows a straight line from (0,0) to (4,20). The acceleration is:",opts:["5 m/s²","10 m/s²","20 m/s²","4 m/s²"],ans:0,exp:"a = slope = Δv/Δt = 20/4 = 5 m/s².",diff:"easy"},
+{type:"mcq",q:"On a v-t graph, what does a line crossing from positive to negative velocity mean?",opts:["The object stops and reverses direction","The object speeds up","Acceleration becomes zero","The object reaches max height"],ans:0,exp:"When v changes sign, the object momentarily stops (v=0) and then moves in the opposite direction.",diff:"medium"},
+{type:"mcq",q:"A v-t graph shows a rectangle (constant velocity v₀ for time T). The displacement is:",opts:["v₀/T","v₀·T","T/v₀","v₀²/2"],ans:1,exp:"Displacement = area of rectangle = v₀ × T.",diff:"easy"},
+{type:"mcq",q:"Which x-t graph corresponds to motion with constant positive acceleration starting from rest?",opts:["Straight line with positive slope","Horizontal line","Parabola opening upward","Straight line with negative slope"],ans:2,exp:"x = ½at² is parabolic (x ∝ t²). Starting from rest and accelerating positively gives an upward-opening parabola.",diff:"medium"},
+{type:"mcq",q:"The area under an a-t (acceleration-time) graph represents:",opts:["Displacement","Speed","Velocity change (Δv)","Distance"],ans:2,exp:"Area under a-t graph = ∫a dt = Δv (change in velocity).",diff:"medium"},
+{type:"mcq",q:"A v-t graph shows a trapezoid: v=0 at t=0, rises to 10 m/s at t=2 s, stays at 10 m/s until t=6 s, then falls to 0 at t=8 s. Total displacement is:",opts:["80 m","60 m","70 m","100 m"],ans:2,exp:"Area = triangle(½×2×10) + rectangle(4×10) + triangle(½×2×10) = 10+40+10 = 60 m. Wait: ½×2×10=10, 10×4=40, ½×2×10=10. Total=60 m. Hmm, option B. Let me recount: triangle up: ½(2)(10)=10; rect: 10×4=40; triangle down: ½(2)(10)=10. Total=60 m.",ans:1,exp:"Triangles (up+down): ½×2×10 + ½×2×10 = 20 m. Rectangle: 4×10 = 40 m. Total = 60 m.",diff:"medium"},
+{type:"mcq",q:"An x-t graph is a curve that becomes less steep over time. This indicates:",opts:["Increasing speed","Decreasing speed","Constant acceleration","Zero velocity"],ans:1,exp:"Decreasing slope on x-t graph means velocity (slope) is decreasing → the object is slowing down.",diff:"medium"},
+{type:"mcq",q:"A v-t graph shows two sections: 0 to 3 s with a=+4 m/s², then 3 to 7 s with a=–2 m/s². The initial velocity is 0. The velocity at t=7 s is:",opts:["4 m/s","12 m/s","–4 m/s","0 m/s"],ans:0,exp:"At t=3: v=0+4(3)=12 m/s. From t=3 to 7: v=12+(–2)(4)=12–8=4 m/s.",diff:"medium"},
+{type:"mcq",q:"Two x-t graph lines intersect. At the intersection point:",opts:["Their velocities are equal","They have the same position","They have the same acceleration","They have traveled the same distance"],ans:1,exp:"An intersection on an x-t graph means both objects are at the same position at that time.",diff:"medium"},
+{type:"mcq",q:"A constant positive v means the x-t graph is:",opts:["A parabola","A horizontal line","A straight line with positive slope","A curve with increasing slope"],ans:2,exp:"Constant velocity = constant slope on x-t graph = straight line with that positive slope.",diff:"easy"},
+{type:"frq",q:"A car's velocity-time graph shows: from t=0 to t=4s, velocity increases linearly from 0 to 16 m/s. From t=4s to t=10s, velocity remains constant at 16 m/s. From t=10s to t=14s, velocity decreases linearly from 16 m/s to 0.",parts:[{lbl:"(a)",q:"Calculate the acceleration in each phase."},{lbl:"(b)",q:"Calculate the displacement in each phase."},{lbl:"(c)",q:"Draw an acceleration-time graph for this motion."}],ans:[{lbl:"(a)",a:"Phase 1: a=(16–0)/4=4 m/s²; Phase 2: a=0; Phase 3: a=(0–16)/4=–4 m/s²"},{lbl:"(b)",a:"Phase 1: ½×4×16=32 m; Phase 2: 6×16=96 m; Phase 3: ½×4×16=32 m. Total=160 m"},{lbl:"(c)",a:"a-t graph: constant +4 from 0–4s; 0 from 4–10s; constant –4 from 10–14s (rectangular pulse shape)"}],diff:"medium"}
+]}
+]},
+
+//─────────────────────────────────────────────────────────────────────
+// UNIT 2: FORCES & TRANSLATIONAL DYNAMICS
+//─────────────────────────────────────────────────────────────────────
+{id:2,name:"Unit 2: Forces & Translational Dynamics",abbr:"U2",weight:"18–23%",subtopics:[
+{id:"2.1",name:"Newton's First & Third Laws",questions:[
+{type:"mcq",q:"Newton's First Law states that an object at rest will remain at rest unless:",opts:["It has no mass","A net external force acts on it","It is on a frictionless surface","It has zero velocity"],ans:1,exp:"Newton's 1st Law (inertia): an object maintains its state of rest or uniform motion unless acted on by a net external force.",diff:"easy"},
+{type:"mcq",q:"A book lies on a table. The reaction to the book's weight (gravitational pull by Earth) is:",opts:["The normal force from the table","The weight of the table","The gravitational pull of the book on the Earth","The friction force"],ans:2,exp:"Newton's 3rd Law: forces come in action-reaction pairs. Earth pulls book down (book's weight) → book pulls Earth up with equal force.",diff:"medium"},
+{type:"mcq",q:"A car hits a mosquito. The force the car exerts on the mosquito compared to the force the mosquito exerts on the car is:",opts:["Car's force is greater","Mosquito's force is greater","They are equal in magnitude","Depends on the car's mass"],ans:2,exp:"Newton's 3rd Law: action and reaction forces are always equal in magnitude and opposite in direction.",diff:"medium"},
+{type:"mcq",q:"Inertia is best described as:",opts:["A force opposing motion","An object's resistance to changes in its state of motion","The force of gravity on an object","A type of friction"],ans:1,exp:"Inertia is the property of matter that resists changes in velocity. It is proportional to mass.",diff:"easy"},
+{type:"mcq",q:"A passenger in a car feels pushed backward when the car accelerates forward. This is explained by:",opts:["Newton's 1st Law — the passenger tends to remain at rest","Newton's 3rd Law — the car pushes back","Centripetal force","Kinetic friction"],ans:0,exp:"The passenger's inertia (Newton's 1st Law) resists the acceleration. The passenger tends to stay at rest while the car moves forward.",diff:"medium"},
+{type:"mcq",q:"Two ice skaters push off each other. Skater A (mass 50 kg) accelerates at 2 m/s². Skater B (mass 100 kg) accelerates at:",opts:["4 m/s²","2 m/s²","1 m/s²","0.5 m/s²"],ans:2,exp:"Same force (Newton's 3rd Law). F=50×2=100 N. For B: a=F/m=100/100=1 m/s².",diff:"medium"},
+{type:"mcq",q:"When a horse pulls a cart, Newton's 3rd Law says the cart pulls back on the horse with an equal force. Why does the system accelerate?",opts:["The horse's force is larger","Newton's 3rd Law pairs act on different objects; net force on the system is from external forces like friction","The cart force is smaller","The road's friction acts only on the cart"],ans:1,exp:"3rd Law pairs act on different objects. The forward friction of the road on the horse's hooves is external and accelerates the horse+cart system.",diff:"hard"},
+{type:"mcq",q:"A 2 kg book is on a table. The forces on the book are:",opts:["Only its weight","Weight upward and normal force downward","Weight downward and normal force upward","Only normal force"],ans:2,exp:"The book experiences its weight (gravitational force downward) and the normal force from the table (upward). They are equal and opposite → net force = 0 → book stays at rest.",diff:"easy"},
+{type:"mcq",q:"An astronaut in outer space (no gravity, no air) pushes on a wall. She will:",opts:["Stay still","Move away from the wall","Move toward the wall","Spin"],ans:1,exp:"Newton's 3rd Law: she pushes wall → wall pushes her back. Newton's 1st Law: this net force accelerates her away from the wall.",diff:"medium"},
+{type:"mcq",q:"A 10 kg box sits on a 50 kg table. Earth's gravity is 10 N/kg. The normal force the floor exerts on the table is:",opts:["100 N","500 N","600 N","400 N"],ans:2,exp:"The floor must support the table AND box. N = (50+10)×10 = 600 N.",diff:"medium"},
+{type:"mcq",q:"A 5 kg ball hangs from a rope. The tension in the rope equals:",opts:["0 N","25 N","50 N","10 N"],ans:2,exp:"Equilibrium: T = mg = 5×10 = 50 N.",diff:"easy"},
+{type:"mcq",q:"A rocket in space fires its engines. The exhaust gases push backward. The rocket moves forward because:",opts:["Air pushes the rocket forward","Newton's 3rd Law — rocket pushes gas back, gas pushes rocket forward","Newton's 1st Law","The fuel creates a magnetic force"],ans:1,exp:"Newton's 3rd Law: rocket pushes gas backward → gas pushes rocket forward with equal force.",diff:"easy"},
+{type:"mcq",q:"An object has zero net force acting on it. Which statement MUST be true?",opts:["The object is at rest","The object has no forces acting on it","The object moves with constant velocity (possibly zero)","The object accelerates uniformly"],ans:2,exp:"Net force = 0 means acceleration = 0 → constant velocity. This includes rest (v=0) but also constant motion.",diff:"medium"},
+{type:"mcq",q:"An object moving in a straight line at constant speed. Net force is:",opts:["Nonzero in direction of motion","Zero","Equal to its weight","Depends on surface"],ans:1,exp:"Constant speed + constant direction = constant velocity = zero acceleration → zero net force (Newton's 1st Law).",diff:"easy"},
+{type:"frq",q:"A student stands on a bathroom scale in an elevator. The scale reads 600 N when the elevator is at rest. The student's true weight is 600 N.",parts:[{lbl:"(a)",q:"Identify all forces on the student and draw a free body diagram."},{lbl:"(b)",q:"The elevator accelerates upward at 2 m/s². What does the scale read? Use g=10 m/s²."},{lbl:"(c)",q:"The elevator decelerates while moving upward at 2 m/s². What does the scale read?"},{lbl:"(d)",q:"Apply Newton's 3rd Law: identify the reaction force to the normal force the scale exerts on the student."}],ans:[{lbl:"(a)",a:"Forces: Weight W=600 N downward; Normal force N upward. FBD shows two arrows at dot: W down, N up."},{lbl:"(b)",a:"m=60 kg. Net force up: N–mg=ma. N=m(g+a)=60(10+2)=720 N."},{lbl:"(c)",a:"Decelerating upward = accelerating downward. N=m(g–a)=60(10–2)=480 N."},{lbl:"(d)",a:"Reaction to N (scale pushing student up): the student pushes the scale down with 600 N at rest. This force acts on the scale, not the student."}],diff:"medium"}
+]},
+{id:"2.2",name:"Newton's Second Law (F=ma)",questions:[
+{type:"mcq",q:"A net force of 60 N acts on a 12 kg object. The acceleration is:",opts:["720 m/s²","5 m/s²","0.2 m/s²","72 m/s²"],ans:1,exp:"F=ma → a=F/m=60/12=5 m/s².",diff:"easy"},
+{type:"mcq",q:"A 5 kg box is pushed with 30 N but friction exerts 10 N. The acceleration is:",opts:["8 m/s²","4 m/s²","6 m/s²","2 m/s²"],ans:1,exp:"Net F = 30–10 = 20 N. a = F/m = 20/5 = 4 m/s².",diff:"easy"},
+{type:"mcq",q:"If the net force on an object doubles and its mass halves, the acceleration:",opts:["Doubles","Quadruples","Halves","Stays the same"],ans:1,exp:"a = F/m. If F→2F and m→m/2: a_new = 2F/(m/2) = 4F/m = 4a. Acceleration quadruples.",diff:"medium"},
+{type:"mcq",q:"Two boxes (3 kg and 7 kg) are pushed with 50 N total force across a frictionless floor. Their acceleration is:",opts:["5 m/s²","7 m/s²","10 m/s²","3.5 m/s²"],ans:0,exp:"a = F/m_total = 50/(3+7) = 50/10 = 5 m/s².",diff:"easy"},
+{type:"mcq",q:"A 1500 kg car accelerates at 3 m/s². The net force is:",opts:["500 N","4500 N","3000 N","1500 N"],ans:1,exp:"F = ma = 1500×3 = 4500 N.",diff:"easy"},
+{type:"mcq",q:"A force of 20 N gives mass A an acceleration of 4 m/s² and mass B an acceleration of 2 m/s². If A and B are joined together and the same force is applied, the acceleration is:",opts:["3 m/s²","1.33 m/s²","6 m/s²","2 m/s²"],ans:1,exp:"m_A=20/4=5 kg; m_B=20/2=10 kg. Total=15 kg. a=20/15=1.33 m/s².",diff:"medium"},
+{type:"mcq",q:"A 0.5 kg ball is hit with average force 200 N for 0.01 s. Its acceleration during impact is:",opts:["400 m/s²","100 m/s²","4000 m/s²","2 m/s²"],ans:0,exp:"a = F/m = 200/0.5 = 400 m/s².",diff:"medium"},
+{type:"mcq",q:"An object of mass m slides on a frictionless incline of angle θ. The acceleration along the incline is:",opts:["g","g·sinθ","g·cosθ","g·tanθ"],ans:1,exp:"Component of gravity along incline = mg·sinθ. F=ma → mg·sinθ=ma → a=g·sinθ.",diff:"medium"},
+{type:"mcq",q:"A 4 kg block hangs from a rope. A second 2 kg block hangs below it. The tension in the upper rope is (g=10 m/s²):",opts:["20 N","40 N","60 N","80 N"],ans:2,exp:"Upper rope supports BOTH masses: T = (4+2)×10 = 60 N.",diff:"medium"},
+{type:"mcq",q:"A 10 kg object is on a surface with μ_k = 0.3 (g=10 m/s²). The friction force is:",opts:["3 N","30 N","300 N","0.3 N"],ans:1,exp:"N=mg=100 N. f_k=μ_k×N=0.3×100=30 N.",diff:"medium"},
+{type:"mcq",q:"An elevator (mass 800 kg) accelerates upward at 1.5 m/s² (g=10 m/s²). Cable tension is:",opts:["8000 N","9200 N","6800 N","12000 N"],ans:1,exp:"T–mg=ma → T=m(g+a)=800(10+1.5)=800×11.5=9200 N.",diff:"medium"},
+{type:"mcq",q:"A 6 kg box is pushed horizontally with 36 N. Friction is 12 N. Acceleration is:",opts:["6 m/s²","4 m/s²","2 m/s²","8 m/s²"],ans:1,exp:"Net F=36–12=24 N. a=24/6=4 m/s².",diff:"easy"},
+{type:"mcq",q:"A 3 kg mass on a frictionless surface is connected by a rope over a pulley to a 2 kg hanging mass. The acceleration (g=10 m/s²) is:",opts:["2 m/s²","4 m/s²","6 m/s²","10 m/s²"],ans:1,exp:"Net force = 2×10=20 N (only hanging weight drives system). Total mass=5 kg. a=20/5=4 m/s².",diff:"hard"},
+{type:"mcq",q:"The weight of a 5 kg object on a planet where g=4 m/s² is:",opts:["20 N","50 N","1.25 N","45 N"],ans:0,exp:"W = mg = 5×4 = 20 N.",diff:"easy"},
+{type:"mcq",q:"A 2 kg object starts from rest and reaches 10 m/s in 5 s on a frictionless surface. The net force is:",opts:["4 N","10 N","25 N","2 N"],ans:0,exp:"a=(10–0)/5=2 m/s². F=ma=2×2=4 N.",diff:"easy"},
+{type:"mcq",q:"A skydiver (mass 70 kg) falls at terminal velocity. The air resistance force is (g=10 m/s²):",opts:["0 N","700 N","70 N","350 N"],ans:1,exp:"At terminal velocity, a=0 → net force=0. Air resistance = weight = mg = 700 N.",diff:"medium"},
+{type:"mcq",q:"Three forces act on an object: 10 N east, 5 N west, 3 N north. The net force magnitude is approximately:",opts:["8 N","5√2 N","√34 N","6 N"],ans:2,exp:"Net east-west = 10–5=5 N east. Net north = 3 N. Net = √(25+9) = √34 ≈ 5.83 N.",diff:"hard"},
+{type:"frq",q:"A 10 kg box is pulled across a rough horizontal floor with a force of 60 N at an angle of 37° above horizontal (sin37°=0.6, cos37°=0.8). The coefficient of kinetic friction is μ_k = 0.2. Use g=10 m/s².",parts:[{lbl:"(a)",q:"Calculate the horizontal and vertical components of the applied force."},{lbl:"(b)",q:"Calculate the normal force."},{lbl:"(c)",q:"Calculate the friction force."},{lbl:"(d)",q:"Calculate the acceleration of the box."}],ans:[{lbl:"(a)",a:"F_x=60cos37°=60×0.8=48 N; F_y=60sin37°=60×0.6=36 N"},{lbl:"(b)",a:"N+F_y=mg → N=mg–F_y=100–36=64 N"},{lbl:"(c)",a:"f=μ_k×N=0.2×64=12.8 N"},{lbl:"(d)",a:"Net F=F_x–f=48–12.8=35.2 N. a=35.2/10=3.52 m/s²"}],diff:"hard"},
+{type:"frq",q:"Two blocks are connected by a light string over a frictionless pulley. Block A (5 kg) sits on a frictionless table. Block B (3 kg) hangs freely. Use g=10 m/s².",parts:[{lbl:"(a)",q:"Draw free body diagrams for each block."},{lbl:"(b)",q:"Write Newton's 2nd Law equations for each block."},{lbl:"(c)",q:"Find the acceleration of the system and the tension in the string."}],ans:[{lbl:"(a)",a:"Block A: T right, weight down, N up. Block B: T up, weight (30N) down."},{lbl:"(b)",a:"Block A: T=5a. Block B: 3g–T=3a → 30–T=3a."},{lbl:"(c)",a:"Adding: 30=8a → a=3.75 m/s². T=5×3.75=18.75 N"}],diff:"hard"}
+]},
+{id:"2.3",name:"Friction Forces",questions:[
+{type:"mcq",q:"Static friction is always __ kinetic friction for the same surfaces.",opts:["Less than","Equal to","Greater than or equal to","Independent of"],ans:2,exp:"μ_s ≥ μ_k. The maximum static friction force is always ≥ the kinetic friction force for the same surfaces.",diff:"medium"},
+{type:"mcq",q:"A 5 kg book rests on a table (μ_s=0.4, g=10 m/s²). The minimum force to start sliding it is:",opts:["2 N","20 N","50 N","200 N"],ans:1,exp:"f_s_max = μ_s × N = 0.4 × 50 = 20 N.",diff:"easy"},
+{type:"mcq",q:"Kinetic friction on an object depends on:",opts:["The object's speed","The object's area in contact","The normal force","The object's velocity direction"],ans:2,exp:"f_k = μ_k × N. Kinetic friction depends only on the normal force and the coefficient of kinetic friction.",diff:"easy"},
+{type:"mcq",q:"A 10 kg box is pushed across a floor at constant speed with a 40 N force. The coefficient of kinetic friction is (g=10):",opts:["0.4","0.2","0.1","4.0"],ans:0,exp:"Constant speed → net force=0 → f_k=40 N. N=mg=100 N. μ_k=f_k/N=40/100=0.4.",diff:"medium"},
+{type:"mcq",q:"A block is on a slope. As the angle increases, the block starts sliding when:",opts:["sinθ = μ_k","cosθ = μ_s","tanθ = μ_s","tanθ = μ_k"],ans:2,exp:"On incline: sliding starts when mg·sinθ > μ_s·mg·cosθ → tanθ > μ_s. Starts exactly at tanθ = μ_s.",diff:"hard"},
+{type:"mcq",q:"Friction always acts:",opts:["Opposite to motion or tendency of motion","In the direction of motion","Perpendicular to motion","Opposite to the normal force"],ans:0,exp:"Friction opposes the motion (kinetic) or the tendency of motion (static).",diff:"easy"},
+{type:"mcq",q:"A 4 kg block slides with deceleration 5 m/s² on a flat surface. The coefficient of kinetic friction is (g=10 m/s²):",opts:["0.5","2.0","1.25","0.2"],ans:0,exp:"Friction provides deceleration: μ_k×g=a → μ_k=5/10=0.5.",diff:"medium"},
+{type:"mcq",q:"Which factor does NOT affect the force of kinetic friction between two surfaces?",opts:["The coefficient of kinetic friction","The normal force between surfaces","The speed of the object","The material of the surfaces"],ans:2,exp:"f_k = μ_k × N. Speed does not appear in this formula. Kinetic friction is independent of speed.",diff:"medium"},
+{type:"mcq",q:"A car with all wheels locked slides to a stop. The relevant friction is:",opts:["Static","Rolling","Kinetic","Air"],ans:2,exp:"Locked wheels slide on the road → kinetic (sliding) friction between tires and road.",diff:"easy"},
+{type:"mcq",q:"A 20 kg crate is on a floor (μ_s=0.5). The maximum static friction force is (g=10):",opts:["10 N","100 N","200 N","40 N"],ans:1,exp:"f_s_max = μ_s × N = 0.5 × (20×10) = 0.5 × 200 = 100 N.",diff:"easy"},
+{type:"mcq",q:"The coefficient of friction between surfaces depends primarily on:",opts:["The mass of the object","The surface area of contact","The nature and roughness of the surfaces","The speed of sliding"],ans:2,exp:"μ depends on the materials and surface properties (roughness, texture) — not mass, area, or speed.",diff:"easy"},
+{type:"mcq",q:"A 6 kg block is pulled along a rough surface (μ_k=0.25) with 30 N (g=10). Acceleration is:",opts:["3.5 m/s²","5 m/s²","2.5 m/s²","1.5 m/s²"],ans:0,exp:"f_k=0.25×60=15 N. Net=30–15=15 N. a=15/6=2.5 m/s². Wait: 15/6=2.5. Option C. Let me recheck: m=6, N=60, f_k=15, applied=30, net=15, a=15/6=2.5. Answer is C.",ans:2,exp:"N=mg=60 N. f_k=0.25×60=15 N. Net F=30–15=15 N. a=15/6=2.5 m/s².",diff:"medium"},
+{type:"mcq",q:"An object is on a surface. A horizontal force of 10 N causes it to start moving. A force of 8 N maintains constant speed. Which statement is true?",opts:["μ_s < μ_k","μ_s > μ_k","μ_s = μ_k","Cannot determine"],ans:1,exp:"10 N overcomes static friction (max static > kinetic). 8 N = kinetic friction. So max static > kinetic → μ_s > μ_k.",diff:"hard"},
+{type:"frq",q:"A 15 kg box is on a rough floor (μ_s = 0.4, μ_k = 0.3). Use g = 10 m/s².",parts:[{lbl:"(a)",q:"What is the minimum horizontal force needed to start moving the box?"},{lbl:"(b)",q:"Once moving, a horizontal force of 70 N is applied. What is the acceleration?"},{lbl:"(c)",q:"Explain why different coefficients are used for parts (a) and (b)."}],ans:[{lbl:"(a)",a:"f_s_max = μ_s × N = 0.4 × 150 = 60 N. Need slightly more than 60 N to start moving."},{lbl:"(b)",a:"f_k = μ_k × N = 0.3 × 150 = 45 N. Net = 70–45 = 25 N. a = 25/15 ≈ 1.67 m/s²"},{lbl:"(c)",a:"Static friction (μ_s) prevents motion from starting — it represents stronger bonding at rest. Kinetic friction (μ_k) acts during sliding and is generally smaller, meaning less force is needed to maintain motion than to start it."}],diff:"medium"}
+]},
+{id:"2.4",name:"Normal Force & Apparent Weight",questions:[
+{type:"mcq",q:"A 60 kg person stands on a scale in an elevator accelerating downward at 3 m/s² (g=10). The scale reading is:",opts:["780 N","600 N","420 N","180 N"],ans:2,exp:"N=m(g–a)=60(10–3)=60×7=420 N.",diff:"medium"},
+{type:"mcq",q:"The normal force on a block on a horizontal surface is equal to its weight when:",opts:["The surface is frictionless","There is no horizontal acceleration","There are no vertical components of applied force","The block is moving"],ans:2,exp:"N = mg only when no vertical components of applied forces exist and the surface is horizontal.",diff:"medium"},
+{type:"mcq",q:"A 10 kg box sits on a 20° incline. The normal force is (g=10 m/s², cos20°≈0.94):",opts:["100 N","94 N","34 N","102 N"],ans:1,exp:"N = mg·cos20° = 100×0.94 = 94 N.",diff:"medium"},
+{type:"mcq",q:"A person in free fall feels:",opts:["Normal weight","Heavier","Weightless","Half their weight"],ans:2,exp:"In free fall, the person and the scale accelerate at the same rate. The normal force = 0 → apparent weight = 0 → weightlessness.",diff:"easy"},
+{type:"mcq",q:"A 50 kg woman is in an elevator going up at constant speed. Her apparent weight is:",opts:["More than 500 N","500 N","Less than 500 N","Zero"],ans:1,exp:"Constant speed → a=0 → N=mg=500 N. Apparent weight equals true weight.",diff:"easy"},
+{type:"mcq",q:"A block is on a rough incline (angle θ). The normal force equals:",opts:["mg","mg·sinθ","mg·cosθ","mg·tanθ"],ans:2,exp:"Perpendicular to incline surface: N = mg·cosθ.",diff:"medium"},
+{type:"mcq",q:"Which increases the normal force of a box on a horizontal floor?",opts:["Pushing horizontally","Pulling upward at angle","Pushing downward at angle","Moving at constant speed"],ans:2,exp:"Pushing downward adds a downward component → the surface must push up more to maintain equilibrium → N increases.",diff:"medium"},
+{type:"mcq",q:"An 80 kg man is in an elevator that accelerates upward at 2 m/s². His apparent weight in Newtons is (g=10):",opts:["800 N","960 N","640 N","1600 N"],ans:1,exp:"N=m(g+a)=80(10+2)=80×12=960 N.",diff:"medium"},
+{type:"mcq",q:"A box rests on the floor of a truck decelerating at 5 m/s² (g=10). The normal force on a 10 kg box is:",opts:["50 N","100 N","150 N","0 N"],ans:1,exp:"The truck decelerates horizontally; vertical equilibrium unchanged. N=mg=100 N. (Horizontal deceleration doesn't affect N.)",diff:"medium"},
+{type:"mcq",q:"A 70 kg skier goes over a hill crest. At the top, centripetal acceleration = 4 m/s² downward. Apparent weight is (g=10):",opts:["700 N","980 N","420 N","280 N"],ans:2,exp:"At crest, mg–N=mv²/r=ma_c → N=m(g–a_c)=70(10–4)=70×6=420 N.",diff:"hard"},
+{type:"frq",q:"A 50 kg student stands on a bathroom scale inside an elevator. The elevator starts from rest and accelerates upward, then travels at constant speed, then decelerates to a stop. Use g=10 m/s².",parts:[{lbl:"(a)",q:"What is the student's true weight?"},{lbl:"(b)",q:"During upward acceleration of 2 m/s², what does the scale read?"},{lbl:"(c)",q:"At constant speed, what does the scale read?"},{lbl:"(d)",q:"While decelerating at 2 m/s², what does the scale read?"}],ans:[{lbl:"(a)",a:"W=mg=50×10=500 N"},{lbl:"(b)",a:"N=m(g+a)=50(12)=600 N"},{lbl:"(c)",a:"N=mg=500 N (a=0)"},{lbl:"(d)",a:"N=m(g–a)=50(8)=400 N"}],diff:"easy"}
+]},
+{id:"2.5",name:"Tension & Connected Bodies",questions:[
+{type:"mcq",q:"A 3 kg mass hangs from a string attached to the ceiling. The tension in the string is (g=10):",opts:["3 N","10 N","30 N","13 N"],ans:2,exp:"T=mg=3×10=30 N.",diff:"easy"},
+{type:"mcq",q:"Two masses (2 kg and 4 kg) hang from either end of a rope over a frictionless pulley. The net force accelerating the system is (g=10):",opts:["20 N","20 N downward on the 4 kg side","20 N net on lighter side","Both wrong"],ans:1,exp:"Net force = (4–2)×g = 2×10 = 20 N in the direction of the heavier mass.",diff:"medium"},
+{type:"mcq",q:"In the Atwood machine above (2 kg and 4 kg), acceleration is (g=10):",opts:["10 m/s²","2 m/s²","3.33 m/s²","5 m/s²"],ans:2,exp:"a = (m₂–m₁)g/(m₁+m₂) = (4–2)×10/(4+2) = 20/6 ≈ 3.33 m/s².",diff:"medium"},
+{type:"mcq",q:"Three 1 kg masses hang in series (one below another) from a ceiling. The tension in the top rope is (g=10):",opts:["10 N","20 N","30 N","5 N"],ans:2,exp:"Top rope supports all 3 masses: T = 3×10 = 30 N.",diff:"medium"},
+{type:"mcq",q:"In an Atwood machine with m₁=m₂, the acceleration is:",opts:["g","g/2","0","2g"],ans:2,exp:"Equal masses → net force = 0 → acceleration = 0. The system remains in equilibrium.",diff:"easy"},
+{type:"mcq",q:"A 5 kg block on a frictionless table is pulled by a 15 N hanging weight via a pulley. The tension in the rope is (g=10, hanging m=1.5 kg):",opts:["12.5 N","15 N","10 N","7.5 N"],ans:0,exp:"a=(15)/(5+1.5)=15/6.5≈2.31 m/s²? Wait: hanging weight = 15 N means mass=1.5 kg. a=1.5×10/(5+1.5)=15/6.5≈2.31. T=5×2.31≈11.5 N. Let me simplify: hanging mass=2 kg, F=20 N. a=20/7≈2.86. T=5×2.86=14.3 N. Let me just do: table block 4 kg, hanging 1 kg, g=10. a=10/5=2 m/s². T=4×2=8 N.",q:"A 4 kg block on a frictionless table is connected over a pulley to a 1 kg hanging mass. Find the acceleration (g=10).",opts:["2 m/s²","10 m/s²","5 m/s²","8 m/s²"],ans:0,exp:"Net force=1×10=10 N. Total mass=5 kg. a=10/5=2 m/s².",diff:"medium"},
+{type:"mcq",q:"In the previous problem, the tension in the string is:",opts:["10 N","8 N","2 N","4 N"],ans:1,exp:"For the 4 kg block: T=ma=4×2=8 N. Check: for 1 kg hanging: 10–T=1×2 → T=8 N. ✓",diff:"medium"},
+{type:"mcq",q:"A rope of mass 0.5 kg holds a 5 kg ball. Tension at the top of the rope is (g=10):",opts:["50 N","55 N","5 N","45 N"],ans:1,exp:"Top of rope supports rope (0.5 kg) + ball (5 kg): T=(5+0.5)×10=55 N.",diff:"medium"},
+{type:"frq",q:"A 3 kg mass (block A) and a 5 kg mass (block B) are connected by a light string. Block A is on a frictionless horizontal table. The string passes over a frictionless pulley at the table's edge. Block B hangs freely. Use g = 10 m/s².",parts:[{lbl:"(a)",q:"Draw free body diagrams for both blocks."},{lbl:"(b)",q:"Write Newton's 2nd law for each block."},{lbl:"(c)",q:"Find the acceleration of the system."},{lbl:"(d)",q:"Find the tension in the string."}],ans:[{lbl:"(a)",a:"Block A: T→ right; W=30N down; N=30N up. Block B: T↑; W=50N down."},{lbl:"(b)",a:"Block A: T=3a. Block B: 50–T=5a."},{lbl:"(c)",a:"Adding: 50=8a → a=6.25 m/s²"},{lbl:"(d)",a:"T=3×6.25=18.75 N. Check: 50–18.75=31.25=5×6.25 ✓"}],diff:"hard"}
+]},
+{id:"2.6",name:"Gravity & Circular Motion",questions:[
+{type:"mcq",q:"A 2 kg ball moves in a circle of radius 0.5 m at speed 4 m/s. The centripetal force is:",opts:["8 N","32 N","64 N","16 N"],ans:1,exp:"F_c = mv²/r = 2×16/0.5 = 32/0.5 = 64 N. Wait: mv²/r = 2×16/0.5 = 64 N. Let me rechoose option: 64 N is option C.",ans:2,exp:"F_c=mv²/r=2×(4²)/0.5=2×16/0.5=64 N.",diff:"medium"},
+{type:"mcq",q:"Centripetal acceleration points:",opts:["In the direction of velocity","Away from the center of circular path","Toward the center of circular path","Opposite to velocity"],ans:2,exp:"Centripetal acceleration is directed toward the center of the circular path.",diff:"easy"},
+{type:"mcq",q:"A car goes around a flat circular track. The centripetal force is provided by:",opts:["Gravity","Engine thrust","Static friction","Normal force"],ans:2,exp:"On a flat surface, static friction between tires and road provides centripetal force.",diff:"medium"},
+{type:"mcq",q:"If a car's speed doubles around a curve (same radius), the required centripetal force:",opts:["Doubles","Quadruples","Halves","Stays the same"],ans:1,exp:"F_c = mv²/r. If v doubles → v² quadruples → F_c quadruples.",diff:"medium"},
+{type:"mcq",q:"A satellite in circular orbit at radius r has speed v. If r doubles (and orbital speed adjusts), centripetal acceleration:",opts:["Doubles","Halves","Stays the same","Quadruples"],ans:1,exp:"At radius 2r with orbital speed: g ∝ 1/r². a_c = GM/r². At 2r: a_c = GM/(2r)² = GM/(4r²) = ¼ of original. Actually a_c at 2r is ¼. But question says r doubles and speed adjusts. If v²=GM/r and r→2r: v_new²=GM/2r=v²/2. a_c=v²/r = (v²/2)/(2r) = v²/4r = ½ of original a_c=v²/r... Let me recalculate: original a_c = v²/r. New: a_c = v_new²/(2r) = (GM/2r)/(2r) = GM/4r² = (v²/r)/4. So a_c is ¼. Option not listed clearly. Let me use a simpler version of this question.",q:"An object moves in a circle at speed 6 m/s with radius 3 m. The centripetal acceleration is:",opts:["2 m/s²","12 m/s²","18 m/s²","3 m/s²"],ans:1,exp:"a_c = v²/r = 36/3 = 12 m/s².",diff:"medium"},
+{type:"mcq",q:"A 500 g ball on a 1.2 m string is swung in a horizontal circle at 3 m/s. The centripetal force is:",opts:["1.25 N","3.75 N","7.5 N","0.375 N"],ans:1,exp:"F = mv²/r = 0.5×9/1.2 = 4.5/1.2 = 3.75 N.",diff:"medium"},
+{type:"mcq",q:"A roller coaster car at the bottom of a loop experiences:",opts:["Normal force less than weight","Normal force equal to weight","Normal force greater than weight","Zero normal force"],ans:2,exp:"At the bottom, centripetal direction is upward. N–mg=mv²/r → N=mg+mv²/r > mg.",diff:"medium"},
+{type:"mcq",q:"At the top of a loop, the centripetal force on a car is provided by:",opts:["Normal force only","Weight only","Weight + normal force","Normal force – weight"],ans:2,exp:"At top of loop, both weight and normal force point downward (toward center). F_c = N + mg.",diff:"hard"},
+{type:"mcq",q:"The minimum speed at the top of a loop of radius R for maintaining contact is:",opts:["√(gR)","√(2gR)","gR","2gR"],ans:0,exp:"At minimum speed, N=0. mg=mv²/R → v=√(gR).",diff:"hard"},
+{type:"mcq",q:"A 60 kg person stands on the inner surface of a rotating cylinder (like an amusement park ride). The friction force prevents them from sliding down. The centripetal force on the person points:",opts:["Downward","Upward","Toward the center (horizontal)","Away from center"],ans:2,exp:"Centripetal force always points toward the center of circular motion, which is horizontal here.",diff:"medium"},
+{type:"frq",q:"A car of mass 1200 kg travels over a hill (circular arc, radius = 30 m) at the top of the hill. Use g = 10 m/s².",parts:[{lbl:"(a)",q:"Draw a free body diagram for the car at the top of the hill."},{lbl:"(b)",q:"At speed 10 m/s, calculate the normal force on the car."},{lbl:"(c)",q:"Find the maximum speed at which the car maintains contact with the road."}],ans:[{lbl:"(a)",a:"FBD: weight mg=12000 N down; Normal force N up. Net downward = centripetal force."},{lbl:"(b)",a:"mg–N=mv²/r → N=m(g–v²/r)=1200(10–100/30)=1200(10–3.33)=1200×6.67=8000 N"},{lbl:"(c)",a:"N=0 at max speed: mg=mv²/r → v=√(gr)=√(300)≈17.3 m/s"}],diff:"hard"}
+]}
+]},
+
+//─────────────────────────────────────────────────────────────────────
+// UNIT 3: WORK, ENERGY & POWER
+//─────────────────────────────────────────────────────────────────────
+{id:3,name:"Unit 3: Work, Energy & Power",abbr:"U3",weight:"18–23%",subtopics:[
+{id:"3.1",name:"Work Done by a Force",questions:[
+{type:"mcq",q:"A 50 N force moves an object 8 m in the direction of the force. Work done is:",opts:["6.25 J","400 J","58 J","42 J"],ans:1,exp:"W = Fd = 50×8 = 400 J.",diff:"easy"},
+{type:"mcq",q:"A force of 40 N at 60° to displacement moves a box 5 m. Work done is:",opts:["200 J","100 J","173 J","86.6 J"],ans:1,exp:"W = Fd·cosθ = 40×5×cos60° = 200×0.5 = 100 J.",diff:"medium"},
+{type:"mcq",q:"A person carries a bag horizontally at constant height. The work done by gravity is:",opts:["Positive","Negative","Zero","Equal to mgd"],ans:2,exp:"Gravity acts downward; displacement is horizontal. cos90°=0 → W_gravity=0.",diff:"easy"},
+{type:"mcq",q:"Which of the following involves zero net work on the object?",opts:["A block sliding down a frictionless ramp","A car slowing down","A satellite in circular orbit","A ball thrown upward"],ans:2,exp:"In uniform circular orbit, the centripetal force is always perpendicular to velocity → W=Fd·cos90°=0. KE is constant.",diff:"hard"},
+{type:"mcq",q:"Negative work is done when the force and displacement are:",opts:["Parallel","Perpendicular","Antiparallel (opposite directions)","At 45° to each other"],ans:2,exp:"W=Fd·cosθ. When θ=180°, cos180°=–1, so W is negative. Force opposes displacement.",diff:"easy"},
+{type:"mcq",q:"A 10 N friction force acts on a box moving 6 m. Work done by friction is:",opts:["60 J","–60 J","0 J","16 J"],ans:1,exp:"Friction acts opposite to motion. W = Fd·cos180° = –10×6 = –60 J.",diff:"easy"},
+{type:"mcq",q:"Work is a __ quantity.",opts:["Vector","Scalar","Tensor","Directional"],ans:1,exp:"Work is a scalar quantity — it has magnitude but no direction.",diff:"easy"},
+{type:"mcq",q:"A 500 N person climbs a 10 m ladder. Work done against gravity is:",opts:["5000 J","50 J","500 J","100 J"],ans:0,exp:"W = Fgravity × height = 500×10 = 5000 J.",diff:"easy"},
+{type:"mcq",q:"The unit of work is:",opts:["Watt","Newton","Joule","Pascal"],ans:2,exp:"1 Joule = 1 N·m = 1 kg·m²/s².",diff:"easy"},
+{type:"mcq",q:"A spring compressed by 0.2 m exerts 30 N. If a force moves it back to natural length, work done by spring is:",opts:["3 J","6 J","–3 J","0 J"],ans:0,exp:"W_spring = ½kx². k=30/0.2=150 N/m. W=½(150)(0.04)=3 J. (Positive because spring force acts in direction of displacement.)",diff:"hard"},
+{type:"mcq",q:"A horizontal force of 20 N pushes a 5 kg block 4 m on a frictionless surface. The work done by the normal force is:",opts:["80 J","0 J","–80 J","200 J"],ans:1,exp:"Normal force is perpendicular to motion. W=Fd·cos90°=0.",diff:"easy"},
+{type:"mcq",q:"Work done against friction is always:",opts:["Positive","Negative","Zero","Stored as potential energy"],ans:0,exp:"Work done against friction is the positive work YOU do against friction = f_k × d (positive value). The work friction does on the object is negative.",diff:"medium"},
+{type:"frq",q:"A 200 N box is pushed 15 m along a horizontal floor. The applied force is 80 N horizontal. Friction is 30 N.",parts:[{lbl:"(a)",q:"Calculate the work done by the applied force."},{lbl:"(b)",q:"Calculate the work done by friction."},{lbl:"(c)",q:"Calculate the net work done on the box."},{lbl:"(d)",q:"What is the change in kinetic energy of the box?"}],ans:[{lbl:"(a)",a:"W_applied = 80×15 = 1200 J"},{lbl:"(b)",a:"W_friction = –30×15 = –450 J"},{lbl:"(c)",a:"W_net = 1200–450 = 750 J (gravity and N do zero work as perpendicular to motion)"},{lbl:"(d)",a:"Work-energy theorem: ΔKE = W_net = 750 J"}],diff:"medium"}
+]},
+{id:"3.2",name:"Kinetic Energy",questions:[
+{type:"mcq",q:"A 4 kg ball moves at 5 m/s. Its kinetic energy is:",opts:["10 J","50 J","20 J","100 J"],ans:1,exp:"KE = ½mv² = ½(4)(25) = 50 J.",diff:"easy"},
+{type:"mcq",q:"If a car's speed doubles, its kinetic energy:",opts:["Doubles","Quadruples","Halves","Stays the same"],ans:1,exp:"KE = ½mv². If v→2v: KE_new = ½m(2v)² = 4(½mv²) = 4×KE. Quadruples.",diff:"easy"},
+{type:"mcq",q:"The work-energy theorem states that the net work done on an object equals:",opts:["Its potential energy change","Its total energy change","Its kinetic energy change","Its gravitational energy"],ans:2,exp:"W_net = ΔKE. Net work = final KE – initial KE.",diff:"easy"},
+{type:"mcq",q:"A 2 kg object has KE = 100 J. Its speed is:",opts:["10 m/s","7.07 m/s","50 m/s","5 m/s"],ans:0,exp:"KE=½mv² → 100=½(2)v² → v²=100 → v=10 m/s.",diff:"easy"},
+{type:"mcq",q:"A 10 N net force acts on a 5 kg object for 6 m. The change in KE is:",opts:["12 J","60 J","30 J","2 J"],ans:1,exp:"ΔKE = W_net = F·d = 10×6 = 60 J.",diff:"easy"},
+{type:"mcq",q:"A ball moving at 6 m/s hits a wall and bounces back at 6 m/s (same mass). The change in KE is:",opts:["0 J","½mv²","–½mv²","2mv²"],ans:0,exp:"KE = ½mv². Since speed is unchanged (only direction changed), ΔKE = 0.",diff:"medium"},
+{type:"mcq",q:"A 3 kg mass falls from 5 m and reaches the ground. Just before impact, its KE is (g=10):",opts:["150 J","75 J","15 J","300 J"],ans:0,exp:"KE = mgh = 3×10×5 = 150 J (all PE converted to KE in free fall).",diff:"easy"},
+{type:"mcq",q:"An object decelerates from 8 m/s to 4 m/s. If mass is 2 kg, work done on it is:",opts:["–48 J","48 J","–24 J","24 J"],ans:0,exp:"ΔKE = ½(2)(16)–½(2)(64) = 16–64 = –48 J. W_net = ΔKE = –48 J.",diff:"medium"},
+{type:"mcq",q:"A car (m=1000 kg) at 20 m/s is braked to 10 m/s. Work done by brakes is:",opts:["–150,000 J","150,000 J","–50,000 J","–100,000 J"],ans:0,exp:"ΔKE=½(1000)(100)–½(1000)(400)=50000–200000=–150000 J.",diff:"medium"},
+{type:"frq",q:"A 5 kg block starts from rest and slides down a 2 m frictionless ramp, then travels along a rough floor (μ_k = 0.4) until it stops. Use g = 10 m/s².",parts:[{lbl:"(a)",q:"Find the speed at the bottom of the ramp."},{lbl:"(b)",q:"Find the kinetic energy at the bottom of the ramp."},{lbl:"(c)",q:"How far does the block travel along the rough floor?"}],ans:[{lbl:"(a)",a:"PE=KE: mgh=½mv² → v=√(2gh)=√(2×10×2)=√40≈6.32 m/s"},{lbl:"(b)",a:"KE=mgh=5×10×2=100 J"},{lbl:"(c)",a:"Friction force=μ_k×mg=0.4×50=20 N. W_friction=–ΔKE → 20d=100 → d=5 m"}],diff:"medium"}
+]},
+{id:"3.3",name:"Potential Energy",questions:[
+{type:"mcq",q:"A 3 kg book is lifted 2 m. The gravitational PE gained is (g=10):",opts:["1.5 J","6 J","60 J","15 J"],ans:2,exp:"ΔPE = mgh = 3×10×2 = 60 J.",diff:"easy"},
+{type:"mcq",q:"Gravitational PE depends on:",opts:["Only mass","Only height","Mass, g, and height","Mass and velocity"],ans:2,exp:"PE_g = mgh. It depends on mass, gravitational field strength, and height above reference.",diff:"easy"},
+{type:"mcq",q:"A spring (k=200 N/m) is compressed 0.15 m. Spring PE is:",opts:["2.25 J","15 J","30 J","4.5 J"],ans:0,exp:"PE_s = ½kx² = ½(200)(0.0225) = 100×0.0225 = 2.25 J.",diff:"medium"},
+{type:"mcq",q:"A 10 kg ball is held 5 m above the floor. Taking floor as reference, GPE is (g=10):",opts:["50 J","100 J","500 J","2 J"],ans:2,exp:"PE = mgh = 10×10×5 = 500 J.",diff:"easy"},
+{type:"mcq",q:"Which type of energy is stored energy?",opts:["Kinetic energy","Potential energy","Thermal energy","Radiant energy"],ans:1,exp:"Potential energy is stored energy due to position or configuration (gravitational, spring, electric, etc.).",diff:"easy"},
+{type:"mcq",q:"A ball is at the top of a 10 m hill. All its energy is PE. At the bottom, all is KE. If PE_top = 200 J, KE_bottom = :",opts:["100 J","20 J","200 J","400 J"],ans:2,exp:"Conservation of energy (frictionless): PE_top = KE_bottom = 200 J.",diff:"easy"},
+{type:"mcq",q:"Spring A (k=400 N/m) is stretched 0.1 m. Spring B (k=100 N/m) is stretched 0.2 m. Their PE ratio PE_A/PE_B is:",opts:["1:1","2:1","4:1","1:4"],ans:1,exp:"PE_A=½(400)(0.01)=2 J. PE_B=½(100)(0.04)=2 J. Wait: PE_A=½×400×0.01=2; PE_B=½×100×0.04=2. Ratio=1:1.",ans:0,exp:"PE_A=½(400)(0.1²)=2 J; PE_B=½(100)(0.2²)=½(100)(0.04)=2 J. Ratio=1:1.",diff:"hard"},
+{type:"mcq",q:"A 2 kg pendulum bob at 0.5 m above its lowest point swings down (g=10). At the lowest point, its speed is:",opts:["√5 m/s","√10 m/s","5 m/s","10 m/s"],ans:1,exp:"mgh=½mv² → v=√(2gh)=√(2×10×0.5)=√10 m/s.",diff:"medium"},
+{type:"frq",q:"A 0.3 kg ball is attached to a spring (k=150 N/m) on a frictionless surface. The spring is compressed 0.2 m from equilibrium and released.",parts:[{lbl:"(a)",q:"Calculate the elastic PE stored in the compressed spring."},{lbl:"(b)",q:"What is the maximum speed of the ball after release?"},{lbl:"(c)",q:"At a point where the spring is compressed 0.1 m, what is the ball's kinetic energy?"}],ans:[{lbl:"(a)",a:"PE=½kx²=½(150)(0.04)=3 J"},{lbl:"(b)",a:"At equilibrium (x=0), all PE→KE. 3=½(0.3)v² → v²=20 → v=√20≈4.47 m/s"},{lbl:"(c)",a:"PE at 0.1m=½(150)(0.01)=0.75 J. KE=Total–PE=3–0.75=2.25 J"}],diff:"hard"}
+]},
+{id:"3.4",name:"Conservation of Energy",questions:[
+{type:"mcq",q:"Mechanical energy is conserved when:",opts:["Only kinetic energy changes","Only conservative forces do work","Friction is present","Acceleration is constant"],ans:1,exp:"Mechanical energy (KE+PE) is conserved when only conservative forces (gravity, spring) do work. Non-conservative forces like friction dissipate energy.",diff:"medium"},
+{type:"mcq",q:"A 2 kg ball is dropped from 5 m. Just before hitting the ground (g=10), its speed is:",opts:["50 m/s","10 m/s","√50 m/s","√100 m/s"],ans:1,exp:"mgh=½mv² → gh=½v² → v=√(2×10×5)=√100=10 m/s.",diff:"easy"},
+{type:"mcq",q:"A pendulum swings from rest at height h. At the bottom, its speed is:",opts:["gh","2gh","√(gh)","√(2gh)"],ans:3,exp:"PE=KE: mgh=½mv² → v=√(2gh).",diff:"easy"},
+{type:"mcq",q:"In a roller coaster with friction, mechanical energy:",opts:["Is conserved","Increases","Decreases","Fluctuates randomly"],ans:2,exp:"Friction converts mechanical energy to thermal energy. Total energy is conserved but mechanical energy decreases.",diff:"easy"},
+{type:"mcq",q:"A 5 kg ball at 20 m height falls (g=10). Speed at 15 m height is:",opts:["√100 m/s","10 m/s","5 m/s","50 m/s"],ans:0,exp:"Energy at 20 m = mgh = 1000 J. At 15 m: PE=750 J. KE=250=½(5)v² → v²=100 → v=10 m/s. So v=10=√100 m/s.",diff:"medium"},
+{type:"mcq",q:"A ball is launched upward from ground level with KE=480 J and mass=6 kg (g=10). Max height is:",opts:["8 m","4 m","80 m","24 m"],ans:0,exp:"mgh=KE → 6×10×h=480 → h=8 m.",diff:"medium"},
+{type:"mcq",q:"A 4 kg box slides down a ramp (h=5 m) with friction. It reaches the bottom with speed 7 m/s (g=10). Energy lost to friction is:",opts:["200 J","98 J","102 J","22 J"],ans:2,exp:"E_initial=mgh=200 J. E_final=½mv²=½(4)(49)=98 J. E_lost=200–98=102 J.",diff:"hard"},
+{type:"mcq",q:"An object on a spring oscillates (no friction). At maximum compression, which is true?",opts:["KE is maximum, PE is zero","PE is maximum, KE is zero","Both are zero","KE = PE always"],ans:1,exp:"At maximum compression/extension, the object momentarily stops (KE=0) and all energy is in spring PE.",diff:"easy"},
+{type:"frq",q:"A roller coaster car (mass 800 kg) starts from rest at the top of a 40 m hill and rolls to the bottom where it enters a circular loop (radius 10 m). Use g = 10 m/s² and assume frictionless track.",parts:[{lbl:"(a)",q:"Find the speed at the bottom of the hill."},{lbl:"(b)",q:"Find the speed at the top of the loop (height 20 m)."},{lbl:"(c)",q:"Is the minimum speed condition for the top of the loop satisfied? (v_min = √(gr))"}],ans:[{lbl:"(a)",a:"½mv²=mgh → v=√(2×10×40)=√800≈28.3 m/s"},{lbl:"(b)",a:"½mv₂²=mgh₁–mgh₂ → v₂=√(2g(40–20))=√(400)=20 m/s"},{lbl:"(c)",a:"v_min=√(gr)=√(100)=10 m/s. v_top=20 m/s > 10 m/s ✓ The loop is safely maintained."}],diff:"hard"}
+]},
+{id:"3.5",name:"Power",questions:[
+{type:"mcq",q:"Power is defined as:",opts:["Force times distance","Work per unit time","Energy per unit mass","Force per unit area"],ans:1,exp:"Power P = W/t = ΔE/t (rate of doing work or transferring energy). Unit: Watt (J/s).",diff:"easy"},
+{type:"mcq",q:"A machine does 600 J of work in 30 s. Its power is:",opts:["18 W","20 W","180 W","200 W"],ans:1,exp:"P = W/t = 600/30 = 20 W.",diff:"easy"},
+{type:"mcq",q:"A 70 kg person climbs 10 m in 20 s (g=10). Power output is:",opts:["350 W","700 W","70 W","14 W"],ans:0,exp:"W=mgh=7000 J. P=7000/20=350 W.",diff:"medium"},
+{type:"mcq",q:"Power can also be expressed as:",opts:["F·a","F·v","F/v","F·d"],ans:1,exp:"P=W/t=Fd/t=F×(d/t)=F·v.",diff:"medium"},
+{type:"mcq",q:"A car engine delivers 60 kW at 30 m/s. The driving force is:",opts:["2000 N","1800 N","180 N","20 N"],ans:0,exp:"P=Fv → F=P/v=60000/30=2000 N.",diff:"medium"},
+{type:"mcq",q:"1 horsepower ≈ 746 W. A 5 hp motor runs for 10 s. Work done is:",opts:["3730 J","37300 J","7460 J","746 J"],ans:1,exp:"P=5×746=3730 W. W=P×t=3730×10=37300 J.",diff:"medium"},
+{type:"mcq",q:"Two workers lift identical boxes the same height. Worker A takes 5 s, B takes 10 s. Their power outputs ratio P_A:P_B is:",opts:["1:2","2:1","1:1","4:1"],ans:1,exp:"Same work, half the time → P_A = W/5, P_B = W/10. P_A/P_B = 2.",diff:"easy"},
+{type:"mcq",q:"A constant force of 500 N acts on a car moving at 20 m/s. Power delivered is:",opts:["25 W","10000 W","2500 W","500 W"],ans:1,exp:"P=Fv=500×20=10000 W=10 kW.",diff:"easy"},
+{type:"frq",q:"A 50 kg student runs up a staircase of height 4 m in 8 seconds. Use g = 10 m/s².",parts:[{lbl:"(a)",q:"Calculate the work done against gravity."},{lbl:"(b)",q:"Calculate the student's average power output."},{lbl:"(c)",q:"If the student is 40% efficient, how much total energy is used?"}],ans:[{lbl:"(a)",a:"W=mgh=50×10×4=2000 J"},{lbl:"(b)",a:"P=W/t=2000/8=250 W"},{lbl:"(c)",a:"Efficiency=useful/total → 0.4=2000/E_total → E_total=5000 J"}],diff:"medium"}
+]},
+{id:"3.6",name:"Hooke's Law & Spring Energy",questions:[
+{type:"mcq",q:"Hooke's Law states F = –kx. The negative sign means:",opts:["The force is always downward","The force is opposite to displacement from equilibrium","The spring constant is negative","The spring does negative work"],ans:1,exp:"The restoring force is opposite to displacement. If stretched (+x), force is toward equilibrium (–x direction).",diff:"easy"},
+{type:"mcq",q:"A spring has k=80 N/m. The force needed to stretch it 0.25 m is:",opts:["20 N","320 N","40 N","8 N"],ans:0,exp:"F=kx=80×0.25=20 N.",diff:"easy"},
+{type:"mcq",q:"A spring stretched by 3 cm stores 0.18 J. The spring constant k is:",opts:["200 N/m","400 N/m","6 N/m","12 N/m"],ans:1,exp:"PE=½kx² → 0.18=½k(0.03)² → 0.18=½k(0.0009) → k=400 N/m.",diff:"hard"},
+{type:"mcq",q:"Which graph shows Hooke's Law (F vs x) for a spring?",opts:["Parabola","Straight line through origin","Horizontal line","Exponential curve"],ans:1,exp:"F=kx is linear. F vs x graph is a straight line through the origin with slope k.",diff:"easy"},
+{type:"mcq",q:"A spring compressed 5 cm stores PE = 2.5 J. Spring constant k is:",opts:["1000 N/m","100 N/m","2000 N/m","50 N/m"],ans:0,exp:"2.5=½k(0.05)² → 2.5=½k(0.0025) → 2.5=0.00125k → k=2000 N/m. Hmm, let me recalculate: ½×k×0.0025=2.5 → k=5/0.0025=2000. Option C.",ans:2,exp:"PE=½kx² → 2.5=½k(0.05)² = ½k(0.0025) → k=2.5/0.00125=2000 N/m.",diff:"hard"},
+{type:"mcq",q:"A spring with k=50 N/m supports a 500 g mass. Extension is (g=10):",opts:["0.1 m","1 m","0.25 m","10 m"],ans:0,exp:"F=mg=0.5×10=5 N. x=F/k=5/50=0.1 m.",diff:"easy"},
+{type:"mcq",q:"A spring is compressed twice as much (2x instead of x). Energy stored is:",opts:["Doubled","Quadrupled","Halved","Same"],ans:1,exp:"PE=½kx². If x→2x: PE_new=½k(2x)²=4(½kx²)=4×PE. Quadrupled.",diff:"medium"},
+{type:"frq",q:"A mass of 0.4 kg is attached to a spring (k = 200 N/m) on a frictionless horizontal surface. The mass is pulled 0.1 m from equilibrium and released from rest.",parts:[{lbl:"(a)",q:"Calculate the spring PE at maximum compression."},{lbl:"(b)",q:"Find the maximum speed of the mass."},{lbl:"(c)",q:"Find the speed when the displacement from equilibrium is 0.06 m."}],ans:[{lbl:"(a)",a:"PE=½kA²=½(200)(0.01)=1 J"},{lbl:"(b)",a:"At equilibrium: 1=½mv² → v²=2/0.4=5 → v=√5≈2.24 m/s"},{lbl:"(c)",a:"PE at 0.06m=½(200)(0.0036)=0.36 J. KE=1–0.36=0.64 J. ½(0.4)v²=0.64 → v²=3.2 → v≈1.79 m/s"}],diff:"hard"}
+]}
+]},
+
+//─────────────────────────────────────────────────────────────────────
+// UNIT 4: LINEAR MOMENTUM
+//─────────────────────────────────────────────────────────────────────
+{id:4,name:"Unit 4: Linear Momentum",abbr:"U4",weight:"10–15%",subtopics:[
+{id:"4.1",name:"Momentum & Impulse",questions:[
+{type:"mcq",q:"A 3 kg ball moves at 4 m/s. Its momentum is:",opts:["0.75 kg·m/s","7 kg·m/s","12 kg·m/s","1.33 kg·m/s"],ans:2,exp:"p = mv = 3×4 = 12 kg·m/s.",diff:"easy"},
+{type:"mcq",q:"Impulse is equal to:",opts:["Force × distance","Force × time = change in momentum","Mass × acceleration","Mass × displacement"],ans:1,exp:"Impulse J = FΔt = Δp (change in momentum). This is the impulse-momentum theorem.",diff:"easy"},
+{type:"mcq",q:"A 0.5 kg ball's velocity changes from +6 m/s to –6 m/s. The change in momentum is:",opts:["0","–6 kg·m/s","–3 kg·m/s","–6 kg·m/s"],ans:3,exp:"Δp = m(v_f – v_i) = 0.5(–6–6) = 0.5×(–12) = –6 kg·m/s.",diff:"medium"},
+{type:"mcq",q:"A 2 kg object is acted on by a 10 N force for 3 s. The impulse is:",opts:["30 N·s","5 N·s","30 kg·m/s","Both A and C"],ans:3,exp:"J = FΔt = 10×3 = 30 N·s = 30 kg·m/s. N·s and kg·m/s are the same unit.",diff:"easy"},
+{type:"mcq",q:"A car (m=1000 kg) changes from 20 m/s to 30 m/s. Impulse is:",opts:["10000 N·s","30000 N·s","50000 N·s","20000 N·s"],ans:0,exp:"J=Δp=m(v_f–v_i)=1000(30–20)=10000 N·s.",diff:"easy"},
+{type:"mcq",q:"A force of 100 N acts for 0.05 s on a 0.2 kg ball initially at rest. Final speed is:",opts:["25 m/s","0.1 m/s","50 m/s","10 m/s"],ans:0,exp:"J=FΔt=100×0.05=5 N·s. Δp=5 kg·m/s. v_f=Δp/m=5/0.2=25 m/s.",diff:"medium"},
+{type:"mcq",q:"A ball hits a wall at 10 m/s and bounces back at 8 m/s (mass 0.3 kg). Impulse from wall is:",opts:["0.6 N·s","5.4 N·s","2.4 N·s","3 N·s"],ans:1,exp:"Δp=0.3(–8–10)=0.3(–18)=–5.4 kg·m/s. Magnitude=5.4 N·s.",diff:"medium"},
+{type:"mcq",q:"Why does a padded glove reduce injury in catching a ball?",opts:["It reduces the impulse","It increases the force","It increases the time of impact, reducing peak force","It absorbs momentum"],ans:2,exp:"J=FΔt=Δp. Δp is fixed (same ball, same speed change). Longer Δt → smaller average F → less injury.",diff:"medium"},
+{type:"mcq",q:"A 1500 kg car goes from 25 m/s to rest. Impulse is:",opts:["37500 N·s","37500 kg·m/s","Both A and B","60 N·s"],ans:2,exp:"J=Δp=1500(0–25)=–37500 N·s = –37500 kg·m/s (same units). Magnitude 37500 for both.",diff:"medium"},
+{type:"frq",q:"A 0.4 kg tennis ball is hit by a racket. The ball changes velocity from –15 m/s (toward racket) to +25 m/s (away from racket) in 0.004 s.",parts:[{lbl:"(a)",q:"Calculate the change in momentum of the ball."},{lbl:"(b)",q:"Calculate the impulse exerted by the racket on the ball."},{lbl:"(c)",q:"Calculate the average force exerted by the racket on the ball."},{lbl:"(d)",q:"What force does the ball exert on the racket? (Newton's 3rd Law)"}],ans:[{lbl:"(a)",a:"Δp=m(v_f–v_i)=0.4(25–(–15))=0.4×40=16 kg·m/s"},{lbl:"(b)",a:"J=Δp=16 N·s (same direction as v_f)"},{lbl:"(c)",a:"F=J/Δt=16/0.004=4000 N"},{lbl:"(d)",a:"4000 N in the opposite direction (toward the racket), by Newton's 3rd Law"}],diff:"medium"}
+]},
+{id:"4.2",name:"Conservation of Momentum",questions:[
+{type:"mcq",q:"The law of conservation of momentum applies when:",opts:["No friction","No gravity","No net external force","Elastic collisions only"],ans:2,exp:"Momentum is conserved in a system when the net external force on the system is zero.",diff:"easy"},
+{type:"mcq",q:"A 3 kg ball at 4 m/s collides with a stationary 1 kg ball. If they stick together, the speed after collision is:",opts:["3 m/s","4 m/s","1 m/s","12 m/s"],ans:0,exp:"p_before=3×4=12 kg·m/s. p_after=(3+1)v → v=12/4=3 m/s.",diff:"easy"},
+{type:"mcq",q:"A 6 kg cart at 2 m/s east collides with a 2 kg cart at 2 m/s west. After they stick together, velocity is:",opts:["2 m/s east","1 m/s east","4 m/s east","0 m/s"],ans:1,exp:"p_total=6×2+(2×(–2))=12–4=8 kg·m/s east. v=(8)/(6+2)=1 m/s east.",diff:"medium"},
+{type:"mcq",q:"In an explosion, a 5 kg object at rest splits into 2 kg (going right at 6 m/s) and 3 kg. Velocity of 3 kg piece is:",opts:["4 m/s right","4 m/s left","6 m/s left","10 m/s left"],ans:1,exp:"p_before=0. 2(6)+3v₂=0 → v₂=–12/3=–4 m/s (4 m/s left).",diff:"medium"},
+{type:"mcq",q:"A 70 kg person runs at 5 m/s east and jumps onto a 30 kg stationary skateboard. The system's speed is:",opts:["5 m/s","3.5 m/s","7 m/s","11.67 m/s"],ans:1,exp:"p=70×5=350 kg·m/s. v=(350)/(70+30)=350/100=3.5 m/s.",diff:"easy"},
+{type:"mcq",q:"Two equal masses approach each other at the same speed. In a perfectly inelastic collision, they will:",opts:["Bounce back equally","Come to rest","Continue in original directions","One mass stops"],ans:1,exp:"Equal masses, equal speeds, opposite directions: p_total=0. After sticking: (2m)v=0 → v=0.",diff:"medium"},
+{type:"mcq",q:"A rifle (4 kg) fires a bullet (0.05 kg) at 600 m/s. Recoil speed of rifle is:",opts:["7.5 m/s","600 m/s","12 m/s","0.075 m/s"],ans:0,exp:"p_before=0. 0=0.05(600)+4v_r → v_r=–30/4=–7.5 m/s (7.5 m/s backward).",diff:"medium"},
+{type:"mcq",q:"In a perfectly elastic collision between equal masses (one at rest), the moving one:",opts:["Stops; the stationary one moves with original speed","Both continue at half speed","Both stop","Stationary one moves twice as fast"],ans:0,exp:"In elastic collision between equal masses: the first stops, the second moves with the first's original velocity. (Full transfer of momentum and KE.)",diff:"hard"},
+{type:"mcq",q:"A 2 kg ball at 3 m/s north collides with a 3 kg ball at 2 m/s south. In a perfectly inelastic collision, velocity is:",opts:["0 m/s","1 m/s south","1 m/s north","0.6 m/s south"],ans:0,exp:"p=2(3)+3(–2)=6–6=0. (2+3)v=0 → v=0.",diff:"medium"},
+{type:"frq",q:"Two carts on a frictionless track. Cart A (mass 2 kg) moves at 5 m/s east. Cart B (mass 3 kg) is stationary. They collide and stick together.",parts:[{lbl:"(a)",q:"Find the velocity of the combined carts after the collision."},{lbl:"(b)",q:"Calculate the kinetic energy before and after the collision."},{lbl:"(c)",q:"How much kinetic energy is lost? Where does it go?"}],ans:[{lbl:"(a)",a:"p_before=2×5=10 kg·m/s. v=(10)/(2+3)=2 m/s east"},{lbl:"(b)",a:"KE_before=½(2)(25)=25 J. KE_after=½(5)(4)=10 J"},{lbl:"(c)",a:"ΔKE=25–10=15 J lost. This energy converts to heat, sound, and internal deformation energy."}],diff:"medium"}
+]},
+{id:"4.3",name:"Types of Collisions",questions:[
+{type:"mcq",q:"In an elastic collision:",opts:["Only momentum is conserved","Only kinetic energy is conserved","Both momentum and kinetic energy are conserved","Neither is conserved"],ans:2,exp:"Elastic collisions conserve both total momentum AND total kinetic energy.",diff:"easy"},
+{type:"mcq",q:"In a perfectly inelastic collision:",opts:["Objects bounce with no KE loss","Objects stick together","KE is conserved","Momentum is not conserved"],ans:1,exp:"Perfectly inelastic: maximum kinetic energy loss; objects stick and move together.",diff:"easy"},
+{type:"mcq",q:"A 1 kg ball at 4 m/s elastically collides with a 1 kg stationary ball. After collision:",opts:["First ball: 4 m/s; Second: 0 m/s","First: 0 m/s; Second: 4 m/s","Both: 2 m/s","First: 2 m/s; Second: 6 m/s"],ans:1,exp:"For equal-mass elastic collision: velocities exchange. First stops, second moves at original speed.",diff:"medium"},
+{type:"mcq",q:"A ball of clay (0.5 kg, 6 m/s) hits and sticks to a stationary block (1.5 kg). Speed after:",opts:["6 m/s","2 m/s","1.5 m/s","4 m/s"],ans:2,exp:"0.5(6)=3 kg·m/s. v=3/(0.5+1.5)=3/2=1.5 m/s.",diff:"easy"},
+{type:"mcq",q:"Which type of collision always conserves kinetic energy?",opts:["Perfectly inelastic","Inelastic","Elastic","All collisions"],ans:2,exp:"Only elastic collisions conserve kinetic energy. All collisions conserve momentum.",diff:"easy"},
+{type:"mcq",q:"A 4 kg ball (3 m/s east) and 2 kg ball (6 m/s west) collide elastically. Using conservation of momentum only (elastic): p_total =",opts:["24 kg·m/s west","0 kg·m/s","24 kg·m/s east","12 kg·m/s east"],ans:1,exp:"p=4(3)+2(–6)=12–12=0. Net momentum = 0.",diff:"medium"},
+{type:"mcq",q:"A superball bouncing off a wall with same speed represents:",opts:["Perfectly inelastic","Perfectly elastic","Inelastic","Explosion"],ans:1,exp:"Same speed after → no KE loss → elastic collision (assuming wall has infinite mass).",diff:"medium"},
+{type:"frq",q:"A 0.3 kg marble (v=4 m/s) collides head-on with a 0.1 kg marble at rest on a frictionless surface. After the collision, the 0.3 kg marble has velocity 2 m/s in the same direction.",parts:[{lbl:"(a)",q:"Find the final velocity of the 0.1 kg marble."},{lbl:"(b)",q:"Calculate the total KE before and after."},{lbl:"(c)",q:"Is this collision elastic, inelastic, or perfectly inelastic? Justify."}],ans:[{lbl:"(a)",a:"p_before=0.3(4)=1.2 kg·m/s. p_after=0.3(2)+0.1v₂=0.6+0.1v₂=1.2 → v₂=6 m/s"},{lbl:"(b)",a:"KE_before=½(0.3)(16)=2.4 J. KE_after=½(0.3)(4)+½(0.1)(36)=0.6+1.8=2.4 J"},{lbl:"(c)",a:"Elastic — KE is conserved (2.4 J = 2.4 J). Momentum is also conserved."}],diff:"hard"}
+]}
+]},
+
+//─────────────────────────────────────────────────────────────────────
+// UNIT 5: TORQUE & ROTATIONAL DYNAMICS
+//─────────────────────────────────────────────────────────────────────
+{id:5,name:"Unit 5: Torque & Rotational Dynamics",abbr:"U5",weight:"10–15%",subtopics:[
+{id:"5.1",name:"Torque",questions:[
+{type:"mcq",q:"Torque is calculated as τ = rF·sinθ. When θ = 90°, torque is:",opts:["Zero","rF","rF/2","2rF"],ans:1,exp:"sin90°=1. τ=rF×1=rF. Maximum torque occurs when force is perpendicular to the moment arm.",diff:"easy"},
+{type:"mcq",q:"A 5 N force acts at 0.4 m from a pivot, perpendicular to the arm. The torque is:",opts:["12.5 N·m","2 N·m","0.08 N·m","1.25 N·m"],ans:1,exp:"τ=rF=0.4×5=2 N·m.",diff:"easy"},
+{type:"mcq",q:"Why is it easier to loosen a bolt with a longer wrench?",opts:["More force is applied","Larger radius increases torque for same force","Less friction","The bolt is weaker"],ans:1,exp:"τ=rF. A longer wrench (larger r) produces more torque with the same applied force.",diff:"easy"},
+{type:"mcq",q:"A force of 10 N is applied at 30° to a 0.6 m wrench. Torque is (sin30°=0.5):",opts:["3 N·m","6 N·m","5.2 N·m","1.5 N·m"],ans:0,exp:"τ=rF·sinθ=0.6×10×0.5=3 N·m.",diff:"medium"},
+{type:"mcq",q:"Torque has units of:",opts:["J","N·m (different from Joules in interpretation)","kg·m²","N/m"],ans:1,exp:"Torque has units of N·m. While numerically the same as J, torque is NOT energy — it's a rotational effect.",diff:"easy"},
+{type:"mcq",q:"The net torque on an object in rotational equilibrium is:",opts:["Maximum","Equal to angular momentum","Zero","Proportional to angular velocity"],ans:2,exp:"Rotational equilibrium: Σ τ = 0. Sum of all torques about any point = 0.",diff:"easy"},
+{type:"mcq",q:"A seesaw (2 m long) is balanced at its center. A 30 kg child sits 0.8 m from center. On what side and how far must a 40 kg child sit?",opts:["0.6 m on same side","0.6 m on opposite side","0.4 m on opposite side","1 m on same side"],ans:1,exp:"Torque balance: 30×0.8=40×d → d=24/40=0.6 m. Opposite side.",diff:"medium"},
+{type:"mcq",q:"A door (0.8 m wide) is pushed with 15 N at the far edge, perpendicular to the door. Torque about the hinge is:",opts:["12 N·m","18.75 N·m","1 N·m","9.375 N·m"],ans:0,exp:"τ=rF=0.8×15=12 N·m.",diff:"easy"},
+{type:"mcq",q:"If force is applied through the pivot point (r=0), torque is:",opts:["Maximum","Minimum but nonzero","Zero","Equal to rF"],ans:2,exp:"τ=rF·sinθ. If r=0, then τ=0 regardless of force magnitude.",diff:"easy"},
+{type:"mcq",q:"A 200 N person stands 0.5 m from one end of a 3 m uniform beam (mass 100 N). The beam is supported at both ends. Torque of the person about the left support is:",opts:["100 N·m","150 N·m","200 N·m","50 N·m"],ans:0,exp:"τ=200×0.5=100 N·m.",diff:"medium"},
+{type:"frq",q:"A uniform beam (length 4 m, weight 200 N) is supported at both ends (left and right supports). A 500 N object hangs 1 m from the left end.",parts:[{lbl:"(a)",q:"Taking torques about the left support, find the right support force."},{lbl:"(b)",q:"Find the left support force using Newton's second law."},{lbl:"(c)",q:"Verify by taking torques about the right support."}],ans:[{lbl:"(a)",a:"Στ about left=0: 500(1)+200(2)–F_R(4)=0 → 500+400=4F_R → F_R=225 N"},{lbl:"(b)",a:"F_L+F_R=500+200=700 N → F_L=700–225=475 N"},{lbl:"(c)",a:"Στ about right: 500(3)+200(2)–F_L(4)=1500+400–F_L(4)=0? 1900/4=475 N ✓"}],diff:"hard"}
+]},
+{id:"5.2",name:"Rotational Equilibrium & Center of Mass",questions:[
+{type:"mcq",q:"An object is in static equilibrium when:",opts:["ΣF=0 only","Στ=0 only","Both ΣF=0 and Στ=0","The object is stationary"],ans:2,exp:"Full static equilibrium requires both translational equilibrium (ΣF=0) and rotational equilibrium (Στ=0).",diff:"easy"},
+{type:"mcq",q:"The center of mass of a uniform rod is at:",opts:["One end","The quarter point","The midpoint","Depends on mass"],ans:2,exp:"For a uniform (constant density) rod, center of mass is at the geometric center — the midpoint.",diff:"easy"},
+{type:"mcq",q:"Two masses (4 kg and 6 kg) are 1 m apart. Center of mass from the 4 kg mass is:",opts:["0.6 m","0.4 m","0.5 m","0.67 m"],ans:0,exp:"x_cm = (4×0+6×1)/(4+6) = 6/10 = 0.6 m from the 4 kg mass.",diff:"medium"},
+{type:"mcq",q:"A uniform square plate has its center of mass at:",opts:["One corner","The center","An edge midpoint","Outside the plate"],ans:1,exp:"Uniform symmetric objects have their center of mass at their geometric center.",diff:"easy"},
+{type:"mcq",q:"Which condition allows an object to remain upright without toppling?",opts:["Equal forces on all sides","Center of mass directly above support base","Zero angular velocity","No external torque"],ans:1,exp:"An object is stable when its center of mass is directly above its base of support. If CM falls outside the base, it topples.",diff:"medium"},
+{type:"mcq",q:"A plank (mass 10 kg, length 6 m) has a pivot at 2 m from one end. For equilibrium, a mass placed at the far end (on the long side):",opts:["Must be 3 kg","Must be 10 kg","Must be 5 kg","Cannot achieve equilibrium"],ans:2,exp:"Long side = 4 m from pivot. Short side = 2 m. Balance: 10×(2–3)... Let me redo. Pivot 2 m from left end → long side = 4 m. Beam weight acts at center (3 m from left, 1 m from pivot toward long side). τ_beam=10×1=10 N·m (long side). For balance: m×4=10 → m=2.5 kg. Let me simplify the question.",q:"A uniform 20 N plank (4 m long) is pivoted at its center. A 10 N weight hangs 1.5 m from pivot on the left. Where should a 15 N weight hang on the right to balance?",opts:["1 m","2 m","1.5 m","0.5 m"],ans:0,exp:"Στ=0: 10×1.5=15×d → d=15/15=1 m from pivot on right.",diff:"medium"},
+{type:"frq",q:"A 3 m long uniform ladder (mass 15 kg) rests against a frictionless wall at an angle of 60° to the floor. A person (mass 60 kg) stands 2 m up the ladder. Use g=10 m/s².",parts:[{lbl:"(a)",q:"Identify all forces on the ladder."},{lbl:"(b)",q:"Write the conditions for equilibrium."},{lbl:"(c)",q:"Find the normal force from the wall and the floor."}],ans:[{lbl:"(a)",a:"Forces: Weight of ladder (150 N) at midpoint; Weight of person (600 N) at 2 m; Normal from floor (N_f, up); Friction at floor (f, horizontal); Normal from wall (N_w, horizontal toward ladder)."},{lbl:"(b)",a:"ΣFx=0: N_w=f; ΣFy=0: N_f=750 N; Στ about base=0: N_w×(3sin60°)=150×(1.5cos60°)+600×(2cos60°)"},{lbl:"(c)",a:"N_w×(3×0.866)=150×0.75+600×1=112.5+600=712.5 → N_w=712.5/2.598≈274.2 N. N_f=750 N."}],diff:"hard"}
+]}
+]},
+
+//─────────────────────────────────────────────────────────────────────
+// UNIT 6: ENERGY & MOMENTUM OF ROTATING SYSTEMS
+//─────────────────────────────────────────────────────────────────────
+{id:6,name:"Unit 6: Energy & Momentum of Rotating Systems",abbr:"U6",weight:"5–8%",subtopics:[
+{id:"6.1",name:"Rotational Kinetic Energy & Angular Momentum",questions:[
+{type:"mcq",q:"The rotational kinetic energy of a rotating object is:",opts:["½mv²","½Iω²","Iα","mω²r"],ans:1,exp:"KE_rot = ½Iω² where I is moment of inertia and ω is angular velocity.",diff:"easy"},
+{type:"mcq",q:"Angular momentum L is defined as:",opts:["mω","Iω","mv×r","Fr"],ans:1,exp:"L = Iω for a rotating object, or L = mvr (for a point mass orbiting at radius r).",diff:"easy"},
+{type:"mcq",q:"A figure skater pulls in her arms, reducing her moment of inertia. Her angular velocity:",opts:["Decreases","Increases","Stays the same","Goes to zero"],ans:1,exp:"Conservation of angular momentum: L=Iω=constant. If I decreases → ω increases.",diff:"easy"},
+{type:"mcq",q:"A solid disk (mass 2 kg, radius 0.3 m, I=½MR²) rotates at 6 rad/s. Its rotational KE is:",opts:["1.62 J","16.2 J","3.24 J","0.81 J"],ans:0,exp:"I=½(2)(0.09)=0.09 kg·m². KE=½Iω²=½(0.09)(36)=1.62 J.",diff:"medium"},
+{type:"mcq",q:"Angular momentum is conserved when:",opts:["No friction","Constant torque","Net external torque is zero","Net external force is zero"],ans:2,exp:"Angular momentum is conserved when net external torque = 0 (analogous to linear momentum and net force).",diff:"medium"},
+{type:"mcq",q:"A spinning top's moment of inertia is 0.01 kg·m² and ω=20 rad/s. Angular momentum is:",opts:["0.2 kg·m²/s","0.5 kg·m²/s","2 kg·m²/s","200 kg·m²/s"],ans:0,exp:"L=Iω=0.01×20=0.2 kg·m²/s.",diff:"easy"},
+{type:"mcq",q:"A 3 kg point mass rotates at 4 m radius and 2 rad/s. Angular momentum is:",opts:["24 kg·m²/s","96 kg·m²/s","6 kg·m²/s","48 kg·m²/s"],ans:1,exp:"I=mr²=3×16=48 kg·m². L=Iω=48×2=96 kg·m²/s.",diff:"medium"},
+{type:"mcq",q:"A skater has I=8 kg·m² at 3 rad/s. Pulling in reduces I to 2 kg·m². New ω is:",opts:["6 rad/s","12 rad/s","0.75 rad/s","24 rad/s"],ans:1,exp:"L=Iω=8×3=24. New ω=L/I_new=24/2=12 rad/s.",diff:"medium"},
+{type:"mcq",q:"Which has more rotational KE: a solid sphere (I=⅖MR²) or a hollow sphere (I=⅔MR²) with same mass, radius, and ω?",opts:["Solid sphere","Hollow sphere","Equal","Depends on radius"],ans:1,exp:"KE=½Iω². Larger I → more KE. Hollow sphere has larger I (⅔MR² > ⅖MR²) → more rotational KE.",diff:"hard"},
+{type:"frq",q:"A student (mass 40 kg, modeled as a point mass) stands on the rim of a rotating platform (I_platform = 200 kg·m², radius 2 m). The platform rotates at 1 rad/s. The student walks to the center.",parts:[{lbl:"(a)",q:"Find initial angular momentum."},{lbl:"(b)",q:"Find the moment of inertia when student is at center."},{lbl:"(c)",q:"Find the new angular velocity."}],ans:[{lbl:"(a)",a:"I_student=mr²=40(4)=160 kg·m². I_total=200+160=360 kg·m². L=360×1=360 kg·m²/s"},{lbl:"(b)",a:"At center r=0: I_student=0. I_total=200 kg·m²."},{lbl:"(c)",a:"L=Iω → 360=200×ω → ω=1.8 rad/s"}],diff:"hard"}
+]}
+]},
+
+//─────────────────────────────────────────────────────────────────────
+// UNIT 7: OSCILLATIONS
+//─────────────────────────────────────────────────────────────────────
+{id:7,name:"Unit 7: Oscillations",abbr:"U7",weight:"5–8%",subtopics:[
+{id:"7.1",name:"Simple Harmonic Motion",questions:[
+{type:"mcq",q:"In SHM, the restoring force is proportional to:",opts:["Velocity","Acceleration","Displacement from equilibrium","Time"],ans:2,exp:"Defining feature of SHM: F = –kx, where x is displacement from equilibrium. Force is proportional to (and opposite) displacement.",diff:"easy"},
+{type:"mcq",q:"At the equilibrium position in SHM, which is maximum?",opts:["Potential energy","Displacement","Velocity","Restoring force"],ans:2,exp:"At equilibrium: displacement=0, so PE=0 and restoring force=0. All energy is KE → maximum velocity.",diff:"medium"},
+{type:"mcq",q:"At the amplitude of SHM, the velocity is:",opts:["Maximum","Zero","Equal to average","Depends on frequency"],ans:1,exp:"At maximum displacement (amplitude), the object momentarily stops before reversing → velocity = 0.",diff:"easy"},
+{type:"mcq",q:"A spring-mass system has T = 2 s. Its frequency is:",opts:["2 Hz","0.5 Hz","1 Hz","4 Hz"],ans:1,exp:"f = 1/T = 1/2 = 0.5 Hz.",diff:"easy"},
+{type:"mcq",q:"In SHM, acceleration is maximum when:",opts:["Displacement is zero","Velocity is maximum","At the equilibrium position","At the amplitude"],ans:3,exp:"a = –(k/m)x. Maximum displacement (amplitude) → maximum acceleration magnitude.",diff:"medium"},
+{type:"mcq",q:"Amplitude in SHM affects:",opts:["Period","Frequency","Maximum speed and energy","Spring constant"],ans:2,exp:"Amplitude does NOT affect period or frequency (for SHM). Larger amplitude → more energy → larger max speed.",diff:"medium"},
+{type:"mcq",q:"Energy in SHM at position x (with amplitude A) is E = ½kA². The KE at displacement x is:",opts:["½k(A²–x²)","½kx²","½k(A²+x²)","½kA²"],ans:0,exp:"Total E=½kA². PE=½kx². KE=E–PE=½k(A²–x²).",diff:"hard"},
+{type:"mcq",q:"The period of SHM for a mass on a spring depends on:",opts:["Amplitude only","Spring constant only","Both mass and spring constant","Gravity"],ans:2,exp:"T=2π√(m/k). Depends on mass m and spring constant k. NOT amplitude or gravity.",diff:"medium"},
+{type:"mcq",q:"A mass on a spring has T=4 s. If mass is quadrupled, new T is:",opts:["16 s","8 s","2 s","1 s"],ans:1,exp:"T=2π√(m/k). If m→4m: T_new=2π√(4m/k)=2×2π√(m/k)=2T=8 s.",diff:"medium"},
+{type:"frq",q:"A 0.5 kg mass is attached to a spring (k=200 N/m) on a frictionless surface. It is displaced 0.1 m from equilibrium and released.",parts:[{lbl:"(a)",q:"Calculate the period and frequency of oscillation."},{lbl:"(b)",q:"Calculate the maximum speed."},{lbl:"(c)",q:"Calculate the maximum acceleration."},{lbl:"(d)",q:"What is the total energy of the system?"}],ans:[{lbl:"(a)",a:"T=2π√(m/k)=2π√(0.5/200)=2π√(0.0025)=2π×0.05≈0.314 s. f=1/T≈3.18 Hz"},{lbl:"(b)",a:"v_max=Aω=A√(k/m)=0.1√(400)=0.1×20=2 m/s"},{lbl:"(c)",a:"a_max=(k/m)A=(200/0.5)(0.1)=400×0.1=40 m/s²"},{lbl:"(d)",a:"E=½kA²=½(200)(0.01)=1 J"}],diff:"medium"}
+]},
+{id:"7.2",name:"Pendulums & Spring Systems",questions:[
+{type:"mcq",q:"The period of a simple pendulum depends on:",opts:["Mass of bob","Amplitude (for small angles)","Length of string and g","Only length"],ans:2,exp:"T=2π√(L/g). Depends on length L and gravitational acceleration g. NOT mass or amplitude (small angle approximation).",diff:"easy"},
+{type:"mcq",q:"A pendulum has T=2 s. If length is quadrupled, new T is:",opts:["4 s","8 s","1 s","2√2 s"],ans:0,exp:"T=2π√(L/g). If L→4L: T_new=2π√(4L/g)=2×2π√(L/g)=2T=4 s.",diff:"medium"},
+{type:"mcq",q:"A pendulum (L=1 m, g=10 m/s²) has period:",opts:["2π s","π s","2 s","1 s"],ans:0,exp:"T=2π√(1/10)=2π/√10≈2π×0.316≈1.99 s ≈ 2π/√10. Actually T=2π√(L/g)=2π×(1/√10) ≈ 1.99 s ≈ 2 s. Closest answer: 2 s. But 2π s is also an option.",ans:2,exp:"T=2π√(L/g)=2π√(1/10)=2π/√10≈1.987 s ≈ 2 s.",diff:"medium"},
+{type:"mcq",q:"Same pendulum taken to the Moon (g_moon=1.6 m/s²). Period compared to Earth:",opts:["Greater","Less","Equal","Zero"],ans:0,exp:"T=2π√(L/g). Smaller g → larger T. Pendulum swings more slowly on the Moon.",diff:"easy"},
+{type:"mcq",q:"Two springs (k₁=100 N/m, k₂=100 N/m) are attached in parallel to a mass. Effective spring constant is:",opts:["50 N/m","100 N/m","200 N/m","10000 N/m"],ans:2,exp:"Parallel springs: k_eff = k₁+k₂ = 200 N/m.",diff:"medium"},
+{type:"mcq",q:"Two springs (k=100 N/m each) are in series. Effective k is:",opts:["200 N/m","100 N/m","50 N/m","10 N/m"],ans:2,exp:"Series springs: 1/k_eff=1/k₁+1/k₂=1/100+1/100=2/100 → k_eff=50 N/m.",diff:"medium"},
+{type:"mcq",q:"At what point in a spring oscillation is elastic PE equal to KE?",opts:["At amplitude only","At equilibrium only","When x = A/√2","Never"],ans:2,exp:"PE=½kx²=KE=½k(A²–x²) → x²=A²–x² → 2x²=A² → x=A/√2.",diff:"hard"},
+{type:"mcq",q:"A 2 kg mass on a spring (k=50 N/m) oscillates. Period is:",opts:["π s","2π s","π/5 s","π/√25 s"],ans:0,exp:"T=2π√(m/k)=2π√(2/50)=2π√(0.04)=2π×0.2=0.4π≈1.257 s... Actually 2π×√(1/25)=2π/5≈1.26 s. Hmm, 2π√(2/50)=2π×(1/5)=2π/5. Not exactly π. Let me adjust: m=0.5 kg, k=50: T=2π√(0.01)=2π×0.1=0.628 s≈π/5. Better: m=2,k=2: T=2π√1=2π. Let me use m=1,k=100:T=2π/10=π/5.",q:"A 1 kg mass on a spring (k=100 N/m) oscillates. Period is:",opts:["π/5 s","2π/10 s","π/5 s","Both A and B"],ans:3,exp:"T=2π√(1/100)=2π/10=π/5 s ≈ 0.628 s. Both A and B are equivalent expressions.",diff:"medium"},
+{type:"frq",q:"A simple pendulum on Earth has period T=2 s. A student takes it to Planet X.",parts:[{lbl:"(a)",q:"Find the length of the pendulum (g_Earth=10 m/s²)."},{lbl:"(b)",q:"On Planet X the period is 3 s for the same pendulum. Find g_X."},{lbl:"(c)",q:"Compare the energy of the pendulum on Earth vs Planet X if the amplitude is the same."}],ans:[{lbl:"(a)",a:"T=2π√(L/g) → 2=2π√(L/10) → 1/π=√(L/10) → L/10=1/π² → L=10/π²≈1.013 m"},{lbl:"(b)",a:"3=2π√(L/g_X) → (3/2π)²=L/g_X → g_X=L×(2π/3)²=(10/π²)(4π²/9)=40/9≈4.44 m/s²"},{lbl:"(c)",a:"E=mgh≈mgA²/2L (for small angle: h≈A²/2L). So E∝g. On Planet X: E_X=(4.44/10)E_Earth≈0.44E_Earth. Less energy on Planet X for same amplitude."}],diff:"hard"}
+]}
+]},
+
+//─────────────────────────────────────────────────────────────────────
+// UNIT 8: FLUIDS
+//─────────────────────────────────────────────────────────────────────
+{id:8,name:"Unit 8: Fluids",abbr:"U8",weight:"10–15%",subtopics:[
+{id:"8.1",name:"Fluid Pressure",questions:[
+{type:"mcq",q:"Pressure is defined as:",opts:["Force times area","Force per unit area","Area per unit force","Force divided by volume"],ans:1,exp:"P = F/A. Pressure is the force applied per unit area. Unit: Pascal (Pa) = N/m².",diff:"easy"},
+{type:"mcq",q:"A fluid pressure at depth h in a liquid of density ρ is:",opts:["ρgh + P₀","ρgh","ρg","P₀/ρgh"],ans:0,exp:"P = P₀ + ρgh. Total pressure = atmospheric + pressure from fluid column above.",diff:"easy"},
+{type:"mcq",q:"Water (ρ=1000 kg/m³, g=10 m/s²) pressure at 5 m depth is:",opts:["5000 Pa","50,000 Pa","500 Pa","5 Pa"],ans:1,exp:"P_gauge=ρgh=1000×10×5=50000 Pa. (This is gauge pressure, not including atmosphere.)",diff:"easy"},
+{type:"mcq",q:"Pascal's principle states:",opts:["Pressure decreases with depth","Pressure in a fluid is transmitted equally in all directions","Faster fluid has lower pressure","Objects float if less dense"],ans:1,exp:"Pascal's principle: a pressure change at any point in a confined fluid is transmitted unchanged to all parts of the fluid.",diff:"easy"},
+{type:"mcq",q:"A hydraulic press has input piston area 0.01 m² and output piston area 0.05 m². A force of 100 N input gives output force of:",opts:["500 N","20 N","100 N","5000 N"],ans:0,exp:"P₁=P₂: F₁/A₁=F₂/A₂ → F₂=F₁(A₂/A₁)=100×(0.05/0.01)=500 N.",diff:"medium"},
+{type:"mcq",q:"Pressure acts in a fluid:",opts:["Only downward","Only upward","In all directions equally at a point","Only horizontally"],ans:2,exp:"Fluid pressure at a point acts equally in all directions — it is isotropic.",diff:"easy"},
+{type:"mcq",q:"A column of mercury (ρ=13600 kg/m³, g=10 m/s²) that is 0.76 m tall creates pressure:",opts:["103360 Pa","10336 Pa","1033600 Pa","760 Pa"],ans:0,exp:"P=ρgh=13600×10×0.76=103360 Pa≈101 kPa (approximately 1 atm).",diff:"medium"},
+{type:"mcq",q:"Going deeper in a lake, pressure:",opts:["Decreases linearly","Stays constant","Increases linearly","Increases exponentially"],ans:2,exp:"P=P₀+ρgh. At constant density, P increases linearly with depth h.",diff:"easy"},
+{type:"frq",q:"A tank is filled with water (ρ=1000 kg/m³) to a height of 4 m. A hole is at 1 m from the bottom. Atmospheric pressure = 101325 Pa. Use g=10 m/s².",parts:[{lbl:"(a)",q:"Calculate the gauge pressure at the bottom of the tank."},{lbl:"(b)",q:"Calculate the gauge pressure at the hole (1 m from bottom)."},{lbl:"(c)",q:"Using Torricelli's theorem (v=√(2gh) where h is depth below surface), find the speed of water emerging from the hole."}],ans:[{lbl:"(a)",a:"P_gauge=ρgh=1000×10×4=40000 Pa"},{lbl:"(b)",a:"Depth at hole=4–1=3 m from surface. P_gauge=1000×10×3=30000 Pa"},{lbl:"(c)",a:"v=√(2gh)=√(2×10×3)=√60≈7.75 m/s"}],diff:"medium"}
+]},
+{id:"8.2",name:"Buoyancy & Archimedes' Principle",questions:[
+{type:"mcq",q:"Archimedes' Principle states that buoyant force equals:",opts:["Weight of the submerged object","Weight of displaced fluid","Pressure times volume","Density times volume"],ans:1,exp:"F_b = ρ_fluid × V_displaced × g = weight of fluid displaced.",diff:"easy"},
+{type:"mcq",q:"An object floats when:",opts:["Its density equals water's density","Buoyant force equals its weight","It is made of wood","Buoyant force exceeds weight"],ans:1,exp:"Floating condition: F_b = W. Buoyant force exactly equals the object's weight.",diff:"easy"},
+{type:"mcq",q:"An object has density greater than water. When submerged, it:",opts:["Floats","Sinks","Stays at any depth","Depends on shape"],ans:1,exp:"If density > fluid density, weight > buoyant force → net downward force → sinks.",diff:"easy"},
+{type:"mcq",q:"A 0.5 m³ block is fully submerged in water (ρ=1000 kg/m³, g=10). Buoyant force is:",opts:["500 N","50 N","5000 N","5 N"],ans:2,exp:"F_b=ρ_fluid×V×g=1000×0.5×10=5000 N.",diff:"easy"},
+{type:"mcq",q:"An object appears to weigh 60 N in air and 50 N in water. Buoyant force is:",opts:["110 N","10 N","50 N","60 N"],ans:1,exp:"F_b=W_air–W_water=60–50=10 N.",diff:"easy"},
+{type:"mcq",q:"An ice cube floats in water. The fraction submerged equals:",opts:["ρ_ice/ρ_water","ρ_water/ρ_ice","(ρ_ice–ρ_water)/ρ_ice","ρ_water/ρ_ice – 1"],ans:0,exp:"Floating: V_sub/V_total = ρ_object/ρ_fluid. For ice (ρ=917)/water(ρ=1000): ~91.7% submerged.",diff:"medium"},
+{type:"mcq",q:"A ship displaces 10,000 m³ of seawater (ρ=1025 kg/m³, g=10). Maximum load (in Newtons) the ship can carry if its hull can displace this volume:",opts:["102,500,000 N","1,025,000 N","10,250,000 N","100,000,000 N"],ans:0,exp:"F_b=ρVg=1025×10000×10=102,500,000 N. This is the maximum total weight the ship can carry.",diff:"hard"},
+{type:"mcq",q:"A 0.2 kg object of volume 100 cm³ is submerged in water (ρ=1000 kg/m³, g=10). Net force on it is:",opts:["2 N up","1 N up","1 N down","0 N"],ans:2,exp:"F_b=1000×0.0001×10=1 N up. W=0.2×10=2 N down. Net=2–1=1 N down.",diff:"medium"},
+{type:"mcq",q:"Steel has density 7800 kg/m³. A solid steel ball in water (1000 kg/m³). Net downward force as fraction of weight is:",opts:["100%","87.2%","12.8%","50%"],ans:1,exp:"Net force/W = 1–(ρ_fluid/ρ_steel)=1–(1000/7800)=1–0.128=0.872=87.2%.",diff:"hard"},
+{type:"frq",q:"A wooden block (mass 800 g, volume 1000 cm³) floats in water (ρ=1000 kg/m³). Use g=10 m/s².",parts:[{lbl:"(a)",q:"Find the block's density."},{lbl:"(b)",q:"Find the volume submerged when floating."},{lbl:"(c)",q:"Find the buoyant force."},{lbl:"(d)",q:"What mass of metal (density 8000 kg/m³) could be placed on top before the block just sinks?"}],ans:[{lbl:"(a)",a:"ρ=m/V=0.8/0.001=800 kg/m³"},{lbl:"(b)",a:"Fraction submerged=800/1000=0.8. V_sub=0.8×1000=800 cm³=0.0008 m³"},{lbl:"(c)",a:"F_b=ρ_water×V_sub×g=1000×0.0008×10=8 N = weight of block ✓"},{lbl:"(d)",a:"At sinking point, total weight=max buoyancy=ρ_w×V_block×g=1000×0.001×10=10 N. Metal mass=(10–8)/10=0.2 kg=200 g"}],diff:"hard"}
+]},
+{id:"8.3",name:"Fluid Flow & Bernoulli",questions:[
+{type:"mcq",q:"The continuity equation A₁v₁ = A₂v₂ expresses conservation of:",opts:["Energy","Momentum","Mass (for incompressible fluid)","Pressure"],ans:2,exp:"A₁v₁=A₂v₂ states that the volume flow rate Q=Av is constant → conservation of mass for incompressible fluids.",diff:"easy"},
+{type:"mcq",q:"A pipe narrows from 0.04 m² to 0.01 m² cross-section. If speed at wide end is 2 m/s, speed at narrow end is:",opts:["0.5 m/s","2 m/s","4 m/s","8 m/s"],ans:3,exp:"A₁v₁=A₂v₂ → 0.04×2=0.01×v₂ → v₂=0.08/0.01=8 m/s.",diff:"easy"},
+{type:"mcq",q:"Bernoulli's equation states that along a streamline:",opts:["Pressure is constant","P+½ρv²+ρgh = constant","Velocity is constant","Density changes with pressure"],ans:1,exp:"Bernoulli: P+½ρv²+ρgh=constant. It is conservation of energy for fluid flow.",diff:"easy"},
+{type:"mcq",q:"According to Bernoulli's principle, faster-moving fluid has:",opts:["Higher pressure","Lower pressure","Same pressure","Higher density"],ans:1,exp:"In Bernoulli's equation: higher v → lower P (if height is the same). Faster flow → lower pressure.",diff:"easy"},
+{type:"mcq",q:"Which best explains why an airplane generates lift?",opts:["Air above wing is faster, creating lower pressure that lifts the wing","Air below wing moves faster","Engine pushes up","Wing deflects air upward only"],ans:0,exp:"Wing shape (airfoil) causes faster airflow over the curved top → lower pressure above → net upward pressure force (lift). Bernoulli's principle.",diff:"medium"},
+{type:"mcq",q:"A venturi meter has a constriction. Compared to the wide section, the constriction has:",opts:["Higher speed, higher pressure","Higher speed, lower pressure","Lower speed, higher pressure","Lower speed, lower pressure"],ans:1,exp:"Continuity: narrower area → faster flow. Bernoulli: faster flow → lower pressure. Venturi meters use this to measure flow rate.",diff:"medium"},
+{type:"mcq",q:"In a horizontal pipe with wider to narrower section, for an incompressible fluid, which is constant?",opts:["Velocity","Pressure","Volume flow rate Av","Kinetic energy"],ans:2,exp:"Q=Av=constant (continuity equation for incompressible fluid). Velocity and pressure both change.",diff:"medium"},
+{type:"mcq",q:"Water flows from a tank through a hose. The hose end is at the same height as the water level. Compared to inside the tank, the water speed in the hose is:",opts:["Less","The same","Greater","Zero"],ans:2,exp:"In a tank, water is nearly stationary. It speeds up as it exits through the narrower hose. Continuity and Bernoulli both confirm this.",diff:"medium"},
+{type:"mcq",q:"A pitcher throws a baseball with spin that causes airflow to be faster on one side. The ball curves toward the:",opts:["Faster-flow side","Slower-flow side","It doesn't curve","Straight up"],ans:0,exp:"Magnus effect: faster air on one side → lower pressure (Bernoulli) → ball pushed toward lower pressure → curves toward faster-flow side.",diff:"hard"},
+{type:"frq",q:"Water (ρ=1000 kg/m³) flows through a horizontal pipe. At section 1: diameter 0.04 m, pressure 200,000 Pa. At section 2: diameter 0.02 m. Use g=10 m/s².",parts:[{lbl:"(a)",q:"Find the ratio of speeds v₂/v₁."},{lbl:"(b)",q:"If v₁=1 m/s, find v₂."},{lbl:"(c)",q:"Find P₂ using Bernoulli's equation."}],ans:[{lbl:"(a)",a:"A₁v₁=A₂v₂. A∝d². (d₁/d₂)²=v₂/v₁. v₂/v₁=(0.04/0.02)²=4."},{lbl:"(b)",a:"v₂=4×1=4 m/s"},{lbl:"(c)",a:"P₁+½ρv₁²=P₂+½ρv₂². 200000+½(1000)(1)=P₂+½(1000)(16). 200500=P₂+8000 → P₂=192500 Pa"}],diff:"hard"}
+]}
+]}
+]};
+
+// ═══════════════════════════════════════════════════════════════════════
+//  APP STATE & LOGIC
+// ═══════════════════════════════════════════════════════════════════════
+let state={
+  qType:"both",
+  difficultyFilter:["easy","medium","hard"],
+  selectedSubtopics:{},
+  questions:[],
+  current:0,
+  answers:{},   // index→{userAns, correct}
+  flagged:new Set(),
+  frqTexts:{},
+  timerInterval:null,
+  elapsed:0,
+  testStarted:false
+};
+
+// ─── BUILD SIDEBAR ───
+function buildSidebar(){
+  const ul=document.getElementById("unitList");
+  QB.units.forEach(unit=>{
+    const div=document.createElement("div");
+    div.className="unit-item";
+    div.id="unit-item-"+unit.id;
+    const totalQ=unit.subtopics.reduce((s,st)=>s+st.questions.length,0);
+    div.innerHTML=`<div class="unit-hd" id="uhd${unit.id}" onclick="toggleUnit(${unit.id})">
+      <input type="checkbox" class="unit-cb" id="ucb${unit.id}" onclick="event.stopPropagation();toggleUnitCheck(${unit.id},this.checked)">
+      <span class="unit-nm">${unit.name}</span>
+      <span class="unit-wt">${unit.weight}</span>
+      <span class="unit-arr" id="uarr${unit.id}">▼</span>
+    </div>
+    <div class="sub-list" id="subs${unit.id}">
+      ${unit.subtopics.map(st=>`
+      <div class="sub-row">
+        <input type="checkbox" class="sub-cb" id="scb${st.id}" onchange="toggleSubtopic('${st.id}',this.checked)">
+        <label class="sub-lbl" for="scb${st.id}">${st.name}</label>
+        <span class="sub-cnt">${st.questions.length}Q</span>
+      </div>`).join("")}
+    </div>`;
+    ul.appendChild(div);
+  });
+  updateSelInfo();
+}
+
+function toggleUnit(uid){
+  const subs=document.getElementById("subs"+uid);
+  const arr=document.getElementById("uarr"+uid);
+  const hd=document.getElementById("uhd"+uid);
+  const open=subs.classList.toggle("open");
+  arr.classList.toggle("open",open);
+  hd.classList.toggle("expanded",open);
+}
+
+function toggleUnitCheck(uid,checked){
+  const unit=QB.units.find(u=>u.id===uid);
+  unit.subtopics.forEach(st=>{
+    document.getElementById("scb"+st.id).checked=checked;
+    if(checked) state.selectedSubtopics[st.id]=true;
+    else delete state.selectedSubtopics[st.id];
+  });
+  document.getElementById("unit-item-"+uid).classList.toggle("has-selected",checked);
+  updateSelInfo();
+}
+
+function toggleSubtopic(sid,checked){
+  if(checked) state.selectedSubtopics[sid]=true;
+  else delete state.selectedSubtopics[sid];
+  // update unit checkbox
+  const unit=QB.units.find(u=>u.subtopics.some(s=>s.id===sid));
+  if(unit){
+    const allChecked=unit.subtopics.every(s=>state.selectedSubtopics[s.id]);
+    document.getElementById("ucb"+unit.id).checked=allChecked;
+    const anyChecked=unit.subtopics.some(s=>state.selectedSubtopics[s.id]);
+    document.getElementById("unit-item-"+unit.id).classList.toggle("has-selected",anyChecked);
+  }
+  updateSelInfo();
+}
+
+function setType(btn){
+  document.querySelectorAll(".type-btn").forEach(b=>b.classList.remove("active"));
+  btn.classList.add("active");
+  state.qType=btn.dataset.type;
+  updateSelInfo();
+}
+
+function toggleDiff(pill,diff){
+  pill.classList.toggle("a-"+diff);
+  if(state.difficultyFilter.includes(diff)) state.difficultyFilter=state.difficultyFilter.filter(d=>d!==diff);
+  else state.difficultyFilter.push(diff);
+  updateSelInfo();
+}
+
+function updateSelInfo(){
+  const selIds=Object.keys(state.selectedSubtopics);
+  const cnt=document.getElementById("qCount").value;
+  let pool=getPool();
+  document.getElementById("selInfo").textContent=
+    selIds.length===0?"Select subtopics above":
+    `${selIds.length} subtopic(s) • ~${pool.length} available • Will use ${Math.min(pool.length,parseInt(cnt))}`;
+}
+
+function getPool(){
+  const selIds=Object.keys(state.selectedSubtopics);
+  if(selIds.length===0) return [];
+  let pool=[];
+  QB.units.forEach(unit=>unit.subtopics.forEach(st=>{
+    if(state.selectedSubtopics[st.id]){
+      st.questions.forEach(q=>{
+        if(!state.difficultyFilter.includes(q.diff)) return;
+        if(state.qType==="mcq" && q.type!=="mcq") return;
+        if(state.qType==="frq" && q.type!=="frq") return;
+        // tag each question
+        pool.push({...q, sub:st.name, unit:unit.name});
+      });
+    }
+  }));
+  return pool;
+}
+
+function shuffle(arr){return arr.sort(()=>Math.random()-.5)}
+
+function generateTest(){
+  const pool=getPool();
+  if(pool.length===0){alert("Please select at least one subtopic and question type.");return;}
+  const cnt=parseInt(document.getElementById("qCount").value);
+  state.questions=shuffle([...pool]).slice(0,cnt);
+  state.current=0;
+  state.answers={};
+  state.flagged=new Set();
+  state.frqTexts={};
+  state.elapsed=0;
+  state.testStarted=true;
+
+  // UI switch
+  document.getElementById("welcomeScreen").classList.add("hidden");
+  document.getElementById("results").classList.remove("vis");
+  document.getElementById("results").style.display="none";
+  document.getElementById("testArea").classList.remove("hidden");
+
+  // live score
+  document.getElementById("liveScore").classList.add("vis");
+  updateLiveScore();
+
+  // timer
+  clearInterval(state.timerInterval);
+  if(document.getElementById("timerOn").checked){
+    document.getElementById("timerDisp").style.display="flex";
+    state.timerInterval=setInterval(()=>{
+      state.elapsed++;
+      const m=Math.floor(state.elapsed/60);
+      const s=state.elapsed%60;
+      document.getElementById("timerTxt").textContent=
+        String(m).padStart(2,"0")+":"+String(s).padStart(2,"0");
+      if(state.elapsed>cnt*120){
+        document.getElementById("timerDisp").classList.add("warn");
+      }
+    },1000);
+  } else {
+    document.getElementById("timerDisp").style.display="none";
+  }
+
+  document.getElementById("testTitle").textContent="AP Physics 1 Practice Test";
+  const units=[...new Set(state.questions.map(q=>q.unit))];
+  document.getElementById("testSubTitle").textContent=
+    state.questions.length+" Questions • "+units.map(u=>u.replace("Unit ","U").split(":")[0]).join(", ");
+
+  buildDots();
+  renderQ();
+}
+
+function buildDots(){
+  const container=document.getElementById("qDots");
+  container.innerHTML="";
+  state.questions.forEach((_,i)=>{
+    const d=document.createElement("div");
+    d.className="qdot"+(i===0?" cur":"");
+    d.textContent=i+1;
+    d.onclick=()=>goTo(i);
+    d.id="qdot"+i;
+    container.appendChild(d);
+  });
+}
+
+function updateDots(){
+  state.questions.forEach((_,i)=>{
+    const d=document.getElementById("qdot"+i);
+    if(!d) return;
+    d.className="qdot";
+    if(i===state.current) d.classList.add("cur");
+    else if(state.answers[i]!==undefined) d.classList.add("ans");
+    if(state.flagged.has(i)) d.classList.add("flagged");
+  });
+}
+
+function renderQ(){
+  const q=state.questions[state.current];
+  const n=state.current;
+  const total=state.questions.length;
+  const pct=Math.round((n/total)*100);
+  document.getElementById("progLabel").textContent=`Question ${n+1} of ${total}`;
+  document.getElementById("progPct").textContent=pct+"%";
+  document.getElementById("progFill").style.width=pct+"%";
+  updateDots();
+
+  // nav
+  document.getElementById("nextBtn").classList.toggle("hidden",n===total-1);
+  document.getElementById("submitBtn").classList.toggle("hidden",n!==total-1);
+  const flagBtn=document.getElementById("flagBtn");
+  flagBtn.classList.toggle("on",state.flagged.has(n));
+
+  let html=`<div class="q-meta">
+    <span class="q-num">Q${n+1}</span>
+    <span class="badge ${q.type}">${q.type.toUpperCase()}</span>
+    <span class="badge sub">${q.sub}</span>
+    <span class="badge ${q.diff}" style="margin-left:auto">${q.diff.charAt(0).toUpperCase()+q.diff.slice(1)}</span>
+  </div>
+  <div class="q-text">${q.q}</div>`;
+
+  if(q.type==="mcq"){
+    const saved=state.answers[n];
+    const locked=saved!==undefined;
+    html+=`<div class="opts" id="opts">`;
+    ["A","B","C","D"].forEach((lt,i)=>{
+      if(i>=q.opts.length) return;
+      let cls="opt"+(locked?" locked":"");
+      if(locked){
+        if(i===q.ans) cls+=" cor";
+        else if(i===saved.userAns && i!==q.ans) cls+=" inc";
+      } else if(saved && saved.userAns===i) cls+=" sel";
+      html+=`<div class="${cls}" onclick="${locked?"":"selectOpt("+i+")"}">
+        <div class="opt-lt">${lt}</div>
+        <div class="opt-txt">${q.opts[i]}</div>
+      </div>`;
+    });
+    html+=`</div>`;
+    if(locked){
+      html+=`<div class="expl vis" id="expl">
+        <h4>${saved.correct?"✅ Correct":"❌ Incorrect"}</h4>
+        <p>${q.exp}</p>
+      </div>`;
+    }
+  } else {
+    // FRQ
+    const saved=state.frqTexts[n]||{};
+    html+=`<div class="frq-wrap">`;
+    q.parts.forEach((part,pi)=>{
+      html+=`<div class="frq-part">
+        <div class="frq-part-lbl">${part.lbl}</div>
+        <div style="font-size:14px;color:var(--gray-700);margin-bottom:8px">${part.q}</div>
+        <textarea class="frq-ta" rows="4" placeholder="Write your answer here..."
+          oninput="saveFRQ(${n},${pi},this.value)">${saved[pi]||""}</textarea>
+      </div>`;
+    });
+    html+=`<div>
+      <button class="model-btn" onclick="toggleModel(this)">💡 Show Model Answer</button>
+      <div class="model-ans" id="modelAns">
+        <h4>Model Answer</h4>`;
+    q.ans.forEach(a=>{
+      html+=`<p><strong>${a.lbl}</strong> ${a.a}</p>`;
+    });
+    html+=`</div></div></div>`;
+  }
+
+  document.getElementById("qCard").innerHTML=html;
+  updateLiveScore();
+}
+
+function selectOpt(idx){
+  const q=state.questions[state.current];
+  const n=state.current;
+  const correct=idx===q.ans;
+  state.answers[n]={userAns:idx,correct};
+  renderQ();
+  // auto-advance after 1.5s
+  if(n<state.questions.length-1){
+    setTimeout(()=>{if(state.current===n) nextQ();},1200);
+  }
+}
+
+function saveFRQ(n,pi,val){
+  if(!state.frqTexts[n]) state.frqTexts[n]={};
+  state.frqTexts[n][pi]=val;
+  // mark as "answered"
+  state.answers[n]={userAns:"frq",correct:true};
+  updateDots();
+}
+
+function toggleModel(btn){
+  const panel=document.getElementById("modelAns");
+  const vis=panel.classList.toggle("vis");
+  btn.textContent=vis?"🔒 Hide Answer":"💡 Show Model Answer";
+}
+
+function prevQ(){if(state.current>0){state.current--;renderQ();}}
+function nextQ(){if(state.current<state.questions.length-1){state.current++;renderQ();}}
+function goTo(i){state.current=i;renderQ();}
+
+function toggleFlag(){
+  const n=state.current;
+  if(state.flagged.has(n)) state.flagged.delete(n);
+  else state.flagged.add(n);
+  document.getElementById("flagBtn").classList.toggle("on",state.flagged.has(n));
+  updateDots();
+}
+
+function updateLiveScore(){
+  const mcqAnswered=Object.entries(state.answers).filter(([_,v])=>v.userAns!=="frq");
+  const correct=mcqAnswered.filter(([_,v])=>v.correct).length;
+  document.getElementById("liveScoreTxt").textContent=`${correct}/${state.questions.length}`;
+}
+
+function submitTest(){
+  clearInterval(state.timerInterval);
+  showResults();
+}
+
+function showResults(){
+  document.getElementById("testArea").classList.add("hidden");
+  const res=document.getElementById("results");
+  res.style.display="block";
+  res.classList.add("vis");
+
+  const total=state.questions.length;
+  const mcqQs=state.questions.filter(q=>q.type==="mcq");
+  const frqQs=state.questions.filter(q=>q.type==="frq");
+  const mcqAnswered=Object.entries(state.answers).filter(([i,v])=>v.userAns!=="frq" && state.questions[i].type==="mcq");
+  const correct=mcqAnswered.filter(([_,v])=>v.correct).length;
+  const wrong=mcqAnswered.filter(([_,v])=>!v.correct).length;
+  const skipped=mcqQs.length - mcqAnswered.length;
+  const frqAttempted=frqQs.filter((_,i)=>{
+    const qi=state.questions.findIndex(q=>q.type==="frq");
+    return qi>=0 && state.frqTexts[qi];
+  }).length;
+
+  const pct=mcqQs.length>0?Math.round((correct/mcqQs.length)*100):0;
+  let grade="1";
+  if(pct>=90) grade="5 🏆";
+  else if(pct>=80) grade="4 ⭐";
+  else if(pct>=70) grade="3 ✓";
+  else if(pct>=55) grade="2";
+
+  document.getElementById("scoreBig").textContent=pct+"%";
+  document.getElementById("scoreFrac").textContent=`${correct} / ${mcqQs.length} MCQ correct`;
+  document.getElementById("scoreGrade").textContent=`AP Score: ${grade}`;
+  document.getElementById("rCorrect").textContent=correct;
+  document.getElementById("rWrong").textContent=wrong;
+  document.getElementById("rSkipped").textContent=skipped;
+  const m=Math.floor(state.elapsed/60);
+  const s=state.elapsed%60;
+  document.getElementById("rTime").textContent=String(m).padStart(2,"0")+":"+String(s).padStart(2,"0");
+
+  // breakdown by unit
+  const byUnit={};
+  state.questions.forEach((q,i)=>{
+    if(!byUnit[q.unit]) byUnit[q.unit]={correct:0,total:0};
+    byUnit[q.unit].total++;
+    if(state.answers[i]?.correct) byUnit[q.unit].correct++;
+  });
+  let bdHtml="";
+  Object.entries(byUnit).forEach(([uname,data])=>{
+    const p=Math.round((data.correct/data.total)*100)||0;
+    const color=p>=70?"var(--green)":p>=50?"var(--yellow)":"var(--red)";
+    bdHtml+=`<div class="us-row">
+      <div class="us-nm">${uname.replace("Unit ","U")}</div>
+      <div class="us-bar-bg"><div class="us-bar-fill" style="width:${p}%;background:${color}"></div></div>
+      <div class="us-pct" style="color:${color}">${p}%</div>
+    </div>`;
+  });
+  document.getElementById("unitBreakdown").innerHTML=bdHtml;
+}
+
+function restartTest(){
+  clearInterval(state.timerInterval);
+  document.getElementById("results").classList.remove("vis");
+  document.getElementById("results").style.display="none";
+  document.getElementById("testArea").classList.add("hidden");
+  document.getElementById("welcomeScreen").classList.remove("hidden");
+  document.getElementById("liveScore").classList.remove("vis");
+  document.getElementById("reviewContainer").innerHTML="";
+}
+
+function reviewTest(){
+  const container=document.getElementById("reviewContainer");
+  let html="<h3 style='font-size:15px;font-weight:800;margin:0 0 16px'>📋 Answer Review</h3>";
+  state.questions.forEach((q,i)=>{
+    if(q.type!=="mcq") return;
+    const ans=state.answers[i];
+    const cor=ans?.correct;
+    html+=`<div class="rv-card ${cor?"cor-q":"inc-q"}">
+      <div class="rv-hd">
+        <span class="rv-icon">${cor?"✅":"❌"}</span>
+        <span class="badge sub">Q${i+1} · ${q.sub}</span>
+        <span class="badge ${q.diff}">${q.diff}</span>
+      </div>
+      <div class="rv-txt">${q.q.substring(0,120)}...</div>
+      <div class="rv-ansbars">
+        ${ans?`<span class="rv-a ${cor?"right":"wrong"}">Your answer: ${["A","B","C","D"][ans.userAns]}</span>`:"<span class='rv-a wrong'>Not answered</span>"}
+        ${!cor?`<span class="rv-a right">Correct: ${["A","B","C","D"][q.ans]}</span>`:""}
+      </div>
+      <div class="rv-expl-txt">${q.exp}</div>
+    </div>`;
+  });
+  container.innerHTML=html;
+  container.scrollIntoView({behavior:"smooth"});
+}
+
+function toggleFS(){
+  document.getElementById("fsPanel").classList.toggle("open");
+}
+
+// INIT
+buildSidebar();
+</script>
+</body>
+</html>
