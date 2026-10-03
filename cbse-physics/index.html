@@ -496,16 +496,11 @@ function selectClass(cls) {
 function renderChapters() {
   const grid = document.getElementById('chapter-grid');
   grid.innerHTML = CHAPTERS.map(ch => {
-    const counts = QB[ch.id] ? Object.entries(QB[ch.id]).reduce((acc, [k,v]) => {
-      if (k !== 'name') acc += v.length;
-      return acc;
-    }, 0) : 0;
     return `<div class="chapter-card" onclick="selectChapter('${ch.id}')">
       <div class="ch-num">${ch.num}</div>
       <div class="ch-info">
         <div class="ch-name">${ch.name}</div>
         <div class="ch-unit">${ch.unit}</div>
-        <div class="ch-count">${counts} questions</div>
       </div>
       <div class="ch-arrow">›</div>
     </div>`;
@@ -518,16 +513,11 @@ function selectChapter(id) {
 
   // Chapter info strip
   const data = QB[id] || {};
-  const statsHtml = Object.entries(TYPE_INFO).map(([k, ti]) => {
-    const count = data[k] ? data[k].length : 0;
-    return `<span class="cis-stat">${ti.label}: ${count}</span>`;
-  }).join('');
   document.getElementById('chapter-info-strip').innerHTML = `
     <div class="cis-num">Ch ${currentChapter.num}</div>
     <div class="cis-text">
       <div class="cis-name">${currentChapter.name}</div>
       <div class="cis-unit">${currentChapter.unit}</div>
-      <div class="cis-stats">${statsHtml}</div>
     </div>`;
 
   renderCountConfig();
@@ -548,7 +538,6 @@ function renderCountConfig() {
       </span>
       <input type="number" class="num-input" id="count-${t}"
         min="0" max="${max}" value="${def}" placeholder="0">
-      <span style="font-size:0.78rem;color:var(--muted);">/ ${max} available</span>
     </div>`;
   }).join('');
 }
