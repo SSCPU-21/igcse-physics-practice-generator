@@ -295,6 +295,32 @@ body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--bg); co
   border-radius: 10px; padding: 1px 7px; font-size: 0.68rem;
   font-weight: 700; margin-left: 4px;
 }
+
+/* PrepEnroll studio enhancements */
+:root{--neon-cyan:#38d9ff;--neon-lime:#8df26b;--neon-violet:#8b7cff}
+.header{background:linear-gradient(90deg,var(--navy) 0%,#193d72 72%,#245a68 100%)}
+.class-card:not(.coming-soon):hover,.qtype-card.selected{
+  box-shadow:0 0 0 1px rgba(56,217,255,.28),0 10px 28px rgba(56,217,255,.12);
+}
+.btn-primary,.btn-success{box-shadow:0 8px 22px rgba(56,217,255,.13)}
+.progress-bar,.score-bar{background:linear-gradient(90deg,var(--accent),var(--neon-cyan))}
+.question-block{border-top:3px solid rgba(56,217,255,.72)}
+.cbse-qnav{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:14px 0 20px}
+.cbse-qpos{font-size:.82rem;font-weight:800;color:var(--navy);padding:7px 11px;border:1px solid rgba(56,217,255,.35);border-radius:999px;background:#fff}
+.hub-return{color:#fff;text-decoration:none;font-size:.78rem;font-weight:800;border:1px solid rgba(255,255,255,.26);padding:7px 11px;border-radius:999px;transition:.18s}
+.hub-return:hover{background:rgba(255,255,255,.12);box-shadow:0 0 18px rgba(56,217,255,.24)}
+.pe-calc-toggle{position:fixed;right:18px;bottom:18px;z-index:9998;border:0;border-radius:999px;padding:10px 14px;font:700 12px system-ui;color:#fff;background:linear-gradient(135deg,#173654,#3E7B3A);box-shadow:0 10px 28px rgba(23,54,84,.22);cursor:pointer}
+.pe-calc{position:fixed;right:18px;bottom:66px;z-index:9999;width:236px;padding:12px;border:1px solid rgba(56,217,255,.25);border-radius:16px;background:rgba(255,255,255,.96);box-shadow:0 18px 50px rgba(20,45,87,.22);backdrop-filter:blur(12px);display:none}
+.pe-calc.open{display:block}
+.pe-calc-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;font-size:12px;font-weight:800;color:var(--navy)}
+.pe-calc-close{border:0;background:none;font-size:18px;cursor:pointer;color:var(--muted)}
+.pe-calc-screen{width:100%;height:42px;border:1px solid var(--border);border-radius:10px;padding:8px 10px;text-align:right;font-size:18px;font-weight:800;color:var(--navy);background:#fafdff;margin-bottom:8px}
+.pe-calc-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+.pe-calc-grid button{border:1px solid var(--border);border-radius:9px;padding:9px 0;background:#fff;color:var(--navy);font-weight:800;cursor:pointer}
+.pe-calc-grid button:hover{border-color:var(--neon-cyan);box-shadow:0 0 12px rgba(56,217,255,.14)}
+.pe-calc-grid .op{background:#eefaff}.pe-calc-grid .eq{background:linear-gradient(135deg,var(--green),#4cbf78);color:#fff;border:0}
+@media(max-width:700px){.pe-calc{right:10px;bottom:62px;width:220px}.pe-calc-toggle{right:10px;bottom:12px}}
+
 </style>
 </head>
 <body>
@@ -304,6 +330,7 @@ body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--bg); co
   <div class="header-badge">CBSE</div>
   <div class="header-right">
     <span class="header-tag">Physics Practice</span>
+    <a class="hub-return" href="/prepenroll-practice/">← Practice Hub</a>
   </div>
 </header>
 
@@ -432,7 +459,11 @@ body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--bg); co
     <button class="btn btn-outline btn-sm" onclick="showAllAnswers()">Show All Answers</button>
   </div>
 
-  <div class="filter-tabs" id="test-filter-tabs"></div>
+  <div class="cbse-qnav" id="cbse-qnav" style="display:none;">
+    <button class="btn btn-outline btn-sm" id="cbse-prev" onclick="cbsePrevQuestion()">← Previous</button>
+    <span class="cbse-qpos" id="cbse-qpos">Question 1</span>
+    <button class="btn btn-primary btn-sm" id="cbse-next" onclick="cbseNextQuestion()">Next →</button>
+  </div>
   <div id="questions-container"></div>
 </div>
 
@@ -480,6 +511,7 @@ let userAnswers = {};
 let userMarks = {};
 let testSubmitted = false;
 let totalMarks = 0;
+let currentQuestionIndex = 0;
 
 function showScreen(id) {
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
@@ -612,8 +644,9 @@ function generateTest() {
   document.getElementById('score-panel').style.display = 'none';
   document.getElementById('progress-bar').style.width = '0%';
 
-  renderFilterTabs();
-  renderQuestions(testQuestions);
+  currentQuestionIndex = 0;
+  renderCurrentQuestion();
+  document.getElementById('cbse-qnav').style.display = 'flex';
   showScreen('screen-test');
 }
 
@@ -639,9 +672,26 @@ function filterQuestions(filter, el) {
   });
 }
 
-function renderQuestions(questions) {
+function renderCurrentQuestion() {
   const container = document.getElementById('questions-container');
-  container.innerHTML = questions.map((q, idx) => renderQuestion(q, idx+1)).join('');
+  if (!testQuestions.length) { container.innerHTML = ''; return; }
+  const q = testQuestions[currentQuestionIndex];
+  container.innerHTML = renderQuestion(q, currentQuestionIndex + 1);
+  const pos = document.getElementById('cbse-qpos');
+  if (pos) pos.textContent = `Question ${currentQuestionIndex + 1} of ${testQuestions.length}`;
+  const prev = document.getElementById('cbse-prev');
+  const next = document.getElementById('cbse-next');
+  if (prev) prev.disabled = currentQuestionIndex === 0;
+  if (next) {
+    next.disabled = currentQuestionIndex === testQuestions.length - 1;
+    next.textContent = currentQuestionIndex === testQuestions.length - 1 ? 'Last Question' : 'Next →';
+  }
+}
+function cbsePrevQuestion() {
+  if (currentQuestionIndex > 0) { currentQuestionIndex--; renderCurrentQuestion(); window.scrollTo({top:0,behavior:'smooth'}); }
+}
+function cbseNextQuestion() {
+  if (currentQuestionIndex < testQuestions.length - 1) { currentQuestionIndex++; renderCurrentQuestion(); window.scrollTo({top:0,behavior:'smooth'}); }
 }
 
 function renderQuestion(q, num) {
@@ -925,5 +975,26 @@ const QB_EXTRA = {
   }
 })();
 </script>
+
+<button class="pe-calc-toggle" type="button" onclick="peCalcToggle()">⌗ Mini Calculator</button>
+<div class="pe-calc" id="pe-calc">
+  <div class="pe-calc-head"><span>Practice Calculator</span><button class="pe-calc-close" type="button" onclick="peCalcToggle()">×</button></div>
+  <input class="pe-calc-screen" id="pe-calc-screen" value="" readonly aria-label="Calculator display">
+  <div class="pe-calc-grid">
+    <button onclick="peCalcClear()">C</button><button onclick="peCalcBack()">⌫</button><button class="op" onclick="peCalcAdd('(')">(</button><button class="op" onclick="peCalcAdd(')')">)</button>
+    <button onclick="peCalcAdd('7')">7</button><button onclick="peCalcAdd('8')">8</button><button onclick="peCalcAdd('9')">9</button><button class="op" onclick="peCalcAdd('/')">÷</button>
+    <button onclick="peCalcAdd('4')">4</button><button onclick="peCalcAdd('5')">5</button><button onclick="peCalcAdd('6')">6</button><button class="op" onclick="peCalcAdd('*')">×</button>
+    <button onclick="peCalcAdd('1')">1</button><button onclick="peCalcAdd('2')">2</button><button onclick="peCalcAdd('3')">3</button><button class="op" onclick="peCalcAdd('-')">−</button>
+    <button onclick="peCalcAdd('0')">0</button><button onclick="peCalcAdd('.')">.</button><button class="eq" onclick="peCalcEqual()">=</button><button class="op" onclick="peCalcAdd('+')">+</button>
+  </div>
+</div>
+<script>
+function peCalcToggle(){document.getElementById('pe-calc').classList.toggle('open')}
+function peCalcAdd(v){document.getElementById('pe-calc-screen').value+=v}
+function peCalcClear(){document.getElementById('pe-calc-screen').value=''}
+function peCalcBack(){const s=document.getElementById('pe-calc-screen');s.value=s.value.slice(0,-1)}
+function peCalcEqual(){const s=document.getElementById('pe-calc-screen');try{const e=s.value;if(!/^[0-9+\-*/().\s]+$/.test(e))throw 0;s.value=String(Function('"use strict";return ('+e+')')())}catch(_){s.value='Error'}}
+</script>
+
 </body>
 </html>
