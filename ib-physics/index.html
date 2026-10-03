@@ -100,14 +100,20 @@ radial-gradient(circle at 70% 82%,rgba(141,123,232,.10),transparent 28%);filter:
 .chip[aria-pressed="true"]{border-color:var(--blue);background:var(--blue-soft)}
 .chip[aria-pressed="true"] .n{color:var(--blue)}
 .theme-group{border:1px solid #D8E5EA;border-radius:14px;overflow:hidden;background:#FFFFFF;box-shadow:0 8px 22px rgba(23,54,84,.045)}
-.theme-chip{width:100%;display:grid;grid-template-columns:34px 1fr auto;align-items:center;gap:9px;border:0;background:linear-gradient(90deg,#F7FCFF 0%,#FBFFFC 55%,#FAF8FF 100%);padding:12px 12px;cursor:pointer;text-align:left;transition:.18s ease}
+.theme-chip{width:100%;display:grid;grid-template-columns:34px 1fr auto 18px;align-items:center;gap:9px;border:0;background:linear-gradient(90deg,#F7FCFF 0%,#FBFFFC 55%,#FAF8FF 100%);padding:12px 12px;cursor:pointer;text-align:left;transition:.18s ease}
 .theme-chip:hover{filter:brightness(.995)}
 .theme-chip .n{display:grid;place-items:center;width:28px;height:28px;border-radius:9px;font:800 11px/1 var(--mono);color:#173B5A;background:linear-gradient(135deg,#DDF7FC,#EAF8EF);border:1px solid #BFE8EE}
 .theme-chip .cnt{font:700 10px/1 var(--mono);color:#6C7A86}
+.theme-chip .chev{font-size:14px;color:#547184;transition:transform .18s ease;transform-origin:center}
+.theme-group.open .theme-chip .chev{transform:rotate(180deg)}
 .theme-chip[aria-pressed="true"]{background:linear-gradient(90deg,#EAF9FF 0%,#F0FFF5 52%,#F3F0FF 100%);box-shadow:inset 4px 0 0 #59C7DA}
 .theme-chip[aria-pressed="true"] .n{background:linear-gradient(135deg,#59C7DA,#8D7BE8);color:#fff;border-color:transparent}
 .theme-name{font-weight:800;font-size:13px;color:#173B5A;line-height:1.35}
-.subtopics{display:flex;flex-direction:column;border-top:1px solid #E5EDF1;padding:6px 8px 9px;background:linear-gradient(180deg,#FFFFFF 0%,#FBFDFE 100%)}
+.subtopics{display:none;flex-direction:column;border-top:1px solid #E5EDF1;padding:6px 8px 9px;background:linear-gradient(180deg,#FFFFFF 0%,#FBFDFE 100%)}
+.theme-group.open .subtopics{display:flex}
+.unit-select{display:flex;justify-content:flex-end;padding:3px 2px 7px}
+.unit-select button{border:1px solid #D5E2E9;background:#FFFFFF;padding:6px 9px;border-radius:999px;color:#245873;font:800 10.5px/1 var(--sans);cursor:pointer}
+.unit-select button:hover{background:#F0FAFD;border-color:#BBDDE6}
 .sub-row{display:grid;grid-template-columns:18px 44px 1fr auto;gap:8px;align-items:center;padding:8px 7px;border-radius:9px;cursor:pointer;font-size:12px;color:#29465D;transition:.16s ease}
 .sub-row:hover{background:#F0FAFD}
 .sub-row:has(input:checked){background:linear-gradient(90deg,#ECFAF1,#EEF9FC);box-shadow:inset 3px 0 0 #70C58B}
@@ -2572,19 +2578,33 @@ function updateLen(){readUI();const L=getL(S),b=[];if(S.types&1)b.push(L.m+' × 
 const TCOUNT={},SCOUNT={};Object.values(BANKS).forEach(bk=>bk.forEach(it=>{TCOUNT[it.t]=(TCOUNT[it.t]||0)+1;if(it.s)SCOUNT[it.s]=(SCOUNT[it.s]||0)+1}));
 $('#chips').innerHTML=TOPICS.map((t,i)=>{
   const subs=SUBKEYS.filter(k=>k[0]===t.k);
-  return `<div class="theme-group"><button type="button" class="theme-chip" aria-pressed="false" data-theme="${t.k}"><span class="n">${t.k}</span><span class="theme-name">${t.n}</span><span class="cnt">${TCOUNT[t.k]||0} Q</span></button><div class="subtopics">${subs.map(sk=>{const si=SUBKEYS.indexOf(sk);return `<label class="sub-row"><input type="checkbox" class="sub-check" data-theme="${t.k}" data-sub="${sk}" data-si="${si}"><span class="sub-code">${sk}</span><span>${SUBN[sk]}</span><span class="sub-count">${SCOUNT[sk]||0}</span></label>`}).join('')}</div></div>`
+  return `<div class="theme-group"><button type="button" class="theme-chip" aria-pressed="false" aria-expanded="false" data-theme="${t.k}"><span class="n">${t.k}</span><span class="theme-name">${t.n}</span><span class="cnt">${TCOUNT[t.k]||0} Q</span><span class="chev" aria-hidden="true">⌄</span></button><div class="subtopics"><div class="unit-select"><button type="button" class="unit-select-btn" data-theme="${t.k}">Select all in this unit</button></div>${subs.map(sk=>{const si=SUBKEYS.indexOf(sk);return `<label class="sub-row"><input type="checkbox" class="sub-check" data-theme="${t.k}" data-sub="${sk}" data-si="${si}"><span class="sub-code">${sk}</span><span>${SUBN[sk]}</span><span class="sub-count">${SCOUNT[sk]||0}</span></label>`}).join('')}</div></div>`
 }).join('');
 $('#chips').addEventListener('click',e=>{
+  const selectUnit=e.target.closest('.unit-select-btn');
+  if(selectUnit){
+    const theme=selectUnit.dataset.theme,checks=[...document.querySelectorAll('.sub-check[data-theme="'+theme+'"]')];
+    const shouldSelect=!checks.every(x=>x.checked);
+    checks.forEach(x=>x.checked=shouldSelect);
+    const tc=document.querySelector('.theme-chip[data-theme="'+theme+'"]');
+    if(tc)tc.setAttribute('aria-pressed',shouldSelect?'true':'false');
+    selectUnit.textContent=shouldSelect?'Clear this unit':'Select all in this unit';
+    readUI();updateLen();return;
+  }
   const chip=e.target.closest('.theme-chip');
   if(chip){
-    const on=chip.getAttribute('aria-pressed')!=='true';chip.setAttribute('aria-pressed',on?'true':'false');
-    document.querySelectorAll('.sub-check[data-theme="'+chip.dataset.theme+'"]').forEach(x=>x.checked=on);
-    readUI();updateLen();return;
+    const group=chip.closest('.theme-group');
+    const open=!group.classList.contains('open');
+    group.classList.toggle('open',open);
+    chip.setAttribute('aria-expanded',open?'true':'false');
+    return;
   }
   const sub=e.target.closest('.sub-check');if(sub){
     const theme=sub.dataset.theme,checks=[...document.querySelectorAll('.sub-check[data-theme="'+theme+'"]')];
     const tc=document.querySelector('.theme-chip[data-theme="'+theme+'"]');
     if(tc)tc.setAttribute('aria-pressed',checks.some(x=>x.checked)?'true':'false');
+    const btn=document.querySelector('.unit-select-btn[data-theme="'+theme+'"]');
+    if(btn)btn.textContent=checks.every(x=>x.checked)?'Clear this unit':'Select all in this unit';
     readUI();updateLen();
   }
 });
