@@ -280,21 +280,7 @@ body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--bg); co
 .cis-stats { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 6px; }
 .cis-stat { background: rgba(255,255,255,0.1); border-radius: 6px; padding: 3px 8px; font-size: 0.72rem; }
 
-/* Filter tabs */
-.filter-tabs { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px; }
-.filter-tab {
-  padding: 6px 14px; border-radius: 20px; font-size: 0.82rem; font-weight: 600;
-  cursor: pointer; border: 1.5px solid var(--border); background: var(--card);
-  transition: all 0.15s; color: var(--muted);
-}
-.filter-tab:hover { border-color: var(--navy); color: var(--navy); }
-.filter-tab.active { background: var(--navy); color: #fff; border-color: var(--navy); }
 
-.count-badge {
-  display: inline-block; background: var(--accent); color: #fff;
-  border-radius: 10px; padding: 1px 7px; font-size: 0.68rem;
-  font-weight: 700; margin-left: 4px;
-}
 
 /* PrepEnroll studio enhancements */
 :root{--neon-cyan:#38d9ff;--neon-lime:#8df26b;--neon-violet:#8b7cff}
@@ -440,7 +426,6 @@ body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--bg); co
       <div class="progress-bar-wrap"><div class="progress-bar" id="progress-bar" style="width:0%"></div></div>
     </div>
     <div class="test-stats">
-      <div class="stat-box"><div class="stat-val" id="stat-total">0</div><div class="stat-lbl">Total Qs</div></div>
       <div class="stat-box"><div class="stat-val" id="stat-marks">0</div><div class="stat-lbl">Max Marks</div></div>
       <div class="stat-box"><div class="stat-val" id="stat-attempted">0</div><div class="stat-lbl">Attempted</div></div>
     </div>
@@ -456,7 +441,7 @@ body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--bg); co
   <div style="display:flex;gap:10px;margin-bottom:16px;flex-wrap:wrap;" id="test-controls">
     <button class="back-btn" onclick="showScreen('screen-config')">← New Test</button>
     <button class="btn btn-success" onclick="submitTest()">✓ Submit & See Score</button>
-    <button class="btn btn-outline btn-sm" onclick="showAllAnswers()">Show All Answers</button>
+    <button class="btn btn-outline btn-sm" onclick="showAllAnswers()">Show Answer</button>
   </div>
 
   <div class="cbse-qnav" id="cbse-qnav" style="display:none;">
@@ -630,7 +615,7 @@ function generateTest() {
     });
   }
 
-  if (!testQuestions.length) { showToast("No questions available for selected types"); return; }
+  if (!testQuestions.length) { showToast("No questions match the selected test setup"); return; }
 
   // Sort by type order
   const order = ['mcq','vsa','sa1','sa2','la','num'];
@@ -638,7 +623,6 @@ function generateTest() {
 
   document.getElementById('test-title-text').textContent = `Chapter ${currentChapter.num}: ${currentChapter.name}`;
   document.getElementById('test-meta-text').textContent = `CBSE Class XI Physics`;
-  document.getElementById('stat-total').textContent = testQuestions.length;
   document.getElementById('stat-marks').textContent = totalMarks;
   document.getElementById('stat-attempted').textContent = '0';
   document.getElementById('score-panel').style.display = 'none';
@@ -650,33 +634,12 @@ function generateTest() {
   showScreen('screen-test');
 }
 
-function renderFilterTabs() {
-  const counts = {};
-  testQuestions.forEach(q => { counts[q._type] = (counts[q._type]||0)+1; });
-  const container = document.getElementById('test-filter-tabs');
-  let html = `<div class="filter-tab active" data-filter="all" onclick="filterQuestions('all',this)">All <span class="count-badge">${testQuestions.length}</span></div>`;
-  const order = ['mcq','vsa','sa1','sa2','la','num'];
-  order.forEach(t => {
-    if (!counts[t]) return;
-    const ti = TYPE_INFO[t];
-    html += `<div class="filter-tab" data-filter="${t}" onclick="filterQuestions('${t}',this)">${ti.label} <span class="count-badge">${counts[t]}</span></div>`;
-  });
-  container.innerHTML = html;
-}
-
-function filterQuestions(filter, el) {
-  document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
-  el.classList.add('active');
-  document.querySelectorAll('.question-block').forEach(b => {
-    b.style.display = (filter === 'all' || b.dataset.type === filter) ? 'block' : 'none';
-  });
-}
-
 function renderCurrentQuestion() {
   const container = document.getElementById('questions-container');
   if (!testQuestions.length) { container.innerHTML = ''; return; }
   const q = testQuestions[currentQuestionIndex];
-  container.innerHTML = renderQuestion(q, currentQuestionIndex + 1);
+  container.replaceChildren();
+  container.insertAdjacentHTML('beforeend', renderQuestion(q, currentQuestionIndex + 1));
   const pos = document.getElementById('cbse-qpos');
   if (pos) pos.textContent = `Question ${currentQuestionIndex + 1} of ${testQuestions.length}`;
   const prev = document.getElementById('cbse-prev');
